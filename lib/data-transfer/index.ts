@@ -1,2 +1,3 @@
-// Supabase Data Access
+// Data Access Functions
+export * from './authentication';
 export * from './supabase';

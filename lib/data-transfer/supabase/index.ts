@@ -1,2 +1,1 @@
-export { createClient } from './client';
-export { updateSession } from './server';
+export { createClient } from './create-client';
