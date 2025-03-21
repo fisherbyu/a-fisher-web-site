@@ -28,8 +28,8 @@ export const updateSession = async (request: NextRequest) => {
     // Refresh session if expired - required for Server Components
     await supabase.auth.getUser();
 
-    // Keep this section if you need protected routes
-    if (request.nextUrl.pathname.startsWith('/protected') && !(await supabase.auth.getUser()).data.user) {
+    // Protect Admin Routes
+    if (request.nextUrl.pathname.startsWith('/admin') && !(await supabase.auth.getUser()).data.user) {
         return NextResponse.redirect(new URL('/sign-in', request.url));
     }
 
