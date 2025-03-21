@@ -17,9 +17,7 @@
             "graduation_month": "April",
             "graduation_year": "2025",
             "gpa": "3.70",
-            "additionals": [
-                "Specialized Courses: Python, C#, JavaScript, C++, Swift Web Publishing"
-            ]
+            "additionals": ["Specialized Courses: Python, C#, JavaScript, C++, Swift Web Publishing"]
         }
     ],
     "jobs": [

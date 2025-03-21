@@ -1,17 +1,16 @@
-"use client"
-import MusicDisplay from "@/components/ui/music-display";
-import PageTitle from "@/components/ui/page-title";
+'use client';
+import MusicDisplay from '@/components/ui/music-display';
+import PageTitle from '@/components/ui/page-title';
 
 import { useEffect, useState } from 'react';
-import { getData, DataType } from "@/api/dataAccess";
+import { getData, DataType } from '@/api/dataAccess';
 
 interface MusicDisplayPageProps {
     type: DataType;
 }
 
-
 export default function MusicDisplayPage({ type }: MusicDisplayPageProps) {
-	const [content, setData] = useState<any[]>([]);
+    const [content, setData] = useState<any[]>([]);
 
     useEffect(() => {
         async function fetchData() {
@@ -25,11 +24,11 @@ export default function MusicDisplayPage({ type }: MusicDisplayPageProps) {
 
         fetchData();
     }, []);
-	return (
-		<div>
-			{ content.map((artist, index) => (
-				<MusicDisplay key={ artist.name } index={ index } components={ artist } />
-			)) }
-		</div>
-	);
+    return (
+        <div>
+            {content.map((artist, index) => (
+                <MusicDisplay key={artist.name} index={index} components={artist} />
+            ))}
+        </div>
+    );
 }
