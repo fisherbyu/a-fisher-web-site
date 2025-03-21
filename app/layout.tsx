@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Merriweather_Sans } from "next/font/google";
-import "@/styles/globals.css";
+import "@/public/styles/globals.css";
 
 import { CoreMenu } from "@/components/core/core-menu";
 import CoreFooter from "@/components/core/core-footer";
