@@ -1,13 +1,12 @@
 'use client';
 
 import { Button, Divider } from 'thread-ui';
-import { authenticate } from '@/lib';
-import { LoginFormProps } from './login-form.types';
 
-export const LoginForm = ({ errorMessage }: LoginFormProps) => {
+export const LoginForm = () => {
+    const errorMessage = true;
     return (
         <form
-            action={authenticate}
+            action={() => null}
             className="sm:w-10/12 md:max-w-80 mx-auto flex flex-col gap-6 justify-center items-center border rounded max-w-screen-sm p-4"
         >
             <span>
