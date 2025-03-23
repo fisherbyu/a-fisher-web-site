@@ -7,5 +7,8 @@ export * from './data-transfer';
 // HTTP Actions
 export * from './http';
 
+// Supabase Connection/Actions
+export * from './supabase';
+
 // Utility Functions
 export * from './utils';
