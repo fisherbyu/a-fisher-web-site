@@ -1,21 +1,19 @@
-import { createClient } from '@/lib';
-import { redirect } from 'next/navigation';
+'use server';
+import { createServer } from '@/lib';
 
-export const authenticateUser = async (email: string, password: string) => {
+export const authenticateUser = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     // Initilize Connection
-    const supabase = await createClient();
+    const supabase = await createServer();
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
     });
 
     if (error) {
-        // Return error information for the client
+        console.error('Login Failed:'), error;
         return { success: false, error: error.message };
     }
 
-    redirect('/admin');
-
-    return { success: true, user: data.user };
+    return { success: true };
 };
