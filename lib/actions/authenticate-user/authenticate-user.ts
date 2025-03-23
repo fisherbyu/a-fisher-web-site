@@ -15,7 +15,7 @@ export const authenticateUser = async (email: string, password: string) => {
         return { success: false, error: error.message };
     }
 
-    redirect('/protected');
+    redirect('/admin');
 
     return { success: true, user: data.user };
 };
