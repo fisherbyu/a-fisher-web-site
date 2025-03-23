@@ -4,16 +4,18 @@ import { authenticateUser } from '@/lib';
 import { useRouter } from 'next/navigation';
 
 export const LoginForm = () => {
+    // Initilaize Router for Redirection
     const router = useRouter();
-    // const [errorMessage, setErrorMessage] = useState('');
 
+    // Handle Form Submit
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        // Extract Values
         e.preventDefault();
-
         const formData = new FormData(e.target as HTMLFormElement);
         const email = formData.get('email')!.toString();
         const password = formData.get('password')!.toString();
 
+        // Process Authentication
         try {
             const result = await authenticateUser(email, password);
 
