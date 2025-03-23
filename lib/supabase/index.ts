@@ -1,2 +1,2 @@
 export { createClient } from './create-client';
-export { createServer } from 'http';
+export { createServer } from './create-server';
