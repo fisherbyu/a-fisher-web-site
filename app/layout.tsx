@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { Merriweather_Sans } from 'next/font/google';
 import '@/public/styles/globals.css';
 
-import { CoreMenu } from '@/components/core/core-menu';
-import CoreFooter from '@/components/core/core-footer';
+import { CoreMenu } from '@/components/old/core/core-menu';
+import CoreFooter from '@/components/old/core/core-footer';
 
 const coreFont = Merriweather_Sans({ subsets: ['latin'] });
 

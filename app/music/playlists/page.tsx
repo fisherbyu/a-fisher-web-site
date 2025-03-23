@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import PageTitle from '@/components/ui/page-title';
-import DisplayPlaylists from '@/components/ui/display-playlists';
+import PageTitle from '@/components/old/ui/page-title';
+import DisplayPlaylists from '@/components/old/ui/display-playlists';
 
 const title: { title: string; subtitle?: string; center?: boolean } = {
     title: 'My Playlists',

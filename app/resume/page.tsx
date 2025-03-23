@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import { Separator } from '@/components/ui/separator';
+import { Separator } from '@/components/old/ui/separator';
 import BYULogo from '@/public/resume/byu-logo.png';
 import Image from 'next/image';
 import resume from '@/app/resume/resume.json';
-import PageTitle from '@/components/ui/page-title';
+import PageTitle from '@/components/old/ui/page-title';
 
 const title: { title: string; subtitle?: string } = {
     title: 'Resume',

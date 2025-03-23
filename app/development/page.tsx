@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import ArticleData from '@/app/development/articles.json';
-import PageTitle from '@/components/ui/page-title';
+import PageTitle from '@/components/old/ui/page-title';
 import { InfoCard, InfoCardProps } from 'thread-ui';
 
 const title: { title: string; subtitle?: string } = {

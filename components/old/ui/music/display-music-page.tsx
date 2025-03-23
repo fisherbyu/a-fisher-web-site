@@ -1,6 +1,6 @@
 'use client';
-import MusicDisplay from '@/components/ui/music-display';
-import PageTitle from '@/components/ui/page-title';
+import MusicDisplay from '@/components/old/ui/music-display';
+import PageTitle from '@/components/old/ui/page-title';
 
 import { useEffect, useState } from 'react';
 import { getData, DataType } from '@/api/dataAccess';

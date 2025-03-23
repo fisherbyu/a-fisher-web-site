@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import MusicDisplay from '@/components/ui/music-display';
-import PageTitle from '@/components/ui/page-title';
+import MusicDisplay from '@/components/old/ui/music-display';
+import PageTitle from '@/components/old/ui/page-title';
 
 // Import Content
 import content from '@/api/static_content/albums.json';

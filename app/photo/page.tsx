@@ -30,8 +30,8 @@ import Wrightslake from '@/public/photography/wrights-lake.jpg';
 import Wrightslake2 from '@/public/photography/wrights-lake-2.jpg';
 import Sacramentostreet from '@/public/photography/sacramento-street.jpg';
 import { StaticImageData } from 'next/image';
-import MasonryBlock from '@/components/ui/masonry-block';
-import PageTitle from '@/components/ui/page-title';
+import MasonryBlock from '@/components/old/ui/masonry-block';
+import PageTitle from '@/components/old/ui/page-title';
 const title: { title: string; subtitle?: string } = {
     title: 'My Photography',
     subtitle:

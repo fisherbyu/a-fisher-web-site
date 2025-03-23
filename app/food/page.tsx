@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { InfoCard, InfoCardProps } from 'thread-ui';
-import NotionPreview from '@/components/ui/notion-preview';
+import NotionPreview from '@/components/old/ui/notion-preview';
 import RecipieData from '@/app/food/recipes.json';
-import PageTitle from '@/components/ui/page-title';
+import PageTitle from '@/components/old/ui/page-title';
 const title: { title: string; subtitle?: string } = {
     title: 'My Recipes',
     subtitle:

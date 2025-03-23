@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import MusicDisplay from '@/components/ui/music-display';
-import MusicDisplayPage from '@/components/ui/music/display-music-page';
-import PageTitle from '@/components/ui/page-title';
+import MusicDisplay from '@/components/old/ui/music-display';
+import MusicDisplayPage from '@/components/old/ui/music/display-music-page';
+import PageTitle from '@/components/old/ui/page-title';
 
 import { useEffect, useState } from 'react';
 import { getData, DataType } from '@/api/dataAccess';

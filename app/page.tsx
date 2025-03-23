@@ -11,8 +11,8 @@ import Utah from '@/public/home/alpine-loop.jpg';
 import HBLL from '@/public/home/hbll.jpg';
 import Philippines from '@/public/home/philippines.jpg';
 // Import Components
-import { Separator } from '@/components/ui/separator';
-import GridBlock from '@/components/ui/grid-block';
+import { Separator } from '@/components/old/ui/separator';
+import GridBlock from '@/components/old/ui/grid-block';
 
 // Declare Content
 const places: {
