@@ -2,6 +2,10 @@ import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 
 export const updateSession = async (request: NextRequest) => {
+    // Define Route Constants
+    const PROTECTED_ROUTE = '/admin';
+    const AUTH_PAGE = '/sign-up';
+
     // Create an unmodified response
     let response = NextResponse.next({
         request: {
@@ -29,12 +33,12 @@ export const updateSession = async (request: NextRequest) => {
     await supabase.auth.getUser();
 
     // Protect Admin Routes
-    if (request.nextUrl.pathname.startsWith('/admin') && !(await supabase.auth.getUser()).data.user) {
-        return NextResponse.redirect(new URL('/sign-in', request.url));
+    if (request.nextUrl.pathname.startsWith(PROTECTED_ROUTE) && !(await supabase.auth.getUser()).data.user) {
+        return NextResponse.redirect(new URL(AUTH_PAGE, request.url));
     }
 
-    if (request.nextUrl.pathname === '/' && (await supabase.auth.getUser()).data.user) {
-        return NextResponse.redirect(new URL('/protected', request.url));
+    if (request.nextUrl.pathname === AUTH_PAGE && (await supabase.auth.getUser()).data.user) {
+        return NextResponse.redirect(new URL(PROTECTED_ROUTE, request.url));
     }
 
     return response;
