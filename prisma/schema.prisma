@@ -12,92 +12,66 @@ datasource db {
 
 // Table Definitions
 model Artist {
-  id         String      @id @default(uuid()) @db.Uuid
-  tier       Int
-  rank       Int?
-  name       String
-  content    Content[]   @relation("ArtistContent")
-  tags       ArtistTag[]
-  musicLinks MusicLink[] @relation("ArtistMusicLink")
-  images     Image[]     @relation("ArtistImage")
+  id        String      @id @default(uuid()) @db.Uuid
+  tier      Int
+  rank      Int?
+  name      String
+  content   Content[] 
+  tags      Tag[]
+  musicLink MusicLink
+  image     Image
 
   @@map("artists")
 }
 
 model Album {
-  id         String     @id @default(uuid()) @db.Uuid
-  rank       Int
-  name       String
-  content    Content[]  @relation("AlbumContent")
-  tags       AlbumTag[]
-  musicLinks MusicLink[] @relation("AlbumMusicLink")
-  images     Image[]    @relation("AlbumImage")
-
-  @@map("albums")
+    id          String      @id @default(uuid()) @db.Uuid
+    rank        Int
+    name        String
+    content     Content[] 
+    tags        Tag[]
+    musicLink   MusicLink
+    image       Image
 }
 
 model Content {
-  id       String  @id @default(uuid()) @db.Uuid
-  orderNum Int     @map("order_num")
-  text     String
-  artistId String? @map("artist_id") @db.Uuid
-  albumId  String? @map("album_id") @db.Uuid
-  artist   Artist? @relation("ArtistContent", fields: [artistId], references: [id])
-  album    Album?  @relation("AlbumContent", fields: [albumId], references: [id])
-
-  @@map("content")
+    id          String  @id @default(uuid()) @db.Uuid
+    order       Int     
+    text        String
+    artist      Artist? @relation(fields: [artistId], references: [id])
+    artistId    String?
+    album       Album?  @relation(fields: [albumId], references: [id])
+    albumId     String?
+    
 }
 
 model Tag {
-  id          String     @id @default(uuid()) @db.Uuid
-  title       String
-  content     String
-  artistTags  ArtistTag[]
-  albumTags   AlbumTag[]
-
-  @@map("tags")
-}
-
-model ArtistTag {
-  artistId String @map("artist_id") @db.Uuid
-  tagId    String @map("tag_id") @db.Uuid
-  artist   Artist @relation(fields: [artistId], references: [id])
-  tag      Tag    @relation(fields: [tagId], references: [id])
-
-  @@id([artistId, tagId])
-  @@map("artists_tags")
-}
-
-model AlbumTag {
-  albumId String @map("album_id") @db.Uuid
-  tagId   String @map("tag_id") @db.Uuid
-  album   Album  @relation(fields: [albumId], references: [id])
-  tag     Tag    @relation(fields: [tagId], references: [id])
-
-  @@id([albumId, tagId])
-  @@map("albums_tags")
+    id          String      @id @default(uuid()) @db.Uuid
+    title       String      
+    text        String
+    order       Int
+    artist      Artist? @relation(fields: [artistId], references: [id])
+    artistId    String?
+    album       Album?  @relation(fields: [albumId], references: [id])
+    albumId     String?
 }
 
 model MusicLink {
-  id        String  @id @default(uuid()) @db.Uuid
-  appleUri  String  @map("apple_uri")
-  spotifyUri String  @map("spotify_uri")
-  artistId  String? @map("artist_id") @db.Uuid
-  albumId   String? @map("album_id") @db.Uuid
-  artist    Artist? @relation("ArtistMusicLink", fields: [artistId], references: [id])
-  album     Album?  @relation("AlbumMusicLink", fields: [albumId], references: [id])
-
-  @@map("music_links")
+    id          String      @id @default(uuid()) @db.Uuid
+    appleURI    String
+    spotifyURI  String
+    artist      Artist? @relation(fields: [artistId], references: [id])
+    artistId    String?
+    album       Album?  @relation(fields: [albumId], references: [id])
+    albumId     String?
 }
 
 model Image {
-  id       String  @id @default(uuid()) @db.Uuid
-  src      String
-  alt      String
-  artistId String? @map("artist_id") @db.Uuid
-  albumId  String? @map("album_id") @db.Uuid
-  artist   Artist? @relation("ArtistImage", fields: [artistId], references: [id])
-  album    Album?  @relation("AlbumImage", fields: [albumId], references: [id])
-
-  @@map("images")
+    id          String      @id @default(uuid()) @db.Uuid
+    src         String
+    alt         String
+    artist      Artist? @relation(fields: [artistId], references: [id])
+    artistId    String?
+    album       Album?  @relation(fields: [albumId], references: [id])
+    albumId     String?
 }
