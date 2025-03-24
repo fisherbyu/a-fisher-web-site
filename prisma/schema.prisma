@@ -2,76 +2,81 @@
 
 // Connection Configurations
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 // Table Definitions
 model Artist {
-  id        String      @id @default(uuid()) @db.Uuid
-  tier      Int
-  rank      Int?
-  name      String
-  content   Content[] 
-  tags      Tag[]
-  musicLink MusicLink
-  image     Image
+    id          String    @id @default(uuid()) @db.Uuid
+    tier        Int
+    rank        Int?
+    name        String
+    content     Content[]
+    tags        Tag[]
+    musicLink   MusicLink @relation(fields: [musicLinkId], references: [id])
+    musicLinkId String    @unique @db.Uuid
+    image       Image     @relation(fields: [imageId], references: [id])
+    imageId     String    @unique @db.Uuid
 
-  @@map("artists")
+    @@map("artists")
 }
 
 model Album {
-    id          String      @id @default(uuid()) @db.Uuid
+    id          String    @id @default(uuid()) @db.Uuid
     rank        Int
     name        String
-    content     Content[] 
+    content     Content[]
     tags        Tag[]
-    musicLink   MusicLink
-    image       Image
+    musicLink   MusicLink @relation(fields: [musicLinkId], references: [id])
+    musicLinkId String    @unique @db.Uuid
+    image       Image     @relation(fields: [imageId], references: [id])
+    imageId     String    @unique @db.Uuid
+
+    @@map("albums")
 }
 
 model Content {
-    id          String  @id @default(uuid()) @db.Uuid
-    order       Int     
-    text        String
-    artist      Artist? @relation(fields: [artistId], references: [id])
-    artistId    String?
-    album       Album?  @relation(fields: [albumId], references: [id])
-    albumId     String?
-    
+    id       String  @id @default(uuid()) @db.Uuid
+    order    Int
+    text     String
+    artist   Artist? @relation(fields: [artistId], references: [id])
+    artistId String?
+    album    Album?  @relation(fields: [albumId], references: [id])
+    albumId  String?
 }
 
 model Tag {
-    id          String      @id @default(uuid()) @db.Uuid
-    title       String      
-    text        String
-    order       Int
-    artist      Artist? @relation(fields: [artistId], references: [id])
-    artistId    String?
-    album       Album?  @relation(fields: [albumId], references: [id])
-    albumId     String?
+    id       String  @id @default(uuid()) @db.Uuid
+    title    String
+    text     String
+    order    Int
+    artist   Artist? @relation(fields: [artistId], references: [id])
+    artistId String?
+    album    Album?  @relation(fields: [albumId], references: [id])
+    albumId  String?
 }
 
 model MusicLink {
-    id          String      @id @default(uuid()) @db.Uuid
-    appleURI    String
-    spotifyURI  String
-    artist      Artist? @relation(fields: [artistId], references: [id])
-    artistId    String?
-    album       Album?  @relation(fields: [albumId], references: [id])
-    albumId     String?
+    id         String  @id @default(uuid()) @db.Uuid
+    appleURI   String
+    spotifyURI String
+    artist     Artist?
+    album      Album?
+
+    @@map("music_links")
 }
 
 model Image {
-    id          String      @id @default(uuid()) @db.Uuid
-    src         String
-    alt         String
-    artist      Artist? @relation(fields: [artistId], references: [id])
-    artistId    String?
-    album       Album?  @relation(fields: [albumId], references: [id])
-    albumId     String?
+    id       String  @id @default(uuid()) @db.Uuid
+    src      String
+    alt      String
+    artist   Artist? @relation(fields: [artistId], references: [id])
+    artistId String?
+    album    Album?  @relation(fields: [albumId], references: [id])
+    albumId  String?
 }
