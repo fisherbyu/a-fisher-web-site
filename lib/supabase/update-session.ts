@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 export async function updateSession(request: NextRequest) {
     // Define Route Constants
-    const AUTH_PAGE = '/sign-in';
+    const AUTH_PAGE = '/login';
     const PROTECTED_ROUTE = '/admin';
 
     let supabaseResponse = NextResponse.next({

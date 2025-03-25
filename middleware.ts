@@ -9,6 +9,6 @@ export async function middleware(request: NextRequest) {
 export const config = {
     matcher: [
         '/admin/:path*', // Protect admin routes
-        '/sign-in', // Check auth status on sign-in page
+        '/login', // Check auth status on sign-in page
     ],
 };
