@@ -2,6 +2,10 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function updateSession(request: NextRequest) {
+    // Define Route Constants
+    const AUTH_PAGE = '/sign-in';
+    const PROTECTED_ROUTE = '/admin';
+
     let supabaseResponse = NextResponse.next({
         request,
     });
@@ -27,12 +31,14 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user && !request.nextUrl.pathname.startsWith('/sign-up') && !request.nextUrl.pathname.startsWith('/auth')) {
-        // no user, potentially respond by redirecting the user to the login page
-        const url = request.nextUrl.clone();
-        url.pathname = '/sign-up';
-        return NextResponse.redirect(url);
+    // If User is not Authenticated when accessing a protected route, redirect to Login
+    if (!user && request.nextUrl.pathname.startsWith(PROTECTED_ROUTE)) {
+        return NextResponse.redirect(new URL(AUTH_PAGE, request.url));
     }
 
+    // If User is Authenticated and trying to access the login page, redirect to admin
+    if (user && request.nextUrl.pathname.startsWith(AUTH_PAGE)) {
+        return NextResponse.redirect(new URL(PROTECTED_ROUTE, request.url));
+    }
     return supabaseResponse;
 }
