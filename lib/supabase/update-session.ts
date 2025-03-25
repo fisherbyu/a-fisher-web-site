@@ -1,45 +1,38 @@
 import { createServerClient } from '@supabase/ssr';
-import { type NextRequest, NextResponse } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 
-export const updateSession = async (request: NextRequest) => {
-    // Define Route Constants
-    const PROTECTED_ROUTE = '/admin';
-    const AUTH_PAGE = '/sign-up';
-
-    // Create an unmodified response
-    let response = NextResponse.next({
-        request: {
-            headers: request.headers,
-        },
+export async function updateSession(request: NextRequest) {
+    let supabaseResponse = NextResponse.next({
+        request,
     });
 
-    // Initialize the Supabase client
     const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
         cookies: {
             getAll() {
                 return request.cookies.getAll();
             },
             setAll(cookiesToSet) {
-                cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-                response = NextResponse.next({
+                cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
+                supabaseResponse = NextResponse.next({
                     request,
                 });
-                cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
+                cookiesToSet.forEach(({ name, value, options }) => supabaseResponse.cookies.set(name, value, options));
             },
         },
     });
 
-    // Refresh session if expired - required for Server Components
-    await supabase.auth.getUser();
+    // IMPORTANT: DO NOT ADD CODE HERE OR REMOVE auth.getUser()
 
-    // Protect Admin Routes
-    if (request.nextUrl.pathname.startsWith(PROTECTED_ROUTE) && !(await supabase.auth.getUser()).data.user) {
-        return NextResponse.redirect(new URL(AUTH_PAGE, request.url));
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user && !request.nextUrl.pathname.startsWith('/sign-up') && !request.nextUrl.pathname.startsWith('/auth')) {
+        // no user, potentially respond by redirecting the user to the login page
+        const url = request.nextUrl.clone();
+        url.pathname = '/sign-up';
+        return NextResponse.redirect(url);
     }
 
-    if (request.nextUrl.pathname === AUTH_PAGE && (await supabase.auth.getUser()).data.user) {
-        return NextResponse.redirect(new URL(PROTECTED_ROUTE, request.url));
-    }
-
-    return response;
-};
+    return supabaseResponse;
+}
