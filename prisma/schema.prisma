@@ -11,30 +11,30 @@ datasource db {
 
 // Table Definitions
 model Artist {
-    id          String    @id @default(uuid())
-    tier        Int
-    rank        Int?
-    name        String
-    content     Content[]
-    tags        Tag[]
-    musicLink   MusicLink @relation(fields: [musicLinkId], references: [id])
-    musicLinkId String    @unique
-    image       Image     @relation(fields: [imageId], references: [id])
-    imageId     String    @unique
+    id      String    @id @default(uuid())
+    tier    Int
+    rank    Int?
+    name    String
+    content Content[]
+    tags    Tag[]
+    link    MusicLink @relation(fields: [linkId], references: [id])
+    linkId  String    @unique
+    image   Image     @relation(fields: [imageId], references: [id])
+    imageId String    @unique
 
     @@map("artists")
 }
 
 model Album {
-    id          String    @id @default(uuid())
-    rank        Int
-    name        String
-    content     Content[]
-    tags        Tag[]
-    musicLink   MusicLink @relation(fields: [musicLinkId], references: [id])
-    musicLinkId String    @unique
-    image       Image     @relation(fields: [imageId], references: [id])
-    imageId     String    @unique
+    id      String    @id @default(uuid())
+    rank    Int
+    name    String
+    content Content[]
+    tags    Tag[]
+    link    MusicLink @relation(fields: [linkId], references: [id])
+    linkId  String    @unique
+    image   Image     @relation(fields: [imageId], references: [id])
+    imageId String    @unique
 
     @@map("albums")
 }
