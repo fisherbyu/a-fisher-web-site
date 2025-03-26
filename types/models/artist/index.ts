@@ -1,1 +1,1 @@
-export type { Artist } from './artist';
+export type { Artist, PrismaArtist } from './artist';
