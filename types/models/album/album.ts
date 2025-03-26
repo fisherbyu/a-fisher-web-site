@@ -12,8 +12,8 @@ import { Content, Tag, MusicLink, Image } from '@/types';
  */
 export interface Album {
     id: string;
-    rank: number;
     name: string;
+    rank: number;
     content: Content[];
     tags: Tag[];
     link: MusicLink;
