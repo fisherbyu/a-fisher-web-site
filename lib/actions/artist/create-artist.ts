@@ -1,5 +1,5 @@
 'use server';
-import { prisma } from '@/lib';
+import { prisma, transformArtist } from '@/lib';
 
 import { Artist } from '@/types';
 
@@ -30,14 +30,5 @@ export const createArtist = async (artist: Omit<Artist, 'id'>): Promise<Artist> 
         },
     });
 
-    return {
-        id: record.id,
-        name: record.name,
-        tier: record.tier,
-        rank: record.rank ?? undefined,
-        content: record.content,
-        tags: record.tags,
-        link: record.link,
-        image: record.image,
-    };
+    return transformArtist(record);
 };
