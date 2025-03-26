@@ -21,3 +21,39 @@ export interface Artist {
     link: MusicLink;
     image: Image;
 }
+
+export type PrismaArtist = {
+    image: {
+        id: string;
+        src: string;
+        alt: string;
+    };
+    link: {
+        id: string;
+        appleURI: string;
+        spotifyURI: string;
+    };
+
+    content: {
+        id: string;
+        order: number;
+        text: string;
+        artistId: string | null;
+        albumId: string | null;
+    }[];
+    tags: {
+        id: string;
+        content: string;
+        order: number;
+        artistId: string | null;
+        albumId: string | null;
+        title: string;
+    }[];
+} & {
+    id: string;
+    name: string;
+    tier: number;
+    rank: number | null;
+    linkId: string;
+    imageId: string;
+};
