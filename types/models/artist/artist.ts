@@ -13,9 +13,9 @@ import { Content, Tag, MusicLink, Image } from '@/types';
  */
 export interface Artist {
     id: string;
+    name: string;
     tier: number;
     rank?: number;
-    name: string;
     content: Content[];
     tags: Tag[];
     link: MusicLink;
