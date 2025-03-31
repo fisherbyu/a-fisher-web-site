@@ -1,58 +1,60 @@
 // artist.ts
 export type Artist = {
-    id: string;
+    id: number;
     name: string;
     tier: number;
     rank?: number;
+    contents: Content[];
+    attributes: Attribute[];
     link: Link;
     image: Image;
-    contents: ContentBlock[];
-    attributes: Attribute[];
 };
 
 // album.ts
 export type Album = {
-    id: string;
+    id: number;
     name: string;
     rank: number;
+    contents: Content[];
+    attributes: Attribute[];
     link: Link;
     image: Image;
-    contents: ContentBlock[];
-    attributes: Attribute[];
 };
 
 // playlist.ts
 export type Playlist = {
-    id: string;
+    id: number;
     title: string;
     link: Link;
 };
 
 // link.ts
 export type Link = {
-    id: string;
+    id: number;
     appleURI: string;
     spotifyURI: string;
 };
 
 // image.ts
 export type Image = {
-    id: string;
+    id: number;
     src: string;
     alt: string;
+    height: number;
+    width: number;
 };
 
 // content.ts
-export type ContentBlock = {
-    id: string;
-    content: string;
+export type Content = {
+    id: number;
     order: number;
+    text: string;
 };
 
 // attribute.ts
 export type Attribute = {
-    id: string;
-    title: string;
-    content: string;
+    id: number;
     order: number;
+    title: string;
+    text: string;
 };
