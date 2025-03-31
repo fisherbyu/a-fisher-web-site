@@ -7,7 +7,7 @@ type CreateArtistInput = {
     name: string;
     tier: number;
     rank?: number;
-    link?: {
+    link: {
         appleURI: string;
         spotifyURI: string;
     };
