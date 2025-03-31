@@ -1,1 +1,1 @@
-export type { Content } from './content';
+export type { Content } from './content.types';

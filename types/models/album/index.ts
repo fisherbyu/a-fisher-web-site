@@ -1,1 +1,1 @@
-export type { Album } from './album';
+export type { Album } from './album.types';
