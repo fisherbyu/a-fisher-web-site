@@ -6,8 +6,8 @@ export type Artist = {
     rank?: number;
     contents: Content[];
     attributes: Attribute[];
-    link: Link;
-    image: Image;
+    link?: Link;
+    image?: Image;
 };
 
 // album.ts
@@ -17,15 +17,15 @@ export type Album = {
     rank: number;
     contents: Content[];
     attributes: Attribute[];
-    link: Link;
-    image: Image;
+    link?: Link;
+    image?: Image;
 };
 
 // playlist.ts
 export type Playlist = {
     id: number;
     title: string;
-    link: Link;
+    link?: Link;
 };
 
 // link.ts
