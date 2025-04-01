@@ -45,7 +45,7 @@ export const Dropdown = ({ label, value, options, onSelect }: DropdownProps) => 
     }, []);
 
     return (
-        <div className="w-10/12 relative p-1" ref={dropdownRef}>
+        <div className="w--full relative p-1" ref={dropdownRef}>
             {label && <FormLabel name={label} title={label} />}
             <button
                 className={`${INPUT_STYLES.alt} w-full flex justify-between items-center`}
