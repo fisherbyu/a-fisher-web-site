@@ -1,17 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { DropdownProps, DropdownOption } from './dropdown.types';
 import { Icon } from 'thread-ui';
-
-interface DropdownProps {
-    label?: string;
-    value: string | number;
-    options: DropdownOption[];
-    onSelect: (value: string | number) => void;
-}
-
-interface DropdownOption {
-    label: string;
-    value: string | number;
-}
 
 export const Dropdown = ({ label, value, options, onSelect }: DropdownProps) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -56,7 +45,7 @@ export const Dropdown = ({ label, value, options, onSelect }: DropdownProps) => 
         <div className="w-full relative" ref={dropdownRef}>
             {label && <div className="block font-medium text-gray-700 mb-2">{label}</div>}
             <button
-                className="flex justify-between items-center w-full px-4 py-2 bg-gray-100 rounded-lg shadow-sm focus:outline-none"
+                className="flex justify-between border border-gray-300 items-center w-full px-4 py-2 bg-gray-50 rounded-lg shadow-sm focus:outline-none"
                 onClick={toggleDropdown}
             >
                 <span>{selected.label}</span>
