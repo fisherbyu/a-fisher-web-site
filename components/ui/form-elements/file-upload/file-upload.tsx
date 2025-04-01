@@ -190,10 +190,24 @@ export const FileUpload = ({
                         <p className="mt-2 text-sm text-gray-600">Drag and drop your file here</p>
                         <p className="text-xs text-gray-500 mb-4">{supportedFormatsText}</p>
                         <div className="flex items-center justify-center">
-                            <label className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded cursor-pointer">
+                            <input
+                                type="file"
+                                id="file-upload-input"
+                                className="hidden"
+                                accept={allowedFileTypes.join(',')}
+                                onChange={handleFileInput}
+                            />
+                            <Button
+                                type="button"
+                                onClick={() => {
+                                    const fileInput = document.getElementById('file-upload-input');
+                                    if (fileInput) {
+                                        fileInput.click();
+                                    }
+                                }}
+                            >
                                 Select File
-                                <input type="file" className="hidden" accept={allowedFileTypes.join(',')} onChange={handleFileInput} />
-                            </label>
+                            </Button>
                         </div>
                     </div>
                 ) : (
