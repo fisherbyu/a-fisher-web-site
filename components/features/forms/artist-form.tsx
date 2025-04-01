@@ -35,7 +35,7 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
     );
     return (
         <form className="container">
-            <div className="text-3xl">Create Artist</div>
+            <div className="text-3xl">{initialData ? 'Edit' : 'Create'} Artist</div>
             <Divider width="100%" />
             <ArtistInfoForm data={artistInfo} onChange={setArtistInfo} />
         </form>
