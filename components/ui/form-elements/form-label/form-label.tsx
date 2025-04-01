@@ -1,8 +1,8 @@
 import { FormLabelProps } from './form-label.types';
 
-export const FormLabel = ({ id, title }: FormLabelProps) => {
+export const FormLabel = ({ name, id = name, title }: FormLabelProps) => {
     return (
-        <label htmlFor={id} className="font-medium text-gray-700 mb-2">
+        <label id={id} htmlFor={name} className="font-medium text-gray-700 mb-2">
             {title}
         </label>
     );
