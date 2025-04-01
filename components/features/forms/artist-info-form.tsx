@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown } from './dropdown';
+import { Dropdown } from '@/components';
 
 type ArtistInfoData = {
     name: string;
@@ -48,28 +48,11 @@ export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
             </div>
 
             <div className="space-y-1">
-                <label htmlFor="tier" className="block font-medium text-gray-700">
-                    Tier
-                </label>
-                <Dropdown id="tier" label="Tier" value={data.tier} options={tierOptions} required onSelect={() => null} />
-                {/* <select
-                    id="tier"
-                    name="tier"
-                    required
-                    value={data.tier}
-                    onChange={handleChange}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                >
-                    {[...Array(5)].map((_, index) => (
-                        <option key={index} value={index + 1}>
-                            {`Tier ${index + 1}`}
-                        </option>
-                    ))}
-                </select> */}
+                <Dropdown label="Tier" value={data.tier} options={tierOptions} onSelect={() => null} />
             </div>
 
             <div>
-                <label htmlFor="rank" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="rank" className="block text-sm font-medium text-gray-700 mb-2">
                     Rank (optional)
                 </label>
                 <input
@@ -79,7 +62,7 @@ export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
                     value={data.rank ?? ''}
                     onChange={handleChange}
                     min="1"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 />
             </div>
         </div>
