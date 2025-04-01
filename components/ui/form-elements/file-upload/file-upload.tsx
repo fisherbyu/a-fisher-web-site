@@ -2,15 +2,7 @@
 import { useState, useCallback } from 'react';
 import { Icon, Button, Divider } from 'thread-ui';
 import { TextInput } from '../text-input';
-
-export interface FileUploadProps {
-    title?: string;
-    allowedFileTypes?: string[];
-    maxFileSize?: number; // in bytes
-    onFileSelect: (file: File, customFilename: string) => Promise<void> | void;
-    supportedFormatsText?: string;
-    initialFileName?: string;
-}
+import { FileUploadProps } from './file-upload.types';
 
 export const FileUpload = ({
     title = 'Upload a File',
