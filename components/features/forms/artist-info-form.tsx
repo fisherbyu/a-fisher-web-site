@@ -31,7 +31,7 @@ export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
     };
 
     return (
-        <div className="max-w-56">
+        <div className="w-96">
             <div>
                 <TextInput name="name" title="Name" value={data.name} onChange={handleChange} required />
                 <NumberInput name="rank" title="Rank" value={data.rank} onChange={handleChange} required />
