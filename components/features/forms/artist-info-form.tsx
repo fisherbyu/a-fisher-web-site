@@ -34,19 +34,7 @@ export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
     return (
         <div className="space-y-4 max-w-56">
             <div>
-                <TextInput />
-                {/* <label htmlFor="name" className="font-medium text-gray-700 mb-2">
-                    Artist Name
-                </label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    value={data.name}
-                    onChange={handleChange}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                /> */}
+                <TextInput name="name" title="Name" value={data.name} onChange={handleChange} required />
             </div>
 
             <div className="space-y-1">
