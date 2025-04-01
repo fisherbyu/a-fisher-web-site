@@ -3,6 +3,7 @@ import { Divider } from 'thread-ui';
 import { ArtistInfoForm } from './artist-info-form';
 import { Artist, Attribute, Content, Image, Link } from '@/types';
 import { useState } from 'react';
+import ImageUpload from '@/components/ui/form-elements/image-upload/image-upload';
 
 type FormProps = {
     initialData?: Artist;
@@ -37,7 +38,10 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
         <form className="container">
             <div className="text-3xl">{initialData ? 'Edit' : 'Create'} Artist</div>
             <Divider width="100%" />
-            <ArtistInfoForm data={artistInfo} onChange={setArtistInfo} />
+            <div className="grid grid-cols-3">
+                <ArtistInfoForm data={artistInfo} onChange={setArtistInfo} />
+                <ImageUpload data={image} onChange={setImage} />
+            </div>
         </form>
     );
 };
