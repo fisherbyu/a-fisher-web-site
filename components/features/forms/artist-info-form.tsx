@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dropdown } from '@/components';
+import { TextInput } from '@/components/ui/form-elements/text-input/text-input';
 
 type ArtistInfoData = {
     name: string;
@@ -33,7 +34,8 @@ export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
     return (
         <div className="space-y-4 max-w-56">
             <div>
-                <label htmlFor="name" className="font-medium text-gray-700 mb-2">
+                <TextInput />
+                {/* <label htmlFor="name" className="font-medium text-gray-700 mb-2">
                     Artist Name
                 </label>
                 <input
@@ -44,7 +46,7 @@ export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
                     value={data.name}
                     onChange={handleChange}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
+                /> */}
             </div>
 
             <div className="space-y-1">
