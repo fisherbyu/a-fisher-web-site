@@ -6,5 +6,5 @@ const BASE_STYLES = {
 };
 
 export const INPUT_STYLES = {
-    standard: BASE_STYLES.border + BASE_STYLES.focus + BASE_STYLES.layout,
+    standard: `${BASE_STYLES.border} ${BASE_STYLES.focus} ${BASE_STYLES.layout}`,
 };
