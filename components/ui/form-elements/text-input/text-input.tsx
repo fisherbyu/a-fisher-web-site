@@ -5,7 +5,7 @@ import { INPUT_STYLES } from '../input-styles';
 export const TextInput = ({ name, id = name, title, value, required, onChange }: TextInputProps) => {
     return (
         <div>
-            <FormLabel id={name} title={title} />
+            <FormLabel id={id} name={name} title={title} />
             <input
                 type="text"
                 id={id}
