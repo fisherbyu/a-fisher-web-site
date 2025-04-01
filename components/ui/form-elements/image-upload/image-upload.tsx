@@ -4,7 +4,8 @@ import { useState, useCallback, FormEvent } from 'react';
 import { Upload } from 'lucide-react';
 import { Button, Divider } from 'thread-ui';
 
-const ImageUpload = () => {
+const ImageUpload = ({ data, onChange }: ImageUploadProps) => {
+    // Init Display State
     const [isDragging, setIsDragging] = useState(false);
     const [preview, setPreview] = useState<string | null>(null);
     const [uploadStatus, setUploadStatus] = useState('');
