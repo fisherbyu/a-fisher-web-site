@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { DropdownProps, DropdownOption } from './dropdown.types';
 import { Icon } from 'thread-ui';
 import { FormLabel } from '../form-elements';
+import { INPUT_STYLES } from '../form-elements/input-styles';
 
 export const Dropdown = ({ label, value, options, onSelect }: DropdownProps) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -44,10 +45,11 @@ export const Dropdown = ({ label, value, options, onSelect }: DropdownProps) => 
     }, []);
 
     return (
-        <div className="w-full relative" ref={dropdownRef}>
+        <div className="w-10/12 relative p-1" ref={dropdownRef}>
             {label && <FormLabel name={label} title={label} />}
             <button
-                className="flex justify-between border border-gray-300 items-center w-full px-4 py-2 bg-gray-50 rounded-lg shadow-sm focus:outline-none"
+                className={`${INPUT_STYLES.alt} w-full flex justify-between items-center`}
+                // className="flex justify-between border border-gray-300 items-center w-full px-4 py-2 bg-gray-50 rounded-lg shadow-sm focus:outline-none"
                 onClick={toggleDropdown}
             >
                 <span>{selected.label}</span>
