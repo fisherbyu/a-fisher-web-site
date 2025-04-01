@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import { DropdownProps, DropdownOption } from './dropdown.types';
 import { Icon } from 'thread-ui';
