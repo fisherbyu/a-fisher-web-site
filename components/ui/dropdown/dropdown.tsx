@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { DropdownProps, DropdownOption } from './dropdown.types';
 import { Icon } from 'thread-ui';
+import { FormLabel } from '../form-elements';
 
 export const Dropdown = ({ label, value, options, onSelect }: DropdownProps) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +45,7 @@ export const Dropdown = ({ label, value, options, onSelect }: DropdownProps) => 
 
     return (
         <div className="w-full relative" ref={dropdownRef}>
-            {label && <div className="block font-medium text-gray-700 mb-2">{label}</div>}
+            {label && <FormLabel name={label} title={label} />}
             <button
                 className="flex justify-between border border-gray-300 items-center w-full px-4 py-2 bg-gray-50 rounded-lg shadow-sm focus:outline-none"
                 onClick={toggleDropdown}
