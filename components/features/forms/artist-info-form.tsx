@@ -31,31 +31,11 @@ export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
     };
 
     return (
-        <div className="space-y-4 max-w-56">
+        <div className="max-w-56">
             <div>
                 <TextInput name="name" title="Name" value={data.name} onChange={handleChange} required />
-            </div>
-
-            <div className="space-y-1">
+                <NumberInput name="rank" title="Rank" value={data.rank} onChange={handleChange} required />
                 <Dropdown label="Tier" value={data.tier} options={tierOptions} onSelect={() => null} />
-            </div>
-            <div>
-                <NumberInput name="rank" title="Ranks" value={data.rank} onChange={handleChange} required />
-            </div>
-
-            <div>
-                <label htmlFor="rank" className="block text-sm font-medium text-gray-700 mb-2">
-                    Rank (optional)
-                </label>
-                <input
-                    type="number"
-                    id="rank"
-                    name="rank"
-                    value={data.rank ?? ''}
-                    onChange={handleChange}
-                    min="1"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                />
             </div>
         </div>
     );
