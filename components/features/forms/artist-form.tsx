@@ -11,26 +11,32 @@ type FormProps = {
 };
 
 export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
+    // Handle core Artist Details
     const [artistInfo, setArtistInfo] = useState({
         name: initialData?.name || '',
         tier: initialData?.tier || 1,
         rank: initialData?.rank || undefined,
     });
 
+    // Handle Link Info
     const [link, setLink] = useState<Omit<Link, 'id'>>({
         appleURI: initialData?.link?.appleURI || '',
         spotifyURI: initialData?.link?.spotifyURI || '',
     });
 
+    // Handle Image Data
     const [image, setImage] = useState<Omit<Image, 'id'>>({
         src: initialData?.image?.src || '',
         alt: initialData?.image?.alt || '',
         height: initialData?.image?.height || 0,
         width: initialData?.image?.width || 0,
     });
+    const handleFileSelect = async (file: File, customFilename: string): Promise<void> => {};
 
+    // Handle Content Data
     const [contents, setContents] = useState<Omit<Content, 'id'>[]>(initialData?.contents || [{ order: 1, text: '' }]);
 
+    // Handle Content Data
     const [attributes, setAttributes] = useState<Omit<Attribute, 'id'>[]>(
         initialData?.attributes || [{ order: 1, title: '', text: '' }]
     );
@@ -44,7 +50,7 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
                     title="Add Image"
                     allowedFileTypes={['image/*']}
                     supportedFormatsText="Supports all Image Types"
-                    onFileSelect={() => {}}
+                    onFileSelect={handleFileSelect}
                 />
             </div>
         </form>
