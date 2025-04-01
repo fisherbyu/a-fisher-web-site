@@ -1,4 +1,5 @@
 export type FormLabelProps = {
-    id: string;
+    id?: string;
+    name: string;
     title: string;
 };
