@@ -4,5 +4,6 @@ export type InputProps<T> = {
     title: string;
     value?: T;
     required?: boolean;
+    placeholder?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 };
