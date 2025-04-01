@@ -1,8 +1,8 @@
-export type InputProps = {
+export type InputProps<T> = {
     id?: string;
     name: string;
     title: string;
-    value?: string;
+    value?: T;
     required?: boolean;
     onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 };
