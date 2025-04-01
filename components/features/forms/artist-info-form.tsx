@@ -1,6 +1,5 @@
 import React from 'react';
-import { Dropdown } from '@/components';
-import { TextInput } from '@/components/ui/form-elements/text-input/text-input';
+import { Dropdown, NumberInput, TextInput } from '@/components';
 
 type ArtistInfoData = {
     name: string;
@@ -39,6 +38,9 @@ export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
 
             <div className="space-y-1">
                 <Dropdown label="Tier" value={data.tier} options={tierOptions} onSelect={() => null} />
+            </div>
+            <div>
+                <NumberInput name="rank" title="Ranks" value={data.rank} onChange={handleChange} required />
             </div>
 
             <div>
