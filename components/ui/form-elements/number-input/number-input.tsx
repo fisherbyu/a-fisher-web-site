@@ -4,7 +4,7 @@ import { NumberInputProps } from './number-input.types';
 
 export const NumberInput = ({ name, id = name, title, value, required, onChange, min }: NumberInputProps) => {
     return (
-        <div>
+        <div className="p-1">
             <FormLabel id={id} name={name} title={title} />
             <input
                 type="number"
@@ -15,6 +15,7 @@ export const NumberInput = ({ name, id = name, title, value, required, onChange,
                 onChange={onChange}
                 className={INPUT_STYLES.standard}
                 min={min}
+                onKeyPress={(e) => !/[0-9]/.test(e.key) && e.preventDefault()}
             />
         </div>
     );
