@@ -31,7 +31,9 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
         height: initialData?.image?.height || 0,
         width: initialData?.image?.width || 0,
     });
-    const handleFileSelect = async (file: File, customFilename: string): Promise<void> => {};
+    const handleFileSelect = async (file: File): Promise<void> => {
+        console.log('IMG PROCESS:', file.name);
+    };
 
     // Handle Content Data
     const [contents, setContents] = useState<Omit<Content, 'id'>[]>(initialData?.contents || [{ order: 1, text: '' }]);

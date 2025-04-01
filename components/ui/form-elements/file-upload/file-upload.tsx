@@ -129,7 +129,7 @@ export const FileUpload = ({
             }
 
             // Call the callback function provided by parent component
-            await onFileSelect(fileToSubmit, customFilename);
+            await onFileSelect(fileToSubmit);
 
             setStatus('File processed successfully!');
         } catch (error) {
