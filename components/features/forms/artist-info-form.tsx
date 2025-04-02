@@ -29,8 +29,10 @@ export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
     return (
         <div>
             <TextInput name="name" title="Name" value={data.name} onChange={handleChange} required />
-            <NumberInput name="rank" title="Rank" value={data.rank} onChange={handleChange} required min={1} max={5} />
-            <Dropdown label="Tier" value={data.tier} options={tierOptions} onSelect={() => null} />
+            <div className="grid grid-cols-2">
+                <NumberInput name="rank" title="Rank" value={data.rank} onChange={handleChange} required min={1} max={5} />
+                <Dropdown label="Tier" value={data.tier} options={tierOptions} onSelect={() => null} />
+            </div>
         </div>
     );
 };
