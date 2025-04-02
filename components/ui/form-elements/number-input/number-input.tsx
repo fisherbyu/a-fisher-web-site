@@ -112,9 +112,12 @@ export const NumberInput = ({ name, id = name, title, value, placeholder, requir
                     onChange={handleInputChange}
                     className={`w-16  ${styles.layout} ${styles.border} ${styles.inputBg} ${styles.text} ${styles.inputFocus} ${styles.alterInput}`}
                     onKeyDown={(e) => {
-                        if (e.key === '-' && (min == undefined || min < 0) && e.currentTarget.value.length === 0) {
-                            return;
+                        // Allow minus sign as first character if negative values are allowed
+                        if (e.key === '-' && e.currentTarget.value.length === 0 && (min === undefined || min < 0)) {
+                            return; // Allow the minus sign
                         }
+
+                        // Prevent non-numeric input except allowed control keys
                         if (
                             !/[0-9]/.test(e.key) &&
                             !e.ctrlKey &&
