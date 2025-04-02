@@ -52,24 +52,23 @@ export const NumberInput = ({ name, id = name, title, value, placeholder, requir
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target.value;
 
-        // Allow empty input (for user to clear and start over)
+        // Allow empty input
         if (inputValue === '') {
-            setNum(undefined); // or whatever represents "empty" in your component
+            setNum(undefined);
             if (onChange) {
                 onChange(e);
             }
             return;
         }
 
-        // Check if it's a valid number
+        // Check if valid number
         const newValue = Number(inputValue);
         if (isNaN(newValue)) {
             // Invalid number - keep previous value
             return;
         }
 
-        // Only apply range validation for complete inputs, not during typing
-        // Or apply it but allow in-progress values
+        // Only apply range validation for complete inputs
         if (valueWithinRange(newValue, min, max)) {
             setNum(newValue);
             if (onChange) {
@@ -113,7 +112,9 @@ export const NumberInput = ({ name, id = name, title, value, placeholder, requir
                     onChange={handleInputChange}
                     className={`w-16  ${styles.layout} ${styles.border} ${styles.inputBg} ${styles.text} ${styles.inputFocus} ${styles.alterInput}`}
                     onKeyDown={(e) => {
-                        // Only block keys that are not digits, control keys, or navigation keys
+                        if (e.key === '-' && (min == undefined || min < 0) && e.currentTarget.value.length === 0) {
+                            return;
+                        }
                         if (
                             !/[0-9]/.test(e.key) &&
                             !e.ctrlKey &&
