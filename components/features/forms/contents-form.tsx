@@ -1,4 +1,5 @@
 import { ReorderableList, TextInput } from '@/components/ui';
+import { EditableListItem } from '@/components/ui/form-elements/editable-list-item';
 import { Content } from '@/types';
 import { ReactNode } from 'react';
 
@@ -13,19 +14,25 @@ type EditContentsProps = Omit<Content, 'id'> & {
 
 const EditContents = (props: EditContentsProps) => {
     const { order, text, dragHandle } = props;
-    return (
-        <div className="flex flex-row justify-between items-center">
-            {dragHandle}
-            <TextInput name="text" />
-        </div>
-    );
+
+    const displayContents = <div>{text}</div>;
+
+    const editContentData = <TextInput name={`contents-${order}`} />;
+
+    return <EditableListItem dragHandle={dragHandle} display={displayContents} edit={editContentData} />;
 };
 
 export const ContentsForm = ({ data, onChange }: ContentFormProps) => {
     return (
         <div>
             <h1>Contents</h1>
-            <ReorderableList data={data} orderProperty="order" ItemComponent={EditContents} onChange={onChange} />
+            <ReorderableList
+                className="flex flex-col gap-1"
+                data={data}
+                orderProperty="order"
+                ItemComponent={EditContents}
+                onChange={onChange}
+            />
         </div>
     );
 };
