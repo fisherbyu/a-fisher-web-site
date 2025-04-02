@@ -4,6 +4,7 @@ import { ArtistInfoForm } from './artist-info-form';
 import { Artist, Attribute, Content, Image, Link } from '@/types';
 import { useState } from 'react';
 import { FileUpload } from '@/components';
+import { LinkForm } from './link-form';
 
 type FormProps = {
     initialData?: Artist;
@@ -47,7 +48,10 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
             <div className="text-3xl">{initialData ? 'Edit' : 'Create'} Artist</div>
             <Divider width="100%" />
             <div className="grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                <ArtistInfoForm data={artistInfo} onChange={setArtistInfo} />
+                <div>
+                    <ArtistInfoForm data={artistInfo} onChange={setArtistInfo} />
+                    <LinkForm data={link} onChange={setLink} />
+                </div>
                 <FileUpload
                     title="Add Image"
                     allowedFileTypes={['image/*']}
