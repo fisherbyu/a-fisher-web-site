@@ -48,24 +48,30 @@ export const NumberInput = ({ name, id = name, title, value, placeholder, requir
         }
     };
 
-    const BTTN_STYLES = {
-        bg: 'bg-gray-100 hover:bg-gray-200',
+    const styles = {
+        bttnBg: 'bg-gray-100 hover:bg-gray-200',
         border: 'border border-gray-300',
         layout: 'p-3 h-11',
         focus: 'focus:ring-gray-100 focus:ring-2 focus:outline-none',
         dark: 'dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 dark:focus:ring-gray-700',
         left: 'rounded-s-lg',
         right: 'rounded-e-lg',
+        inputBorder: 'border-y border-gray-300',
+        inputBg: 'bg-gray-50',
+        text: 'text-center text-gray-900 text-sm',
+        inputFocus: 'focus:ring-blue-500 focus:border-blue-500',
+        alterInput:
+            'appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]',
     };
 
-    const btnLeft = `${BTTN_STYLES.bg} ${BTTN_STYLES.border} ${BTTN_STYLES.layout} ${BTTN_STYLES.focus} ${BTTN_STYLES.dark} ${BTTN_STYLES.left}`;
-    const btnRight = `${BTTN_STYLES.bg} ${BTTN_STYLES.border} ${BTTN_STYLES.layout} ${BTTN_STYLES.focus} ${BTTN_STYLES.dark} ${BTTN_STYLES.right}`;
+    const bttnLeft = `${styles.bttnBg} ${styles.border} ${styles.layout} ${styles.focus} ${styles.dark} ${styles.left}`;
+    const bttnRight = `${styles.bttnBg} ${styles.border} ${styles.layout} ${styles.focus} ${styles.dark} ${styles.right}`;
 
     return (
         <InputWrapper>
             {title && <FormLabel id={id} name={name} title={title} />}
             <div className="flex self-start justify-center items-center">
-                <button type="button" className={btnLeft} onClick={handleIncrement(-1)}>
+                <button type="button" className={bttnLeft} onClick={handleIncrement(-1)}>
                     <Icon name="CaretLeft" color="grey" size={12} />
                 </button>
                 <input
@@ -75,11 +81,11 @@ export const NumberInput = ({ name, id = name, title, value, placeholder, requir
                     placeholder={placeholder}
                     value={num ?? ''}
                     onChange={handleInputChange}
-                    className="w-24 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield] bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500  py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className={`w-16  ${styles.layout} ${styles.border} ${styles.inputBg} ${styles.text} ${styles.inputFocus} ${styles.alterInput}`}
                     required={required}
                     min={min}
                 />
-                <button type="button" className={btnRight} onClick={handleIncrement(1)}>
+                <button type="button" className={bttnRight} onClick={handleIncrement(1)}>
                     <Icon name="CaretRight" color="grey" size={12} />
                 </button>
             </div>
