@@ -5,5 +5,5 @@ export type InputProps<T> = {
     value?: T;
     required?: boolean;
     placeholder?: string;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
 };
