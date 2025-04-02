@@ -22,6 +22,7 @@ const EditAttribute = (props: EditAttributeProps) => {
     // Init Data Handling
     const [attributeData, setAttributeData] = useState<AttributeData[]>([{ id: id, title: title, text: text, order: order }]);
 
+    // Temp Define Display/Forms
     const displayAttribute = (
         <div className="flex flex-col justify-start">
             <h3 className="font-medium">{title}</h3>
