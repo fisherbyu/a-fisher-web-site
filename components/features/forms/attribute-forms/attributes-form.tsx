@@ -1,18 +1,26 @@
 import { ReorderableList, TextInput } from '@/components/ui';
 import { EditableListItem } from '@/components/ui/form-elements/editable-list-item';
 import { Attribute } from '@/types';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
-type AttributesFormProps = {
-    data: Attribute[];
-    onChange: (data: Attribute[]) => void;
+type AttributeData = Omit<Attribute, 'id'> & {
+    id: string | number;
 };
 
-type EditAttributeProps = Omit<Attribute, 'id'> & {
+type AttributesFormProps = {
+    data: AttributeData[];
+    onChange: (data: AttributeData[]) => void;
+};
+
+type EditAttributeProps = AttributeData & {
     dragHandle: ReactNode;
 };
 const EditAttribute = (props: EditAttributeProps) => {
-    const { title, text, order, dragHandle } = props;
+    // Extract Props
+    const { id, title, text, order, dragHandle } = props;
+
+    // Init Data Handling
+    const [attributeData, setAttributeData] = useState<AttributeData[]>([{ id: id, title: title, text: text, order: order }]);
 
     const displayAttribute = (
         <div className="flex flex-col justify-start">
