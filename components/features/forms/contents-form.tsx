@@ -15,7 +15,7 @@ type EditContentsProps = Omit<Content, 'id'> & {
 const EditContents = (props: EditContentsProps) => {
     const { order, text, dragHandle } = props;
 
-    const displayContents = <div>{text}</div>;
+    const displayContents = <div className="truncate">{text}</div>;
 
     const editContentData = <TextInput name={`contents-${order}`} value={text} multiline />;
 
