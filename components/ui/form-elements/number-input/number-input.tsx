@@ -15,7 +15,7 @@ const valueWithinRange = (value: number, min?: number, max?: number): boolean =>
     return true;
 };
 
-export const NumberInput = ({ name, id = name, title, value, placeholder, required, min, max, onChange }: NumberInputProps) => {
+export const NumberInput = ({ name, id = name, title, value, placeholder, required, dark, min, max, onChange }: NumberInputProps) => {
     // Initialize state with the value from props or null
     const [num, setNum] = useState<number | undefined>(value);
 
@@ -110,7 +110,7 @@ export const NumberInput = ({ name, id = name, title, value, placeholder, requir
                     placeholder={placeholder}
                     value={num ?? ''}
                     onChange={handleInputChange}
-                    className={`w-16  ${styles.layout} ${styles.border} ${styles.inputBg} ${styles.text} ${styles.inputFocus} ${styles.alterInput}`}
+                    className={`w-16  ${styles.layout} ${styles.border} ${styles.text} ${styles.inputFocus} ${styles.alterInput} ${dark ? styles.inputBg : ''}`}
                     onKeyDown={(e) => {
                         // Allow minus sign as first character if negative values are allowed
                         if (e.key === '-' && e.currentTarget.value.length === 0 && (min === undefined || min < 0)) {
