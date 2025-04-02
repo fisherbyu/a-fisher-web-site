@@ -47,7 +47,9 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
     );
 
     // Handle Content Data
-    const [attributes, setAttributes] = useState<Attribute[]>(initialData?.attributes || [{ id: 1, order: 1, title: '', text: '' }]);
+    const [attributes, setAttributes] = useState<Attribute[]>(
+        initialData?.attributes || [{ id: 1, order: 1, title: 'Title', text: 'Contents' }]
+    );
     return (
         <form className="container">
             <div className="text-3xl">{initialData ? 'Edit' : 'Create'} Artist</div>
