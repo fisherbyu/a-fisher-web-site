@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dropdown, NumberInput, TextInput } from '@/components';
+import { HandleInputChanges } from '@/lib';
 
 type ArtistInfoData = {
     name: string;
@@ -15,20 +16,15 @@ type ArtistInfoFormProps = {
 export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
     const tierOptions = [...Array(5)].map((_, index) => ({ label: `Tier ${index + 1}`, value: index + 1 }));
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type } = e.target as HTMLInputElement;
-
-        let parsedValue: string | number | undefined = value;
-
-        // Handle numeric inputs
-        if (type === 'number') {
-            parsedValue = value === '' ? undefined : Number(value);
-        }
-
-        onChange({
-            ...data,
-            [name]: parsedValue,
-        });
+        HandleInputChanges(e, data, onChange);
     };
+
+    // const handleTierChange = (selectedValue: number) => {
+    //     onChange({
+    //         ...data,
+    //         tier: selectedValue,
+    //     });
+    // };
 
     return (
         <div>
