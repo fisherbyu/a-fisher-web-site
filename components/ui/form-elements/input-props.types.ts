@@ -1,7 +1,7 @@
 export type InputProps<T> = {
     id?: string;
     name: string;
-    title: string;
+    title?: string;
     value?: T;
     required?: boolean;
     placeholder?: string;
