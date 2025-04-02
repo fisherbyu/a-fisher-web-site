@@ -10,6 +10,7 @@ export const ReorderableList = <T extends { id: string | number }>({
     orderProperty,
     ItemComponent,
     onChange,
+    className,
 }: ReorderableListProps<T>) => {
     // Track items locally for immediate UI updates
     const [items, setItems] = useState(data);
@@ -50,7 +51,7 @@ export const ReorderableList = <T extends { id: string | number }>({
     return (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={items.map((item) => ({ id: item.id }))} strategy={verticalListSortingStrategy}>
-                <div className="">
+                <div className={className}>
                     {items.map((item) => (
                         <SortableItem key={item.id} id={item.id} item={item} ItemComponent={ItemComponent} />
                     ))}

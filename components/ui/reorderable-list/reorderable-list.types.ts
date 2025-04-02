@@ -5,4 +5,5 @@ export type ReorderableListProps<T> = {
     orderProperty: keyof T;
     ItemComponent: React.ComponentType<T & { dragHandle: ReactNode }>;
     onChange: (data: T[]) => void;
+    className?: string;
 };
