@@ -41,7 +41,7 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
     // Handle Content Data
     const [contents, setContents] = useState<Content[]>(
         initialData?.contents || [
-            { id: 0, order: 1, text: '' },
+            { id: 0, order: 1, text: 'Test' },
             { id: 1, order: 2, text: '' },
         ]
     );
