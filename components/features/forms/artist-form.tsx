@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { FileUpload } from '@/components';
 import { LinkForm } from './link-form';
 import { ContentsForm } from './contents-form';
-import { AttributesForm } from './attributes-form';
+import { AttributesForm } from './attribute-forms';
 
 type FormProps = {
     initialData?: Artist;
