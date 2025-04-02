@@ -17,7 +17,7 @@ const EditContents = (props: EditContentsProps) => {
 
     const displayContents = <div>{text}</div>;
 
-    const editContentData = <TextInput name={`contents-${order}`} value={text} />;
+    const editContentData = <TextInput name={`contents-${order}`} value={text} multiline />;
 
     return <EditableListItem dragHandle={dragHandle} display={displayContents} edit={editContentData} />;
 };
