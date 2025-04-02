@@ -5,6 +5,16 @@ import { InputWrapper } from '../input-wrapper';
 import { NumberInputProps } from './number-input.types';
 import { useState, useEffect } from 'react';
 
+const valueWithinRange = (value: number, min?: number, max?: number): boolean => {
+    if (min !== undefined && value < min) {
+        return false;
+    }
+    if (max !== undefined && value > max) {
+        return false;
+    }
+    return true;
+};
+
 export const NumberInput = ({ name, id = name, title, value, placeholder, required, min, max, onChange }: NumberInputProps) => {
     // Initialize state with the value from props or null
     const [num, setNum] = useState<number | undefined>(value);
@@ -19,7 +29,7 @@ export const NumberInput = ({ name, id = name, title, value, placeholder, requir
         const newValue = (num ?? 0) + increment;
 
         // Respect min/max values if provided
-        if ((min !== undefined && newValue < min) || (max !== undefined && newValue > max)) {
+        if (!valueWithinRange(newValue, min, max)) {
             return;
         }
 
@@ -40,11 +50,31 @@ export const NumberInput = ({ name, id = name, title, value, placeholder, requir
 
     // Handle direct input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = e.target.value === '' ? undefined : Number(e.target.value);
-        setNum(newValue);
+        const inputValue = e.target.value;
 
-        if (onChange) {
-            onChange(e);
+        // Allow empty input (for user to clear and start over)
+        if (inputValue === '') {
+            setNum(undefined); // or whatever represents "empty" in your component
+            if (onChange) {
+                onChange(e);
+            }
+            return;
+        }
+
+        // Check if it's a valid number
+        const newValue = Number(inputValue);
+        if (isNaN(newValue)) {
+            // Invalid number - keep previous value
+            return;
+        }
+
+        // Only apply range validation for complete inputs, not during typing
+        // Or apply it but allow in-progress values
+        if (valueWithinRange(newValue, min, max)) {
+            setNum(newValue);
+            if (onChange) {
+                onChange(e);
+            }
         }
     };
 
@@ -82,6 +112,17 @@ export const NumberInput = ({ name, id = name, title, value, placeholder, requir
                     value={num ?? ''}
                     onChange={handleInputChange}
                     className={`w-16  ${styles.layout} ${styles.border} ${styles.inputBg} ${styles.text} ${styles.inputFocus} ${styles.alterInput}`}
+                    onKeyDown={(e) => {
+                        // Only block keys that are not digits, control keys, or navigation keys
+                        if (
+                            !/[0-9]/.test(e.key) &&
+                            !e.ctrlKey &&
+                            !e.metaKey &&
+                            !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Home', 'End'].includes(e.key)
+                        ) {
+                            e.preventDefault();
+                        }
+                    }}
                     required={required}
                     min={min}
                     max={max}
