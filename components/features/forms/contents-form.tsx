@@ -24,6 +24,7 @@ const EditContents = (props: EditContentsProps) => {
 export const ContentsForm = ({ data, onChange }: ContentFormProps) => {
     return (
         <div>
+            <h1>Contents</h1>
             <ReorderableList data={data} orderProperty="order" ItemComponent={EditContents} onChange={onChange} />
         </div>
     );
