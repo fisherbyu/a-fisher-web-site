@@ -1,5 +1,5 @@
 export const HandleInputChanges = <T extends Record<string, any>>(
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
     currentData: T,
     onChange: (data: T) => void
 ) => {
