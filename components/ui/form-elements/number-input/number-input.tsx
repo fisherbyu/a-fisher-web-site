@@ -5,21 +5,21 @@ import { InputWrapper } from '../input-wrapper';
 import { NumberInputProps } from './number-input.types';
 import { useState, useEffect } from 'react';
 
-export const NumberInput = ({ name, id = name, title, value, placeholder, required, onChange, min }: NumberInputProps) => {
+export const NumberInput = ({ name, id = name, title, value, placeholder, required, min, max, onChange }: NumberInputProps) => {
     // Initialize state with the value from props or null
     const [num, setNum] = useState<number | undefined>(value);
 
-    // Update internal state when prop value changes
+    // Update internal state
     useEffect(() => {
         setNum(value);
     }, [value]);
 
-    // Correct increment handler
+    // Handle Num Increment
     const handleIncrement = (increment: number) => () => {
         const newValue = (num ?? 0) + increment;
 
-        // Respect min value if provided
-        if (min !== undefined && newValue < min) {
+        // Respect min/max values if provided
+        if ((min !== undefined && newValue < min) || (max !== undefined && newValue > max)) {
             return;
         }
 
@@ -84,6 +84,7 @@ export const NumberInput = ({ name, id = name, title, value, placeholder, requir
                     className={`w-16  ${styles.layout} ${styles.border} ${styles.inputBg} ${styles.text} ${styles.inputFocus} ${styles.alterInput}`}
                     required={required}
                     min={min}
+                    max={max}
                 />
                 <button type="button" className={bttnRight} onClick={handleIncrement(1)}>
                     <Icon name="CaretRight" color="grey" size={12} />
