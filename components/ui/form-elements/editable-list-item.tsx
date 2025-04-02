@@ -8,21 +8,18 @@ type EditableListItemProps = {
 };
 
 export const EditableListItem = ({ display, edit, dragHandle }: EditableListItemProps) => {
-    const [contents, setContents] = useState(display);
+    // Handle Opening Edit
+    const [open, setOpen] = useState(false);
+    const toggleContents = () => setOpen(!open);
 
-    const toggleContents = () => {
-        if (contents == display) {
-            setContents(edit);
-        } else {
-            setContents(display);
-        }
-    };
     return (
-        <div className="w-full flex flex-row justify-between items-center">
+        <div
+            className={`w-full flex flex-row gap-3 justify-between py-2 px-3 border rounded-md items-start ${open ? 'items-start' : 'items-center'}`}
+        >
             {dragHandle}
-            {contents}
-            <button onClick={toggleContents}>
-                <Icon name="NotePencil" color="info" size={24} />
+            <div className="flex-grow">{open ? edit : display}</div>
+            <button className="self-start" onClick={toggleContents}>
+                <Icon name={open ? 'XSquare' : 'NotePencil'} color="info" size={24} />
             </button>
         </div>
     );
