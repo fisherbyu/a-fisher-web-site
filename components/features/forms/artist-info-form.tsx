@@ -15,7 +15,7 @@ type ArtistInfoFormProps = {
 
 export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
     const tierOptions = [...Array(5)].map((_, index) => ({ label: `Tier ${index + 1}`, value: index + 1 }));
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         HandleInputChanges(e, data, onChange);
     };
 
