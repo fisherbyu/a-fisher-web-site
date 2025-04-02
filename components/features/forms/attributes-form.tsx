@@ -34,7 +34,7 @@ const EditAttribute = (props: EditAttributeProps) => {
 export const AttributesForm = ({ data, onChange }: AttributesFormProps) => {
     return (
         <div>
-            <h1>Contents</h1>
+            <h1>Attributes</h1>
             <ReorderableList data={data} orderProperty="order" ItemComponent={EditAttribute} onChange={onChange} />
         </div>
     );
