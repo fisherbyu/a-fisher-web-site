@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react';
 import { EditableListItemProps } from './editable-list-item.types';
 import { Icon } from 'thread-ui';
