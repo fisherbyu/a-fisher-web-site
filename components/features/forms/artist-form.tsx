@@ -1,12 +1,12 @@
 'use client';
 import { Divider } from 'thread-ui';
 import { ArtistInfoForm } from './artist-info-form';
-import { Artist, Attribute, Content, Image, Link } from '@/types';
+import { Artist, Attribute, AttributeDto, Content, Image, Link } from '@/types';
 import { useState } from 'react';
 import { FileUpload } from '@/components';
 import { LinkForm } from './link-form';
 import { ContentData, ContentsForm } from './contents-form';
-import { AttributesForm, AttributeData } from './attribute-forms';
+import { AttributesForm } from '@/components';
 
 type FormProps = {
     initialData?: Artist;
@@ -60,7 +60,7 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
         initialData?.attributes || [{ id: 1, order: 1, title: 'Title', text: 'Contents' }]
     );
 
-    const updateAttributes = (data: AttributeData[]) => {
+    const updateAttributes = (data: AttributeDto[]) => {
         const newData = data.map(({ id, ...rest }) => ({
             id: typeof id === 'string' ? parseInt(id, 10) : id,
             ...rest,
