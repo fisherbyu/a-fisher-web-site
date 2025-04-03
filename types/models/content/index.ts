@@ -1,1 +1,1 @@
-export type { Content } from './content.types';
+export type { Content, ContentDto } from './content.types';
