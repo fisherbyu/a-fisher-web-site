@@ -1,1 +1,1 @@
-export type { Attribute } from './attribute.types';
+export type { Attribute, AttributeDto } from './attribute.types';
