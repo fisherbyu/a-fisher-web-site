@@ -1,12 +1,5 @@
 import { Attribute, AttributeDto, Content, ContentDto, Image, ImageDto, Link, LinkDto } from '@/types';
-
-export type ArtistDto = Omit<Artist, 'id' | 'contents' | 'attributes' | 'link' | 'image'> & {
-    id: string | number;
-    contents: ContentDto[];
-    attributes: AttributeDto[];
-    link?: LinkDto;
-    image?: ImageDto;
-};
+import { DtoId } from '../dto';
 
 export type Artist = {
     id: number;
@@ -17,4 +10,12 @@ export type Artist = {
     attributes: Attribute[];
     link?: Link;
     image?: Image;
+};
+
+export type ArtistDto = Omit<Artist, 'id' | 'contents' | 'attributes' | 'link' | 'image'> & {
+    id: DtoId;
+    contents: ContentDto[];
+    attributes: AttributeDto[];
+    link?: LinkDto;
+    image?: ImageDto;
 };

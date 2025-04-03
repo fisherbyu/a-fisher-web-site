@@ -1,3 +1,5 @@
+import { DtoId } from '../dto';
+
 export type Link = {
     id: number;
     appleURI: string;
@@ -5,5 +7,5 @@ export type Link = {
 };
 
 export type LinkDto = Omit<Link, 'id'> & {
-    id: 'string' | number;
+    id: DtoId;
 };

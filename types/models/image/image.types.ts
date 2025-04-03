@@ -1,3 +1,5 @@
+import { DtoId } from '../dto';
+
 export type Image = {
     id: number;
     src: string;
@@ -7,5 +9,5 @@ export type Image = {
 };
 
 export type ImageDto = Omit<Image, 'id'> & {
-    id: 'string' | number;
+    id: DtoId;
 };
