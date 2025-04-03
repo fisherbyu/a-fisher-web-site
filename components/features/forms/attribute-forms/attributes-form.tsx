@@ -1,7 +1,9 @@
 import { ReorderableList, TextInput } from '@/components/ui';
 import { EditableListItem } from '@/components/ui/form-elements/editable-list-item';
 import { Attribute } from '@/types';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
+import { ItemChangeProp, ItemComponentProp } from '@/components/ui/reorderable-list/sortable-item';
+import { HandleInputChanges, useDebounce } from '@/lib';
 
 export type AttributeData = Omit<Attribute, 'id'> & {
     id: string | number;
@@ -14,26 +16,62 @@ type AttributesFormProps = {
 
 type EditAttributeProps = AttributeData & {
     dragHandle: ReactNode;
+    onItemChange: ItemChangeProp<AttributeData>;
 };
 const EditAttribute = (props: EditAttributeProps) => {
     // Extract Props
-    const { id, title, text, order, dragHandle } = props;
+    const { id, title, text, order, dragHandle, onItemChange } = props;
 
-    // Init Data Handling
-    const [attributeData, setAttributeData] = useState<AttributeData[]>([{ id: id, title: title, text: text, order: order }]);
+    // Init Local Data Handling
+    const [attributeData, setAttributeData] = useState<AttributeData>({
+        id: id,
+        title: title,
+        text: text,
+        order: order,
+    });
+
+    // Track if this data has been modified locally
+    const [isDirty, setIsDirty] = useState(false);
+
+    // Update parent component with debounced changes
+    const debouncedUpdate = useDebounce((newData) => {
+        onItemChange(newData);
+        setIsDirty(false);
+    }, 500); // 500ms delay
+
+    // Handle Local Updates
+    const handleLocalUpdate = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        const newData = { ...attributeData, [name]: value };
+
+        // Update local state immediately for responsive UI
+        setAttributeData(newData);
+        setIsDirty(true);
+
+        // Debounce the update to the parent
+        debouncedUpdate(newData);
+    };
+
+    // Handle blur event to ensure changes are saved
+    const handleBlur = () => {
+        if (isDirty) {
+            onItemChange(attributeData);
+            setIsDirty(false);
+        }
+    };
 
     // Temp Define Display/Forms
     const displayAttribute = (
         <div className="flex flex-col justify-start">
-            <h3 className="font-medium">{title}</h3>
-            <p className=" font-light">{text}</p>
+            <h3 className="font-medium">{attributeData.title}</h3>
+            <p className="font-light">{attributeData.text}</p>
         </div>
     );
 
     const editAttributeData = (
         <div className="flex flex-col justify-start">
-            <TextInput name={`title-${title}`} title={'Title'} value={title} required />
-            <TextInput name={`title-${text}`} title={'Text'} value={text} required />
+            <TextInput name="title" title={'Title'} value={attributeData.title} onChange={handleLocalUpdate} required />
+            <TextInput name="text" title={'Text'} value={attributeData.text} onChange={handleLocalUpdate} required />
         </div>
     );
 
@@ -41,10 +79,18 @@ const EditAttribute = (props: EditAttributeProps) => {
 };
 
 export const AttributesForm = ({ data, onChange }: AttributesFormProps) => {
+    // Only update parent when necessary
+    const handleAttributeChange = useCallback(
+        (updatedItems: AttributeData[]) => {
+            onChange(updatedItems);
+        },
+        [onChange]
+    );
+
     return (
         <div>
             <h1>Attributes</h1>
-            <ReorderableList data={data} orderProperty="order" ItemComponent={EditAttribute} onChange={onChange} />
+            <ReorderableList data={data} orderProperty="order" ItemComponent={EditAttribute} onChange={handleAttributeChange} />
         </div>
     );
 };
