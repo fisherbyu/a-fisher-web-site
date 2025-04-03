@@ -1,1 +1,1 @@
-export type { Link } from './link.types';
+export type { Link, LinkDto } from './link.types';

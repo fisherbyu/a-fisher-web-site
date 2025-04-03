@@ -3,3 +3,7 @@ export type Link = {
     appleURI: string;
     spotifyURI: string;
 };
+
+export type LinkDto = Omit<Link, 'id'> & {
+    id: 'string' | number;
+};

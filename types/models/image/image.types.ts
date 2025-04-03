@@ -5,3 +5,7 @@ export type Image = {
     height: number;
     width: number;
 };
+
+export type ImageDto = Omit<Image, 'id'> & {
+    id: 'string' | number;
+};

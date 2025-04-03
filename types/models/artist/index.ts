@@ -1,1 +1,1 @@
-export type { Artist } from './artist.types';
+export type { Artist, ArtistDto } from './artist.types';
