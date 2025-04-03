@@ -1,29 +1,28 @@
-import { ReorderableList, TextInput } from '@/components/ui';
-import { EditableListItem } from '@/components/ui/form-elements/editable-list-item';
-import { Attribute } from '@/types';
-import { ReactNode, useCallback, useState } from 'react';
-import { ItemChangeProp, ItemComponentProp } from '@/components/ui/reorderable-list/sortable-item';
-import { HandleInputChanges, useDebounce } from '@/lib';
+import { AttributeDto } from '@/types';
+import { ReorderableList } from '@/components';
 
-export type AttributeData = Omit<Attribute, 'id'> & {
-    id: string | number;
-};
+import { EditableListItem } from '@/components/ui/form-elements/editable-list-item';
+import { ReactNode, useCallback, useState } from 'react';
+import { ItemChangeProp } from '@/components/ui/reorderable-list/sortable-item';
+import { useDebounce } from '@/lib';
+import { EditAttributeData } from './edit-attribute-data/edit-attribute-data';
+import { DisplayAttributeData } from './display-attribute-data';
 
 type AttributesFormProps = {
-    data: AttributeData[];
-    onChange: (data: AttributeData[]) => void;
+    data: AttributeDto[];
+    onChange: (data: AttributeDto[]) => void;
 };
 
-type EditAttributeProps = AttributeData & {
+type EditAttributeProps = AttributeDto & {
     dragHandle: ReactNode;
-    onItemChange: ItemChangeProp<AttributeData>;
+    onItemChange: ItemChangeProp<AttributeDto>;
 };
 const EditAttribute = (props: EditAttributeProps) => {
     // Extract Props
     const { id, title, text, order, dragHandle, onItemChange } = props;
 
     // Init Local Data Handling
-    const [attributeData, setAttributeData] = useState<AttributeData>({
+    const [attributeData, setAttributeData] = useState<AttributeDto>({
         id: id,
         title: title,
         text: text,
@@ -47,28 +46,19 @@ const EditAttribute = (props: EditAttributeProps) => {
         debouncedUpdate(newData);
     };
 
-    // Temp Define Display/Forms
-    const displayAttribute = (
-        <div className="flex flex-col justify-start">
-            <h3 className="font-medium">{attributeData.title}</h3>
-            <p className="font-light">{attributeData.text}</p>
-        </div>
+    return (
+        <EditableListItem
+            dragHandle={dragHandle}
+            display={<DisplayAttributeData title={attributeData.title} text={attributeData.text} />}
+            edit={<EditAttributeData title={attributeData.title} text={attributeData.text} onChange={handleLocalUpdate} />}
+        />
     );
-
-    const editAttributeData = (
-        <div className="flex flex-col justify-start">
-            <TextInput name="title" title={'Title'} value={attributeData.title} onChange={handleLocalUpdate} required />
-            <TextInput name="text" title={'Text'} value={attributeData.text} onChange={handleLocalUpdate} required />
-        </div>
-    );
-
-    return <EditableListItem dragHandle={dragHandle} display={displayAttribute} edit={editAttributeData} />;
 };
 
 export const AttributesForm = ({ data, onChange }: AttributesFormProps) => {
     // Only update parent when necessary
     const handleAttributeChange = useCallback(
-        (updatedItems: AttributeData[]) => {
+        (updatedItems: AttributeDto[]) => {
             onChange(updatedItems);
         },
         [onChange]
