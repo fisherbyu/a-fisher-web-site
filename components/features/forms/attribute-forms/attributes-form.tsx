@@ -3,7 +3,7 @@ import { EditableListItem } from '@/components/ui/form-elements/editable-list-it
 import { Attribute } from '@/types';
 import { ReactNode, useState } from 'react';
 
-type AttributeData = Omit<Attribute, 'id'> & {
+export type AttributeData = Omit<Attribute, 'id'> & {
     id: string | number;
 };
 
