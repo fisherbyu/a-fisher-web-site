@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { FileUpload } from '@/components';
 import { LinkForm } from './link-form';
 import { ContentsForm } from './contents-form';
-import { AttributesForm } from './attribute-forms';
+import { AttributesForm, AttributeData } from './attribute-forms';
 
 type FormProps = {
     initialData?: Artist;
@@ -46,10 +46,20 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
         ]
     );
 
-    // Handle Content Data
+    // Handle Attribute Data
     const [attributes, setAttributes] = useState<Attribute[]>(
         initialData?.attributes || [{ id: 1, order: 1, title: 'Title', text: 'Contents' }]
     );
+
+    const updateAttributes = (data: AttributeData[]) => {
+        const newData = data.map(({ id, ...rest }) => ({
+            id: typeof id === 'string' ? parseInt(id, 10) : id,
+            ...rest,
+        }));
+
+        setAttributes(newData);
+    };
+
     return (
         <form className="container">
             <div className="text-3xl">{initialData ? 'Edit' : 'Create'} Artist</div>
@@ -60,7 +70,7 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
                     <LinkForm data={link} onChange={setLink} />
                 </div>
                 <div>
-                    <AttributesForm data={attributes} onChange={setAttributes} />
+                    <AttributesForm data={attributes} onChange={updateAttributes} />
                     <ContentsForm data={contents} onChange={setContents} />
                 </div>
                 <FileUpload
