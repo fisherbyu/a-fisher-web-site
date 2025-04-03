@@ -30,13 +30,9 @@ const EditAttribute = (props: EditAttributeProps) => {
         order: order,
     });
 
-    // Track if this data has been modified locally
-    const [isDirty, setIsDirty] = useState(false);
-
     // Update parent component with debounced changes
     const debouncedUpdate = useDebounce((newData) => {
         onItemChange(newData);
-        setIsDirty(false);
     }, 500); // 500ms delay
 
     // Handle Local Updates
@@ -46,18 +42,9 @@ const EditAttribute = (props: EditAttributeProps) => {
 
         // Update local state immediately for responsive UI
         setAttributeData(newData);
-        setIsDirty(true);
 
         // Debounce the update to the parent
         debouncedUpdate(newData);
-    };
-
-    // Handle blur event to ensure changes are saved
-    const handleBlur = () => {
-        if (isDirty) {
-            onItemChange(attributeData);
-            setIsDirty(false);
-        }
     };
 
     // Temp Define Display/Forms
