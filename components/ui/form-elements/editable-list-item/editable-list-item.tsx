@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { EditableListItemProps } from './editable-list-item.type';
+import { EditableListItemProps } from './editable-list-item.types';
 import { Icon } from 'thread-ui';
 
 export const EditableListItem = ({ display, edit, dragHandle }: EditableListItemProps) => {
