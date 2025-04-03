@@ -3,7 +3,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { SortableItemProps } from './sortable-item.types';
 
-export const SortableItem = <T extends object>({ id, item, ItemComponent }: SortableItemProps<T>) => {
+export const SortableItem = <T extends object>({ id, item, ItemComponent, onItemChange }: SortableItemProps<T>) => {
     // Init DnD Kit Functionality
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
 
@@ -22,7 +22,7 @@ export const SortableItem = <T extends object>({ id, item, ItemComponent }: Sort
 
     return (
         <div ref={setNodeRef} style={style}>
-            <ItemComponent {...item} dragHandle={dragHandle} />
+            <ItemComponent {...item} dragHandle={dragHandle} onItemChange={onItemChange} />
         </div>
     );
 };
