@@ -1,12 +1,13 @@
 'use client';
 import { Divider } from 'thread-ui';
 import { ArtistInfoForm } from './artist-info-form';
-import { Artist, Attribute, AttributeDto, Content, Image, Link } from '@/types';
-import { useState } from 'react';
+import { Artist, ArtistDto, Attribute, AttributeDto, Content, ContentDto, Image, Link } from '@/types';
+import { useId, useState } from 'react';
 import { FileUpload } from '@/components';
 import { LinkForm } from './link-form';
 import { ContentData, ContentsForm } from './contents-form';
 import { AttributesForm } from '@/components';
+import { handleArtist } from '@/lib/hooks/use-entity-state/handleArtist';
 
 type FormProps = {
     initialData?: Artist;
@@ -14,6 +15,29 @@ type FormProps = {
 };
 
 export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
+    const [contents, setContents] = useState<Content[]>([
+        { id: 0, order: 1, text: 'Test' },
+        { id: 1, order: 2, text: '' },
+    ]);
+    const artistHandler = handleArtist<Artist, ArtistDto>({
+        data: initialData,
+        dto: {
+            id: useId(),
+            name: '',
+            tier: 0,
+            contents: [],
+            attributes: [],
+        },
+        createEntity: (data: ArtistDto) => {},
+        saveEntity: (data: Artist) => {},
+        attributeHandlers: {
+            contents: {
+                onChange: setContents,
+            },
+        },
+        attributeCreators: {},
+    });
+
     // Handle core Artist Details
     const [artistInfo, setArtistInfo] = useState({
         name: initialData?.name || '',
@@ -39,12 +63,6 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
     };
 
     // Handle Content Data
-    const [contents, setContents] = useState<Content[]>(
-        initialData?.contents || [
-            { id: 0, order: 1, text: 'Test' },
-            { id: 1, order: 2, text: '' },
-        ]
-    );
 
     const updateContents = (data: ContentData[]) => {
         const newData = data.map(({ id, ...rest }) => ({
@@ -56,17 +74,18 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
     };
 
     // Handle Attribute Data
-    const [attributes, setAttributes] = useState<Attribute[]>(
-        initialData?.attributes || [{ id: 1, order: 1, title: 'Title', text: 'Contents' }]
-    );
+    // const [attributes, setAttributes] = useState<Attribute[]>(
+    //     initialData?.attributes || [{ id: 1, order: 1, title: 'Title', text: 'Contents' }]
+    // );
+    const [attributes, setAttributes] = useState<AttributeDto[]>([{ id: '1', order: 1, title: 'Title', text: 'Contents' }]);
 
     const updateAttributes = (data: AttributeDto[]) => {
-        const newData = data.map(({ id, ...rest }) => ({
-            id: typeof id === 'string' ? parseInt(id, 10) : id,
-            ...rest,
-        }));
+        // const newData = data.map(({ id, ...rest }) => ({
+        //     id: typeof id === 'string' ? parseInt(id, 10) : id,
+        //     ...rest,
+        // }));
 
-        setAttributes(newData);
+        setAttributes(data);
     };
 
     return (
