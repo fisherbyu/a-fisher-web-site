@@ -4,6 +4,7 @@ import { ItemChangeProp } from '@/components/ui/reorderable-list/sortable-item';
 import { useDebounce } from '@/lib';
 import { Content } from '@/types';
 import { ReactNode, useState } from 'react';
+import { Icon } from 'thread-ui';
 
 export type ContentData = Omit<Content, 'id'> & {
     id: string | number;
@@ -12,6 +13,7 @@ export type ContentData = Omit<Content, 'id'> & {
 type ContentFormProps = {
     data: ContentData[];
     onChange: (data: ContentData[]) => void;
+    onAdd: () => void;
 };
 
 type EditContentsProps = ContentData & {
@@ -54,10 +56,15 @@ const EditContents = (props: EditContentsProps) => {
     return <EditableListItem dragHandle={dragHandle} display={displayContents} edit={editContentData} />;
 };
 
-export const ContentsForm = ({ data, onChange }: ContentFormProps) => {
+export const ContentsForm = ({ data, onChange, onAdd }: ContentFormProps) => {
     return (
         <div>
-            <h1>Contents</h1>
+            <div className="flex flex-row items-center justify-between">
+                <h1>Contents</h1>
+                <button type="button" onClick={onAdd}>
+                    <Icon name="Plus" color="info" size={24} />
+                </button>
+            </div>
             <ReorderableList
                 className="flex flex-col gap-1"
                 data={data}
