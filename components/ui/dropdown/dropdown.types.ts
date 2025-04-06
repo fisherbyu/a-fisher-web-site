@@ -1,6 +1,6 @@
 export type DropdownProps = {
     label?: string;
-    value: string | number;
+    value?: string | number;
     options: DropdownOption[];
     onSelect: (value: string | number) => void;
 };
