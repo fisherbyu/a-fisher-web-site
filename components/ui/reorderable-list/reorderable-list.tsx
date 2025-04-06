@@ -38,7 +38,7 @@ export const ReorderableList = React.memo(
                     // Update OrderProperty on each Item
                     const updatedItems = newItems.map((item, index) => ({
                         ...item,
-                        [orderProperty]: index + 1,
+                        [orderProperty]: index,
                     }));
 
                     // Update UI
