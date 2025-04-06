@@ -1,51 +1,39 @@
 'use server';
-import { Artist } from '@/types';
+import { Artist, ArtistDto } from '@/types';
 import { prisma, transformArtist } from '@/lib';
-
-// Input type for creating a new Artist with nested data
-type CreateArtistInput = {
-    name: string;
-    tier: number;
-    rank?: number;
-    link: {
-        appleURI: string;
-        spotifyURI: string;
-    };
-    image: {
-        src: string;
-        alt: string;
-        height: number;
-        width: number;
-    };
-    contents: {
-        order: number;
-        text: string;
-    }[];
-    attributes: {
-        order: number;
-        title: string;
-        text: string;
-    }[];
-};
 
 /**
  * Server Action to Create Artist
  * @param {CreateArtistInput} data
  * @returns {Promise<Artist>}
  */
-export async function createArtist(data: CreateArtistInput): Promise<Artist> {
-    const { name, tier, rank, link, image, contents, attributes } = data;
+export async function createArtist(data: ArtistDto): Promise<Artist> {
+    // Extract Data
+    const {
+        name,
+        tier,
+        rank,
+        link: { id: linkId, ...linkData },
+        image: { id: imgId, ...imgData },
+        contents: contentsWithIds,
+        attributes: attributesWithIds,
+    } = data;
 
+    // Remove IDs from arrays
+    const contents = contentsWithIds.map(({ id, ...rest }) => rest);
+    const attributes = attributesWithIds.map(({ id, ...rest }) => rest);
+
+    // Add to Database
     const artist = await prisma.artist.create({
         data: {
             name,
             tier,
             rank,
             link: {
-                create: link,
+                create: linkData,
             },
             image: {
-                create: image,
+                create: imgData,
             },
             contents: {
                 create: contents,
