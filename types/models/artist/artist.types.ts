@@ -8,14 +8,14 @@ export type Artist = {
     rank?: number;
     contents: Content[];
     attributes: Attribute[];
-    link?: Link;
-    image?: Image;
+    link: Link;
+    image: Image;
 };
 
 export type ArtistDto = Omit<Artist, 'id' | 'contents' | 'attributes' | 'link' | 'image'> & {
     id: DtoId;
     contents: ContentDto[];
     attributes: AttributeDto[];
-    link?: LinkDto;
-    image?: ImageDto;
+    link: LinkDto;
+    image: ImageDto;
 };
