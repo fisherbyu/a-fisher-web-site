@@ -1,8 +1,8 @@
 import { TextInput } from '@/components/ui';
 import { HandleInputChanges } from '@/lib';
-import { Link } from '@/types';
+import { Link, LinkDto } from '@/types';
 
-type LinkData = Omit<Link, 'id'>;
+type LinkData = LinkDto;
 
 type LinkFormProps = {
     data: LinkData;
@@ -10,7 +10,7 @@ type LinkFormProps = {
 };
 
 export const LinkForm = ({ data, onChange }: LinkFormProps) => {
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         HandleInputChanges(e, data, onChange);
     };
 
