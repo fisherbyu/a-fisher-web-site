@@ -2,7 +2,7 @@ import React from 'react';
 import { Dropdown, NumberInput, TextInput } from '@/components';
 import { HandleInputChanges } from '@/lib';
 
-type ArtistInfoData = {
+export type ArtistInfoData = {
     name: string;
     tier?: number;
     rank?: number;
