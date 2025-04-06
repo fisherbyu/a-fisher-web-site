@@ -4,8 +4,8 @@ import { HandleInputChanges } from '@/lib';
 
 type ArtistInfoData = {
     name: string;
-    tier: number;
-    rank: number | undefined;
+    tier?: number;
+    rank?: number;
 };
 
 type ArtistInfoFormProps = {
