@@ -1,1 +1,1 @@
-export type DtoId = string;
+export type DtoId = number | string;

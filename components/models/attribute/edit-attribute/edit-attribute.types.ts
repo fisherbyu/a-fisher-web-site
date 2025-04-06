@@ -1,5 +1,5 @@
 import { ItemChangeProp } from '@/components';
-import { AttributeDto } from '@/types';
+import { Attribute, AttributeDto } from '@/types';
 import { ReactNode } from 'react';
 
 export type EditAttributeProps = AttributeDto & {
