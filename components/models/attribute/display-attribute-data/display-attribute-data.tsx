@@ -4,7 +4,7 @@ export const DisplayAttributeData = ({ title, text }: DisplayAttributeDataProps)
     return (
         <div className="flex flex-col justify-start">
             <h3 className="font-medium">{title}</h3>
-            <p className="font-light">{text}</p>
+            <p className="font-light truncate">{text}</p>
         </div>
     );
 };

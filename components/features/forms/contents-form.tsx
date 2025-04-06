@@ -49,7 +49,7 @@ const EditContents = (props: EditContentsProps) => {
         debouncedUpdate(newData);
     };
 
-    const displayContents = <div className="truncate">{contentData.text}</div>;
+    const displayContents = <div className="w-full truncate">{contentData.text}</div>;
 
     const editContentData = <TextInput name="text" value={contentData.text} onChange={handleLocalUpdate} multiline />;
 
