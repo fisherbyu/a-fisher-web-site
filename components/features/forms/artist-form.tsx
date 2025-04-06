@@ -7,6 +7,7 @@ import { FileUpload } from '@/components';
 import { LinkForm } from './link-form';
 import { ContentData, ContentsForm } from './contents-form';
 import { AttributesForm } from '@/components';
+import { createArtist } from '@/lib/actions/artist';
 
 type FormProps = {
     initialData?: Artist;
@@ -56,7 +57,28 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
 
     // Submission
     const handleSubmit = () => {
-        //
+        // Edit Artist
+        if (initialData) {
+            console.log(initialData);
+        }
+        // Create Artist
+        else {
+            try {
+                const dto: ArtistDto = {
+                    id: crypto.randomUUID(),
+                    name: artistInfo.name,
+                    tier: artistInfo.tier!,
+                    rank: artistInfo.rank,
+                    contents: contents,
+                    attributes: attributes,
+                    link: link,
+                    image: image,
+                };
+                console.log(createArtist(dto));
+            } catch (error) {
+                console.log(error);
+            }
+        }
     };
 
     return (
