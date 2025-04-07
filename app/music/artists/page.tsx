@@ -6,6 +6,7 @@ import PageTitle from '@/components/old/ui/page-title';
 import { useEffect, useState } from 'react';
 import { getData, DataType } from '@/api/dataAccess';
 import { Imprima } from 'next/font/google';
+import ArtistContents from './contents';
 
 const title: { title: string; subtitle?: string; center?: boolean } = {
     title: 'My Favorite Artists',
@@ -17,11 +18,11 @@ export default function ArtistPage() {
     return (
         <main>
             <PageTitle components={title} />
-            <MusicDisplayPage type={DataType.Artist} />
+            <ArtistContents />
         </main>
     );
 }
 
-// export let metadata: Metadata = {
-//     title: "My Favorite Artists"
-// };
+export let metadata: Metadata = {
+    title: 'My Favorite Artists',
+};
