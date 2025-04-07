@@ -4,8 +4,8 @@ import { getArtists } from '@/lib';
 import { Artist } from '@/types';
 import { useEffect, useState } from 'react';
 
-const EditArtistForm = (data: Artist) => {
-    return <ArtistForm initialData={data} />;
+const EditArtistForm = ({ data }: { data: Artist }) => {
+    return <ArtistForm key={data.id} initialData={data} />;
 };
 
 export default function ArtistContents() {
@@ -23,7 +23,6 @@ export default function ArtistContents() {
                 setLoading(false);
             }
         }
-
         fetchArtists();
     }, []);
 
@@ -37,7 +36,7 @@ export default function ArtistContents() {
         <BookDisplay<Artist>
             items={artists}
             renderListItem={displayArtistListItem}
-            renderDetail={EditArtistForm}
+            renderDetail={(artist) => <EditArtistForm data={artist} />}
             listTitle="Artists"
         />
     );
