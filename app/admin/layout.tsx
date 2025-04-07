@@ -20,7 +20,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         },
     ];
     return (
-        <div className="flex h-screen overflow-hidden">
+        <div className="flex h-screen">
             <SideNav links={adminLinks} basePath="/admin" />
             {children}
         </div>
