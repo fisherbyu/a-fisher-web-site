@@ -1,4 +1,6 @@
+import { ReactNode } from 'react';
+
 export type FilePreviewProps = {
     file: File;
-    type: 'IMG' | 'FILE';
+    actions?: ReactNode;
 };
