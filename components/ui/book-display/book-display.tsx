@@ -19,7 +19,7 @@ export const BookDisplay = <T extends BaseItem>({
     return (
         <div className={`flex w-full h-full ${className}`}>
             {/* List Panel */}
-            <div className={`w-1/3 border-r border-gray-200 p-4 overflow-auto ${listClassName}`}>
+            <div className={`w-52 border-r border-gray-200 p-4 overflow-auto ${listClassName}`}>
                 <h2 className="text-xl font-bold mb-4">{listTitle}</h2>
                 <ul className="space-y-2">
                     {items.map((item) => (
@@ -35,7 +35,7 @@ export const BookDisplay = <T extends BaseItem>({
             </div>
 
             {/* Detail Panel */}
-            <div className={`w-52 p-4 overflow-auto ${detailClassName}`}>
+            <div className={` p-4 overflow-auto ${detailClassName}`}>
                 {selectedItem ? (
                     renderDetail(selectedItem)
                 ) : (
