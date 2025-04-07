@@ -1,4 +1,3 @@
-import { BaseResponse, Image } from '@/types';
 import { createClient } from '@/lib';
 
 type UploadFileProps = {
