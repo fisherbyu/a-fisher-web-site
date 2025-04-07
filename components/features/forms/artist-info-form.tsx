@@ -20,12 +20,10 @@ export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
     };
 
     const handleTierChange = (value: number | string) => {
-        // Create updated data object with the new tier value
         const updatedData = {
             ...data,
             tier: value as number,
         };
-        // Pass the updated data to the parent component
         onChange(updatedData);
     };
 
