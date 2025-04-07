@@ -4,6 +4,48 @@ import { Icon, Button, Divider } from 'thread-ui';
 import { TextInput } from '../text-input';
 import { FileUploadProps } from './file-upload.types';
 
+type FileDisplayProps = {
+    file: File;
+};
+
+const FileDisplay = ({ file }: FileDisplayProps) => {
+    return (
+        <div className="w-full flex items-center justify-between rounded bg-gray-100 py-4 px-5">
+            <Icon name="FileText" size={48} color="grey" />
+            <p className="mt-2 text-sm font-medium">{file.name}</p>
+            <p className="text-xs text-gray-500">{(file.size / 1024).toFixed(1)} KB</p>
+        </div>
+    );
+};
+
+type ImageDisplayProps = {
+    src: string;
+};
+
+const ImageDisplay = ({ src }: ImageDisplayProps) => {
+    return (
+        <img
+            src={src}
+            alt="Preview"
+            className="w-full h-full object-cover rounded"
+            style={{ height: 'auto', width: 'auto', maxWidth: '256px', maxHeight: '400px' }}
+        />
+    );
+};
+
+type FilePreviewProps = {
+    file?: File;
+    src?: string;
+};
+
+const FilePreview = ({ file, src }: FilePreviewProps) => {
+    if (src) {
+        return <ImageDisplay src={src} />;
+    } else if (file) {
+        return <FileDisplay file={file} />;
+    }
+};
+
 export const FileUpload = ({
     title = 'Upload a File',
     allowedFileTypes = ['*/*'],
@@ -14,12 +56,13 @@ export const FileUpload = ({
 }: FileUploadProps) => {
     // Init Display States
     const [isDragging, setIsDragging] = useState(false);
-    const [preview, setPreview] = useState<string | null>(null);
+    const [preview, setPreview] = useState<string | undefined>(undefined);
     const [status, setStatus] = useState('');
 
     // Init File States
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [customFilename, setCustomFilename] = useState(initialFileName);
+    const [alt, setAlt] = useState('');
 
     // Drag UI Reactions
     const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
@@ -83,7 +126,7 @@ export const FileUpload = ({
             reader.readAsDataURL(file);
         } else {
             // Clear preview for non-image files
-            setPreview(null);
+            setPreview(undefined);
         }
     };
 
@@ -103,7 +146,7 @@ export const FileUpload = ({
 
     const handleRemoveFile = () => {
         setSelectedFile(null);
-        setPreview(null);
+        setPreview(undefined);
         setCustomFilename('');
         setStatus('');
     };
@@ -140,31 +183,6 @@ export const FileUpload = ({
             }
         }
     };
-
-    const previewDisplay = (
-        <>
-            {/* Preview an Image */}
-            {preview && (
-                <img
-                    src={preview}
-                    alt="Preview"
-                    className="w-full h-full object-cover rounded"
-                    style={{ height: 'auto', width: 'auto', maxWidth: '256px', maxHeight: '400px' }}
-                />
-            )}
-            {/* Preview a File */}
-            {!preview && selectedFile && (
-                <div
-                    className="w-full flex items-center justify-between rounded bg-gray-100 py-4 px-5"
-                    // style={{ width: '256px', height: '200px' }}
-                >
-                    <Icon name="FileText" size={48} color="grey" />
-                    <p className="mt-2 text-sm font-medium">{selectedFile.name}</p>
-                    <p className="text-xs text-gray-500">{(selectedFile.size / 1024).toFixed(1)} KB</p>
-                </div>
-            )}
-        </>
-    );
 
     return (
         <div className="max-w-md mx-auto w-full">
@@ -212,7 +230,7 @@ export const FileUpload = ({
                     </div>
                 ) : (
                     <div className="flex gap-4 flex-col  w-full  mx-auto md:justify-between items-center">
-                        {previewDisplay}
+                        <FilePreview src={preview} file={selectedFile} />
                         <div className="w-full flex flex-row justify-start">
                             <div className="w-full">
                                 <TextInput
@@ -222,6 +240,11 @@ export const FileUpload = ({
                                     onChange={(e) => setCustomFilename(e.target.value)}
                                     required
                                 />
+                                <p className="text-xs text-gray-500 mt-1">Extension: .{selectedFile.name.split('.').pop()}</p>
+                                {status && <p className="text-sm text-gray-600">{status}</p>}
+                            </div>
+                            <div className="w-full">
+                                <TextInput name="alt" title="Alt Text:" value={alt} onChange={(e) => setAlt(e.target.value)} />
                                 <p className="text-xs text-gray-500 mt-1">Extension: .{selectedFile.name.split('.').pop()}</p>
                                 {status && <p className="text-sm text-gray-600">{status}</p>}
                             </div>
