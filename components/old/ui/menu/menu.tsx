@@ -74,8 +74,6 @@ export function Menu() {
             const isClickInsideMenu = menu && menu.contains(event.target as Node);
 
             if (!isClickInsideMenu) {
-                console.log('out');
-                console.log('Close Here');
                 closeNavbar();
             }
         };
