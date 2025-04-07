@@ -10,12 +10,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         },
         {
             title: 'Artists',
-            path: '/admin/artists',
+            path: '/admin/artist',
             icon: 'MusicNotes',
         },
         {
-            title: 'Album',
-            path: '/admin/albums',
+            title: 'Albums',
+            path: '/admin/album',
             icon: 'VinylRecord',
         },
     ];
