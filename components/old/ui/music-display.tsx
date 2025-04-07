@@ -6,6 +6,7 @@ import Link from 'next/link';
 import AppleMusicLogo from '@/public/music/apple-music.svg';
 import SpotifyLogo from '@/public/music/spotify.svg';
 import { Album, Artist } from '@/types';
+import { getPublicUrl } from '@/lib';
 
 interface MusicBlock {
     name: string;
@@ -67,10 +68,12 @@ export default function MusicDisplay({ data, type }: MusicBlockProps) {
             <div className={`w-full mx-auto flex items-center justify-center gap-2 flex-col ${largeDirection}`}>
                 <div className="w-full lg:w-4/12 mx-auto flex items-center justify-center gap-2 lg:gap-3 flex-col">
                     {data.image && (
-                        <img
-                            className=" rounded-md border w-full max-w-64 mx-auto lg:mt-3"
-                            src={data.image.src}
+                        <Image
+                            src={getPublicUrl(data.image.src)}
                             alt={data.image.alt}
+                            height={data.image.height}
+                            width={data.image.width}
+                            className="rounded-md border w-full max-w-64 mx-auto lg:mt-3"
                         />
                     )}
                     {/* <Image className=" rounded-md border w-full max-w-64 mx-auto lg:mt-3" src={ components.image.src } alt={ components.image.alt } /> */}
