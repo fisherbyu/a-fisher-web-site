@@ -115,7 +115,11 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
                     maxNumberFiles={1}
                 />
             </div>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <div className="flex flex-row justify-end">
+                <Button margin="0px" onClick={handleSubmit}>
+                    Submit
+                </Button>
+            </div>
         </form>
     );
 };
