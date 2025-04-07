@@ -16,7 +16,7 @@ export const AttributesForm = ({ data, onChange, onAdd }: AttributesFormProps) =
     );
 
     return (
-        <div className="h-48 overflow-scroll">
+        <div className="h-64 overflow-scroll">
             <div className="flex flex-row items-center justify-between">
                 <h1>Attributes</h1>
                 <button type="button" onClick={onAdd}>

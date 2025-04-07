@@ -58,7 +58,7 @@ const EditContents = (props: EditContentsProps) => {
 
 export const ContentsForm = ({ data, onChange, onAdd }: ContentFormProps) => {
     return (
-        <div className="h-48 overflow-scroll">
+        <div className="h-64 overflow-scroll">
             <div className="flex flex-row items-center justify-between">
                 <h1>Contents</h1>
                 <button type="button" onClick={onAdd}>
