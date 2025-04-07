@@ -2,13 +2,30 @@
 import { ArtistForm, BookDisplay } from '@/components';
 import { getArtists } from '@/lib';
 import { Artist } from '@/types';
+import { useEffect, useState } from 'react';
 
 const EditArtistForm = (data: Artist) => {
     return <ArtistForm initialData={data} />;
 };
 
-export default async function ArtistContents() {
-    const artists = await getArtists();
+export default function ArtistContents() {
+    const [artists, setArtists] = useState<Artist[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchArtists() {
+            try {
+                const data = await getArtists();
+                setArtists(data);
+            } catch (error) {
+                console.error('Failed to fetch artists:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchArtists();
+    }, []);
 
     const displayArtistListItem = (item: Artist) => (
         <div>
