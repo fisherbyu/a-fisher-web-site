@@ -54,6 +54,7 @@ export const Dropdown = ({ label, value, options, onSelect }: DropdownProps) => 
                         className={`${INPUT_STYLES.alt} w-full flex justify-between items-center`}
                         // className="flex justify-between border border-gray-300 items-center w-full px-4 py-2 bg-gray-50 rounded-lg shadow-sm focus:outline-none"
                         onClick={toggleDropdown}
+                        type="button"
                     >
                         <span>{selected.label}</span>
                         <Icon name={isOpen ? 'CaretUp' : 'CaretDown'} size={16} color="black" />
