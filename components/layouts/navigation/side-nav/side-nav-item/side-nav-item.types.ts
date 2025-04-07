@@ -1,5 +1,4 @@
 import { IconNames } from 'thread-ui';
-
 export type SideNavItemProps = {
     title: string;
     path: string;
@@ -7,4 +6,5 @@ export type SideNavItemProps = {
     isMobile?: boolean;
     isCollapsed?: boolean;
     onClick?: () => void;
+    basePath?: string;
 };
