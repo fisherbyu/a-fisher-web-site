@@ -49,9 +49,6 @@ export const FileUpload = ({
         });
     };
 
-    // Manage Preview
-    const handleClearPreview = () => {};
-
     // File Submissions
     const processFile = (file: File) => {
         // Ensure Maximum is not Exceeded
@@ -140,8 +137,8 @@ export const FileUpload = ({
     };
 
     return (
-        <div className="max-w-md mx-auto w-full">
-            <div className="w-full mx-auto ">
+        <div className="w-full p-1">
+            <div className="w-full">
                 <h1>{title}</h1>
                 <div>
                     <Divider width="100%" />
@@ -169,7 +166,7 @@ export const FileUpload = ({
                 {!selectedFile ? (
                     // File Uploader
                     <div
-                        className={`border-2 max-w-md mx-auto border-dashed rounded-lg p-8 text-center ${
+                        className={`border-2 mx-auto border-dashed rounded-lg p-8 text-center ${
                             isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
                         }`}
                         onDragOver={handleDragOver}
