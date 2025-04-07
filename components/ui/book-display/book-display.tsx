@@ -35,7 +35,7 @@ export const BookDisplay = <T extends BaseItem>({
             </div>
 
             {/* Detail Panel */}
-            <div className={` p-4 overflow-auto ${detailClassName}`}>
+            <div className={`w-full p-4 ${detailClassName}`}>
                 {selectedItem ? (
                     renderDetail(selectedItem)
                 ) : (
