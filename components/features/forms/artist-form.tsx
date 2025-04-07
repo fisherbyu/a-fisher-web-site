@@ -49,6 +49,9 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
     // Link
     const [link, setLink] = useState<Link | LinkDto>(initialData?.link || { id: useId(), appleURI: '', spotifyURI: '' });
 
+    // Files
+    const [files, setFiles] = useState<File[]>([]);
+
     // Image
     const [image, setImage] = useState<Image | ImageDto>(initialData?.image || { id: useId(), src: '', alt: '', height: 0, width: 0 });
     const handleFileSelect = async (file: File): Promise<void> => {
@@ -98,7 +101,8 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
                     title="Add Image"
                     allowedFileTypes={['image/*']}
                     supportedFormatsText="Supports all Image Types"
-                    onFileSelect={handleFileSelect}
+                    files={files}
+                    setFiles={setFiles}
                 />
             </div>
             <Button onClick={handleSubmit}>Submit</Button>
