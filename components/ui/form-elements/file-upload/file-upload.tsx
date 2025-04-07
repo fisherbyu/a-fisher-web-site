@@ -2,7 +2,7 @@
 import { useState, useCallback } from 'react';
 import { Icon, Button, Divider } from 'thread-ui';
 import { TextInput } from '../text-input';
-import { FileUploadProps } from './file-upload.types';
+import { FileUploadProps, FileWithAlt } from './file-upload.types';
 import { FilePreview, ImageDisplay } from './previews';
 import { isFileImageType } from '@/lib';
 
@@ -21,7 +21,7 @@ export const FileUpload = ({
     const [status, setStatus] = useState('');
 
     // Init File States
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [selectedFile, setSelectedFile] = useState<FileWithAlt | null>(null);
     const [customFilename, setCustomFilename] = useState('');
     const [alt, setAlt] = useState('');
 
@@ -125,6 +125,7 @@ export const FileUpload = ({
     const saveFile = () => {
         // Save File
         if (selectedFile) {
+            selectedFile.alt = alt;
             setFiles([...files, selectedFile]);
             handleClearFile();
         }
