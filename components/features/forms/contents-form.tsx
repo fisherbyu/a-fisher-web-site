@@ -4,7 +4,7 @@ import { ItemChangeProp } from '@/components/ui/reorderable-list/sortable-item';
 import { useDebounce } from '@/lib';
 import { Content } from '@/types';
 import { ReactNode, useState } from 'react';
-import { Icon } from 'thread-ui';
+import { Divider, Icon } from 'thread-ui';
 
 export type ContentData = Omit<Content, 'id'> & {
     id: string | number;
@@ -58,13 +58,14 @@ const EditContents = (props: EditContentsProps) => {
 
 export const ContentsForm = ({ data, onChange, onAdd }: ContentFormProps) => {
     return (
-        <div>
+        <div className="h-48 overflow-scroll">
             <div className="flex flex-row items-center justify-between">
                 <h1>Contents</h1>
                 <button type="button" onClick={onAdd}>
                     <Icon name="Plus" color="info" size={24} />
                 </button>
             </div>
+            <Divider width="100%" marginY="4px" />
             <ReorderableList
                 className="flex flex-col gap-1"
                 data={data}

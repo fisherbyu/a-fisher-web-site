@@ -102,7 +102,7 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
                     <ArtistInfoForm data={artistInfo} onChange={setArtistInfo} />
                     <LinkForm data={link} onChange={setLink} />
                 </div>
-                <div>
+                <div className="flex flex-col gap-3">
                     <AttributesForm data={attributes} onChange={setAttributes} onAdd={addAttribute} />
                     <ContentsForm data={contents} onChange={setContents} onAdd={addContent} />
                 </div>
