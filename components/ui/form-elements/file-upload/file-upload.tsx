@@ -3,56 +3,17 @@ import { useState, useCallback } from 'react';
 import { Icon, Button, Divider } from 'thread-ui';
 import { TextInput } from '../text-input';
 import { FileUploadProps } from './file-upload.types';
-
-type FileDisplayProps = {
-    file: File;
-};
-
-const FileDisplay = ({ file }: FileDisplayProps) => {
-    return (
-        <div className="w-full flex items-center justify-between rounded bg-gray-100 py-4 px-5">
-            <Icon name="FileText" size={48} color="grey" />
-            <p className="mt-2 text-sm font-medium">{file.name}</p>
-            <p className="text-xs text-gray-500">{(file.size / 1024).toFixed(1)} KB</p>
-        </div>
-    );
-};
-
-type ImageDisplayProps = {
-    src: string;
-};
-
-const ImageDisplay = ({ src }: ImageDisplayProps) => {
-    return (
-        <img
-            src={src}
-            alt="Preview"
-            className="w-full h-full object-cover rounded"
-            style={{ height: 'auto', width: 'auto', maxWidth: '256px', maxHeight: '400px' }}
-        />
-    );
-};
-
-type FilePreviewProps = {
-    file?: File;
-    src?: string;
-};
-
-const FilePreview = ({ file, src }: FilePreviewProps) => {
-    if (src) {
-        return <ImageDisplay src={src} />;
-    } else if (file) {
-        return <FileDisplay file={file} />;
-    }
-};
+import { FilePreview, ImageDisplay } from './previews';
+import { isFileImageType } from '@/lib';
 
 export const FileUpload = ({
     title = 'Upload a File',
+    files,
+    setFiles,
     allowedFileTypes = ['*/*'],
     maxFileSize,
-    onFileSelect,
+    maxNumberFiles,
     supportedFormatsText = 'Supports all file types',
-    initialFileName = '',
 }: FileUploadProps) => {
     // Init Display States
     const [isDragging, setIsDragging] = useState(false);
@@ -61,7 +22,7 @@ export const FileUpload = ({
 
     // Init File States
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [customFilename, setCustomFilename] = useState(initialFileName);
+    const [customFilename, setCustomFilename] = useState('');
     const [alt, setAlt] = useState('');
 
     // Drag UI Reactions
@@ -88,34 +49,43 @@ export const FileUpload = ({
         });
     };
 
+    // Manage Preview
+    const handleClearPreview = () => {};
+
+    // File Submissions
     const processFile = (file: File) => {
-        // Ensure File is Passed
-        if (!file) {
-            setStatus('No file selected');
+        // Ensure Maximum is not Exceeded
+        if (maxNumberFiles && files.length >= maxNumberFiles) {
+            setStatus(`Maximum files already added`);
             return;
         }
 
-        // Ensure File is Valid type
+        // Ensure File is passed
+        if (!file) {
+            setStatus('No File Selected');
+        }
+
+        // Ensure Valid Type
         if (!isValidFileType(file)) {
             setStatus(`Invalid file type. Please select a ${allowedFileTypes.join(', ')} file`);
             return;
         }
 
-        // Ensure File is Valid size
+        // Ensure Valid Size
         if (maxFileSize && file.size > maxFileSize) {
             setStatus(`File too large. Maximum size is ${Math.round(maxFileSize / 1024 / 1024)}MB`);
             return;
         }
 
-        // Extract original filename without extension for the input field
+        // Extract Original Filename for user Editing
         const extension = file.name.split('.').pop() || '';
         const originalName = file.name.replace(`.${extension}`, '');
         setCustomFilename(originalName);
         setSelectedFile(file);
         setStatus('');
 
-        // Create preview for images
-        if (file.type.startsWith('image/')) {
+        // Generate Image Preview
+        if (isFileImageType(file)) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 const result = reader.result;
@@ -136,52 +106,36 @@ export const FileUpload = ({
         const file = e.dataTransfer.files[0];
         processFile(file);
     }, []);
-
-    const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
             processFile(file);
         }
     };
 
-    const handleRemoveFile = () => {
+    // Remove File from files
+    const handleClearFile = () => {
         setSelectedFile(null);
         setPreview(undefined);
         setCustomFilename('');
         setStatus('');
     };
 
-    const handleSubmit = async () => {
-        if (!selectedFile) {
-            setStatus('Please select a file first');
-            return;
+    // Save Selected file
+    const saveFile = () => {
+        // Save File
+        if (selectedFile) {
+            setFiles([...files, selectedFile]);
+            handleClearFile();
         }
+    };
 
-        try {
-            setStatus('Processing...');
+    const removeFile = (index: number) => {
+        // Remove File @ index
+        const updatedFiles = files.filter((_, i) => i !== index);
 
-            // Create new file with custom filename if it's different
-            let fileToSubmit = selectedFile;
-
-            if (customFilename !== selectedFile.name.replace(`.${selectedFile.name.split('.').pop() || ''}`, '')) {
-                const extension = selectedFile.name.split('.').pop() || '';
-                const newFilename = `${customFilename}.${extension}`;
-                fileToSubmit = new File([selectedFile], newFilename, {
-                    type: selectedFile.type,
-                });
-            }
-
-            // Call the callback function provided by parent component
-            await onFileSelect(fileToSubmit);
-
-            setStatus('File processed successfully!');
-        } catch (error) {
-            if (error instanceof Error) {
-                setStatus('Processing failed: ' + error.message);
-            } else {
-                setStatus('Processing failed: Unknown error');
-            }
-        }
+        // Save Changes
+        setFiles(updatedFiles);
     };
 
     return (
@@ -193,7 +147,26 @@ export const FileUpload = ({
                 </div>
             </div>
             <div>
+                {/* Current Files */}
+                {files && (
+                    <div className="mb-2">
+                        {files.map((file, index) => (
+                            <FilePreview
+                                file={file}
+                                actions={
+                                    <>
+                                        <button onClick={() => removeFile(index)}>
+                                            <Icon name="XSquare" size={16} color="error" />
+                                        </button>
+                                    </>
+                                }
+                            />
+                        ))}
+                    </div>
+                )}
+
                 {!selectedFile ? (
+                    // File Uploader
                     <div
                         className={`border-2 max-w-md mx-auto border-dashed rounded-lg p-8 text-center ${
                             isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
@@ -213,9 +186,9 @@ export const FileUpload = ({
                                 id="file-upload-input"
                                 className="hidden"
                                 accept={allowedFileTypes.join(',')}
-                                onChange={handleFileInput}
+                                onChange={handleFileUpload}
                             />
-                            <Button
+                            <button
                                 type="button"
                                 onClick={() => {
                                     const fileInput = document.getElementById('file-upload-input');
@@ -224,13 +197,14 @@ export const FileUpload = ({
                                     }
                                 }}
                             >
-                                Select File
-                            </Button>
+                                Select a File
+                            </button>
                         </div>
                     </div>
                 ) : (
+                    // Preview Selected File
                     <div className="flex gap-4 flex-col  w-full  mx-auto md:justify-between items-center">
-                        <FilePreview src={preview} file={selectedFile} />
+                        {preview ? <ImageDisplay src={preview} /> : <FilePreview file={selectedFile} />}
                         <div className="w-full flex flex-row justify-start">
                             <div className="w-full">
                                 <TextInput
@@ -240,31 +214,25 @@ export const FileUpload = ({
                                     onChange={(e) => setCustomFilename(e.target.value)}
                                     required
                                 />
-                                <p className="text-xs text-gray-500 mt-1">Extension: .{selectedFile.name.split('.').pop()}</p>
-                                {status && <p className="text-sm text-gray-600">{status}</p>}
+                                <p className="text-xs text-gray-500 pl-1 mt-1">Extension: .{selectedFile.name.split('.').pop()}</p>
+                                {status && <p className="text-sm text-gray-600 pl-1">{status}</p>}
                             </div>
-                            <div className="w-full">
-                                <TextInput name="alt" title="Alt Text:" value={alt} onChange={(e) => setAlt(e.target.value)} />
-                                <p className="text-xs text-gray-500 mt-1">Extension: .{selectedFile.name.split('.').pop()}</p>
-                                {status && <p className="text-sm text-gray-600">{status}</p>}
-                            </div>
+                            {isFileImageType(selectedFile) && (
+                                <div className="w-full">
+                                    <TextInput name="alt" title="Alt Text:" value={alt} onChange={(e) => setAlt(e.target.value)} />
+                                </div>
+                            )}
                         </div>
                         <div className="self-end flex gap-3 flex-col">
                             <div className="flex gap-2">
-                                {status === 'File processed successfully!' ? (
-                                    <Button type="button" onClick={handleRemoveFile} fullWidth>
-                                        Upload Another
+                                <>
+                                    <Button type="button" color="error" onClick={handleClearFile}>
+                                        Remove
                                     </Button>
-                                ) : (
-                                    <>
-                                        <Button type="button" color="error" onClick={handleRemoveFile}>
-                                            Remove
-                                        </Button>
-                                        <Button type="button" onClick={handleSubmit} fullWidth>
-                                            Submit
-                                        </Button>
-                                    </>
-                                )}
+                                    <Button type="button" onClick={saveFile} fullWidth>
+                                        Add File
+                                    </Button>
+                                </>
                             </div>
                         </div>
                     </div>
@@ -273,5 +241,3 @@ export const FileUpload = ({
         </div>
     );
 };
-
-export default FileUpload;
