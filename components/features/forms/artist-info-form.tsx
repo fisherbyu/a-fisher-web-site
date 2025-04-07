@@ -4,7 +4,7 @@ import { HandleInputChanges } from '@/lib';
 
 export type ArtistInfoData = {
     name: string;
-    tier?: number;
+    tier: number;
     rank?: number;
 };
 
@@ -19,19 +19,22 @@ export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
         HandleInputChanges(e, data, onChange);
     };
 
-    // const handleTierChange = (selectedValue: number) => {
-    //     onChange({
-    //         ...data,
-    //         tier: selectedValue,
-    //     });
-    // };
+    const handleTierChange = (value: number | string) => {
+        // Create updated data object with the new tier value
+        const updatedData = {
+            ...data,
+            tier: value as number,
+        };
+        // Pass the updated data to the parent component
+        onChange(updatedData);
+    };
 
     return (
         <div>
             <TextInput name="name" title="Name" value={data.name} onChange={handleChange} required />
             <div className="grid grid-cols-2">
                 <NumberInput name="rank" title="Rank" value={data.rank} onChange={handleChange} required min={1} max={5} />
-                <Dropdown label="Tier" value={data.tier} options={tierOptions} onSelect={() => null} />
+                <Dropdown label="Tier" value={data.tier} options={tierOptions} onSelect={handleTierChange} />
             </div>
         </div>
     );
