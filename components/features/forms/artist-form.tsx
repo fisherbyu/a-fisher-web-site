@@ -97,23 +97,23 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
         <form className="container">
             <div className="text-3xl">{initialData ? 'Edit' : 'Create'} Artist</div>
             <Divider width="100%" />
-            <div className="grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-10 grid-cols-1 md:grid-cols-2">
                 <div>
                     <ArtistInfoForm data={artistInfo} onChange={setArtistInfo} />
                     <LinkForm data={link} onChange={setLink} />
+                    <FileUpload
+                        title="Add Image"
+                        allowedFileTypes={['image/*']}
+                        supportedFormatsText="Supports all Image Types"
+                        files={files}
+                        setFiles={setFiles}
+                        maxNumberFiles={1}
+                    />
                 </div>
                 <div className="flex flex-col gap-3">
                     <AttributesForm data={attributes} onChange={setAttributes} onAdd={addAttribute} />
                     <ContentsForm data={contents} onChange={setContents} onAdd={addContent} />
                 </div>
-                <FileUpload
-                    title="Add Image"
-                    allowedFileTypes={['image/*']}
-                    supportedFormatsText="Supports all Image Types"
-                    files={files}
-                    setFiles={setFiles}
-                    maxNumberFiles={1}
-                />
             </div>
             <div className="flex flex-row justify-end">
                 <Button margin="0px" onClick={handleSubmit}>
