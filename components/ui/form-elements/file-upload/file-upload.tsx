@@ -25,6 +25,9 @@ export const FileUpload = ({
     const [customFilename, setCustomFilename] = useState('');
     const [alt, setAlt] = useState('');
 
+    // Check if maximum files reached
+    const isMaxFilesReached = maxNumberFiles !== undefined && files.length >= maxNumberFiles;
+
     // Drag UI Reactions
     const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
