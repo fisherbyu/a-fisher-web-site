@@ -139,6 +139,49 @@ export const FileUpload = ({
         setFiles(updatedFiles);
     };
 
+    const FileInput = () => {
+        if (isMaxFilesReached) {
+            return null;
+        } else {
+            return (
+                <div
+                    className={`border-2 mx-auto border-dashed rounded-lg p-8 text-center ${
+                        isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+                    }`}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                >
+                    <div className="w-full flex justify-center">
+                        <Icon name="UploadSimple" size={48} color="grey" />
+                    </div>
+                    <p className="mt-2 text-sm text-gray-600">Drag and drop your file here</p>
+                    <p className="text-xs text-gray-500 mb-4">{supportedFormatsText}</p>
+                    <div className="flex items-center justify-center">
+                        <input
+                            type="file"
+                            id="file-upload-input"
+                            className="hidden"
+                            accept={allowedFileTypes.join(',')}
+                            onChange={handleFileUpload}
+                        />
+                        <button
+                            type="button"
+                            onClick={() => {
+                                const fileInput = document.getElementById('file-upload-input');
+                                if (fileInput) {
+                                    fileInput.click();
+                                }
+                            }}
+                        >
+                            Select a File
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+    };
+
     return (
         <div className="w-full p-1">
             <div className="w-full">
@@ -165,43 +208,8 @@ export const FileUpload = ({
                         ))}
                     </div>
                 )}
-
                 {!selectedFile ? (
-                    // File Uploader
-                    <div
-                        className={`border-2 mx-auto border-dashed rounded-lg p-8 text-center ${
-                            isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
-                        }`}
-                        onDragOver={handleDragOver}
-                        onDragLeave={handleDragLeave}
-                        onDrop={handleDrop}
-                    >
-                        <div className="w-full flex justify-center">
-                            <Icon name="UploadSimple" size={48} color="grey" />
-                        </div>
-                        <p className="mt-2 text-sm text-gray-600">Drag and drop your file here</p>
-                        <p className="text-xs text-gray-500 mb-4">{supportedFormatsText}</p>
-                        <div className="flex items-center justify-center">
-                            <input
-                                type="file"
-                                id="file-upload-input"
-                                className="hidden"
-                                accept={allowedFileTypes.join(',')}
-                                onChange={handleFileUpload}
-                            />
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    const fileInput = document.getElementById('file-upload-input');
-                                    if (fileInput) {
-                                        fileInput.click();
-                                    }
-                                }}
-                            >
-                                Select a File
-                            </button>
-                        </div>
-                    </div>
+                    <FileInput />
                 ) : (
                     // Preview Selected File
                     <div className="flex gap-4 flex-col  w-full  mx-auto md:justify-between items-center">
