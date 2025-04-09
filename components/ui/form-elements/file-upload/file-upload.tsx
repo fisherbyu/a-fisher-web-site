@@ -1,6 +1,7 @@
 'use client';
 import { useState, useCallback } from 'react';
 import { Icon, Button, Divider } from 'thread-ui';
+import clsx from 'clsx';
 import { TextInput } from '../text-input';
 import { FileUploadProps, FileWithAlt } from './file-upload.types';
 import { FilePreview, ImageDisplay } from './previews';
@@ -15,8 +16,9 @@ export const FileUpload = ({
     allowedFileTypes = ['*/*'],
     maxFileSize,
     maxNumberFiles,
-    supportedFormatsText = 'Supports all file types',
+    supportedFormatsText,
     required,
+    size = 'md',
 }: FileUploadProps) => {
     // Init Display States
     const [isDragging, setIsDragging] = useState(false);
@@ -148,38 +150,58 @@ export const FileUpload = ({
         } else {
             return (
                 <div
-                    className={`border-2 mx-auto border-dashed rounded-lg p-8 text-center ${
-                        isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
-                    }`}
+                    className={clsx(
+                        'border-2 mx-auto border-dashed rounded-lg text-center flex items-center',
+                        {
+                            'flex-row justify-center items-center gap-7 p-3': size === 'sm' || size === 'md',
+                            'p-8': size === 'md' || size === 'lg',
+                            'flex-col': size === 'lg',
+                        },
+                        {
+                            'border-blue-500 bg-blue-50': isDragging,
+                            'border-gray-300': !isDragging,
+                        }
+                    )}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
                 >
-                    <div className="w-full flex justify-center">
-                        <Icon name="UploadSimple" size={48} color="grey" />
-                    </div>
-                    <p className="mt-2 text-sm text-gray-600">Drag and drop your file here</p>
-                    <p className="text-xs text-gray-500 mb-4">{supportedFormatsText}</p>
-                    <div className="flex items-center justify-center">
-                        <input
-                            type="file"
-                            id="file-upload-input"
-                            className="hidden"
-                            accept={allowedFileTypes.join(',')}
-                            onChange={handleFileUpload}
-                            required={required}
-                        />
-                        <button
-                            type="button"
-                            onClick={() => {
-                                const fileInput = document.getElementById('file-upload-input');
-                                if (fileInput) {
-                                    fileInput.click();
-                                }
-                            }}
-                        >
-                            Select a File
-                        </button>
+                    <Icon name="UploadSimple" size={size === 'sm' ? 24 : 48} color="grey" />
+                    <div
+                        className={clsx('flex gap-2', {
+                            'flex-row': size === 'sm',
+                            'flex-col': !(size === 'sm'),
+                        })}
+                    >
+                        <span>
+                            {!(size === 'sm') && <p className="text-sm text-gray-600">Drag and drop your file here</p>}
+                            {supportedFormatsText && <span className="text-xs text-gray-500">{supportedFormatsText}</span>}
+                        </span>
+
+                        <div>
+                            <input
+                                type="file"
+                                id="file-upload-input"
+                                className="hidden"
+                                accept={allowedFileTypes.join(',')}
+                                onChange={handleFileUpload}
+                                required={required}
+                            />
+                            <button
+                                className={clsx('text-blue-600 hover:underline', {
+                                    'text-xs': size === 'sm',
+                                })}
+                                type="button"
+                                onClick={() => {
+                                    const fileInput = document.getElementById('file-upload-input');
+                                    if (fileInput) {
+                                        fileInput.click();
+                                    }
+                                }}
+                            >
+                                Select a File
+                            </button>
+                        </div>
                     </div>
                 </div>
             );
