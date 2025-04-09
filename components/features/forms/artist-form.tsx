@@ -119,7 +119,7 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
                             files={files}
                             setFiles={setFiles}
                             maxNumberFiles={1}
-                            size="sm"
+                            size="md"
                         />
                     )}
                 </div>
