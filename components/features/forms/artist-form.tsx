@@ -8,8 +8,9 @@ import { LinkForm } from './link-form';
 import { ContentsForm } from './contents-form';
 import { AttributesForm } from '@/components';
 import { createArtist } from '@/lib/actions/artist';
-import { uploadImage } from '@/lib';
+import { getPublicUrl, uploadImage } from '@/lib';
 import { FileWithAlt } from '@/components/ui/form-elements/file-upload/file-upload.types';
+import { ImageDisplay } from '@/components/ui/form-elements/file-upload/previews';
 
 type FormProps = {
     initialData?: Artist;
@@ -51,11 +52,10 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
     // Link
     const [link, setLink] = useState<Link | LinkDto>(initialData?.link || { id: useId(), appleURI: '', spotifyURI: '' });
 
-    // Files
-    const [files, setFiles] = useState<FileWithAlt[]>([]);
-
     // Image
     const [image, setImage] = useState<Image | ImageDto>(initialData?.image || { id: useId(), src: '', alt: '', height: 0, width: 0 });
+    const [files, setFiles] = useState<FileWithAlt[]>([]);
+    const [replaceImage, setReplaceImage] = useState(false);
 
     // Submission
     const handleSubmit = async () => {
@@ -101,14 +101,26 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
                 <div>
                     <ArtistInfoForm data={artistInfo} onChange={setArtistInfo} />
                     <LinkForm data={link} onChange={setLink} />
-                    <FileUpload
-                        title="Add Image"
-                        allowedFileTypes={['image/*']}
-                        supportedFormatsText="Supports all Image Types"
-                        files={files}
-                        setFiles={setFiles}
-                        maxNumberFiles={1}
-                    />
+                    {image && !replaceImage ? (
+                        <div className="mt-3">
+                            <ImageDisplay
+                                src={getPublicUrl(image.src)}
+                                action={() => {
+                                    setReplaceImage(true);
+                                }}
+                            />
+                        </div>
+                    ) : (
+                        <FileUpload
+                            title="Add Image"
+                            name="image"
+                            allowedFileTypes={['image/*']}
+                            supportedFormatsText="Supports all Image Types"
+                            files={files}
+                            setFiles={setFiles}
+                            maxNumberFiles={1}
+                        />
+                    )}
                 </div>
                 <div className="flex flex-col gap-3">
                     <AttributesForm data={attributes} onChange={setAttributes} onAdd={addAttribute} />
