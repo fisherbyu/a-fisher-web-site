@@ -8,6 +8,7 @@ export type FileUploadProps = {
     maxNumberFiles?: number;
     supportedFormatsText?: string;
     required?: boolean;
+    size?: 'sm' | 'md' | 'lg';
 };
 
 export type FileWithAlt = File & {
