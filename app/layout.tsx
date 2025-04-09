@@ -19,9 +19,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={coreFont.className}>
+            <body className="flex flex-col min-h-screen">
                 <CoreMenu />
-                {children}
+                <main className="flex-grow">{children}</main>
                 <CoreFooter />
             </body>
         </html>
