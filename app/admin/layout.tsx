@@ -1,5 +1,6 @@
 import { SideNav } from '@/components';
 import { SideNavItemProps } from '@/components/layouts/navigation/side-nav/side-nav-item';
+import { CoreMenu } from '@/components/old/core/core-menu';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const adminLinks: SideNavItemProps[] = [
@@ -20,9 +21,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         },
     ];
     return (
-        <div className="flex h-screen">
-            <SideNav links={adminLinks} basePath="/admin" />
-            {children}
+        <div className="h-screen overflow-hidden">
+            <CoreMenu />
+            <div className="h-full flex flex-row">
+                <SideNav links={adminLinks} basePath="/admin" />
+                {children}
+            </div>
         </div>
     );
 }
