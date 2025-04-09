@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import ArticleData from '@/app/development/articles.json';
+import ArticleData from './articles.json';
 import PageTitle from '@/components/old/ui/page-title';
 import { InfoCard, InfoCardProps } from 'thread-ui';
 
