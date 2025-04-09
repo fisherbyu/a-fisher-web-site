@@ -5,15 +5,18 @@ import { TextInput } from '../text-input';
 import { FileUploadProps, FileWithAlt } from './file-upload.types';
 import { FilePreview, ImageDisplay } from './previews';
 import { isFileImageType } from '@/lib';
+import { FormLabel } from '../form-label';
 
 export const FileUpload = ({
     title = 'Upload a File',
+    name,
     files,
     setFiles,
     allowedFileTypes = ['*/*'],
     maxFileSize,
     maxNumberFiles,
     supportedFormatsText = 'Supports all file types',
+    required,
 }: FileUploadProps) => {
     // Init Display States
     const [isDragging, setIsDragging] = useState(false);
@@ -164,6 +167,7 @@ export const FileUpload = ({
                             className="hidden"
                             accept={allowedFileTypes.join(',')}
                             onChange={handleFileUpload}
+                            required={required}
                         />
                         <button
                             type="button"
@@ -184,12 +188,8 @@ export const FileUpload = ({
 
     return (
         <div className="w-full p-1">
-            <div className="w-full">
-                <h1>{title}</h1>
-                <div>
-                    <Divider width="100%" />
-                </div>
-            </div>
+            <FormLabel name={name} title={title} />
+            <Divider width="100%" marginY="2px" />
             <div>
                 {/* Current Files */}
                 {files && (
