@@ -1,6 +1,3 @@
 // export * from './albums';
-export * from './artist';
-export * from './authenticate-user';
-export * from './files';
-export * from './image';
-export * from './sign-out';
+export * from './auth';
+export * from './models';
