@@ -1,6 +1,6 @@
 import { createClient, getImageDimensions } from '@/lib';
 import { Image } from '@/types';
-import { uploadFile } from '../files';
+import { uploadFile } from '@/lib';
 
 type UploadImageProps = {
     file: File;
