@@ -1,5 +1,5 @@
 import MusicDisplay from '@/components/old/ui/music-display';
-import { getArtists } from '@/lib/actions/artist/get-artists';
+import { getArtists } from '@/lib/';
 
 export default async function ArtistContents() {
     const artists = await getArtists();

@@ -62,7 +62,7 @@ export default function MusicDisplay({ data, type }: MusicBlockProps) {
     const largeDirection = data.id % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse';
 
     return (
-        <div className="flex items-center justify-center flex-col gap-4 p-4 lg:p-6 w-10/12 mx-auto border rounded-md mb-3">
+        <div className="flex items-center justify-center flex-col gap-4 p-4 lg:p-6 w-10/12 max-w-2xl mx-auto border rounded-md mb-3">
             <h1 className="w-full mx-auto text-center text-2xl font-medium">{data.name}</h1>
             <Separator />
             <div className={`w-full mx-auto flex items-center justify-center gap-2 flex-col ${largeDirection}`}>
