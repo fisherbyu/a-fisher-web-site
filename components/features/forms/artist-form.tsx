@@ -7,7 +7,7 @@ import { FileUpload } from '@/components';
 import { LinkForm } from './link-form';
 import { ContentsForm } from './contents-form';
 import { AttributesForm } from '@/components';
-import { createArtist } from '@/lib/actions/artist';
+import { createArtist } from '@/lib';
 import { getPublicUrl, uploadImage } from '@/lib';
 import { FileWithAlt } from '@/components/ui/form-elements/file-upload/file-upload.types';
 import { ImageDisplay } from '@/components/ui/form-elements/file-upload/previews';
