@@ -3,12 +3,17 @@ import { CSSProperties, ReactNode } from 'react';
 export type TypographyProps = {
     children: ReactNode;
 };
-export const Title = ({ children }: TypographyProps) => {
+
+export type TitleProps = TypographyProps & {
+    align?: 'left' | 'center';
+};
+export const Title = ({ children, align = 'left' }: TitleProps) => {
     const styles: CSSProperties = {
         fontSize: '2.5rem',
         fontWeight: 700,
         lineHeight: 1.3,
         margin: '0 0 40px 0',
+        textAlign: align,
     };
     return <h1 style={styles}>{children}</h1>;
 };
