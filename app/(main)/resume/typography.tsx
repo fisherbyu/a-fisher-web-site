@@ -7,7 +7,6 @@ export const Title = ({ children }: TypographyProps) => {
     const styles: CSSProperties = {
         fontSize: '2.5rem',
         fontWeight: 700,
-        height: 51,
         lineHeight: 1.3,
         margin: '0 0 40px 0',
     };
@@ -18,7 +17,6 @@ export const H1 = ({ children }: TypographyProps) => {
     const styles: CSSProperties = {
         fontSize: '2rem',
         fontWeight: 600,
-        height: 39,
         lineHeight: 1.3,
         margin: '0 0 32px 0',
     };
@@ -29,7 +27,6 @@ export const H2 = ({ children }: TypographyProps) => {
     const styles: CSSProperties = {
         fontSize: '1.5rem',
         fontWeight: 600,
-        height: 37,
         lineHeight: 1.3,
         margin: '0 0 24px 0',
     };
@@ -40,7 +37,6 @@ export const H3 = ({ children }: TypographyProps) => {
     const styles: CSSProperties = {
         fontSize: '1.25rem',
         fontWeight: 600,
-        height: 26,
         lineHeight: 1.3,
         margin: '0 0 16px 0',
     };
@@ -63,7 +59,8 @@ export const Text = ({ children, inline = false }: TextProps) => {
 
 export const Subtitle = ({ children }: TypographyProps) => {
     const styles: CSSProperties = {
-        fontSize: 'clamp(0.875rem, 0.75em, 2rem)',
+        display: 'block',
+        fontSize: 'clamp(0.875rem, 0.75em, 1.5rem)',
         color: '#878787',
         marginTop: '0.2em',
     };
