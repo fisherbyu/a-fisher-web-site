@@ -13,14 +13,12 @@ export default function FoodPage() {
     return (
         <main>
             <PageTitle components={title} />
-            <section className="container">
-                <div className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 lg:grid-cols-3 ">
-                    {recipes
-                        .sort((a, b) => a.title.localeCompare(b.title))
-                        .map((recipe, index) => (
-                            <InfoCard key={index} title={recipe.title} url={recipe.url} icon={recipe.icon} img={recipe.img} />
-                        ))}
-                </div>
+            <section className="grid grid-cols-1 gap-1 mt-8 md:grid-cols-2 lg:grid-cols-3 ">
+                {recipes
+                    .sort((a, b) => a.title.localeCompare(b.title))
+                    .map((recipe, index) => (
+                        <InfoCard key={index} title={recipe.title} url={recipe.url} icon={recipe.icon} img={recipe.img} />
+                    ))}
             </section>
         </main>
     );
