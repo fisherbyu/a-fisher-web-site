@@ -4,20 +4,42 @@ import BYULogo from '@/public/resume/byu-logo.png';
 import Image from 'next/image';
 import resume from './resume.json';
 import PageTitle from '@/components/old/ui/page-title';
+import { ReactNode } from 'react';
+import { H2 } from './typography';
 
 const title: { title: string; subtitle?: string } = {
     title: 'Resume',
 };
-const jobs = resume.jobs;
+
+type CardProps = {
+    size?: 'sm' | 'md' | 'lg';
+    title?: string;
+    children: ReactNode;
+};
+
+const Card = ({ size = 'md', title, children }: CardProps) => {
+    return (
+        <div className="p-5 rounded-lg border bg-card text-card-foreground shadow-sm w-full md:w-9/12 mx-auto max-w-[850px] mb-5">
+            {title && (
+                <div>
+                    <h1 className="text-xl font-semibold leading-none tracking-tight">{title}</h1>
+                    <Separator className="my-2" />
+                </div>
+            )}
+            {children}
+        </div>
+    );
+};
 
 export default function ResumePage() {
+    const LAYOUT_WIDTH = 'w-full md:w-9/12 mx-auto max-w-[850px]';
     return (
         <main>
             <PageTitle components={title} />
-            <div className="container">
-                <h1 className="text-left dark:text-white text-2xl md:text-3xl xl:text-4xl font-medium text-gray-900 w-10/12 p-5">
-                    Education
-                </h1>
+            <div className="container mb-6">
+                <div className={LAYOUT_WIDTH}>
+                    <H2>Education</H2>
+                </div>
                 <div className="p-5 rounded-lg border bg-card text-card-foreground shadow-sm w-full md:w-9/12 mx-auto max-w-[850px]">
                     <div className="flex justify-start items-center space-x-2 pb-4">
                         <Image src={BYULogo} alt="BYU Logo" className=" w-10" />
@@ -37,28 +59,21 @@ export default function ResumePage() {
                     <p className=" text-xs">{resume.education[0].additionals}</p>
                 </div>
             </div>
-            <div className="container">
-                <h1 className="text-left dark:text-white text-2xl md:text-3xl xl:text-4xl font-medium text-gray-900 w-10/12 p-5">
-                    Experience
-                </h1>
+            <div className="container mb-6">
+                <div className={LAYOUT_WIDTH}>
+                    <H2>Experience</H2>
+                </div>
                 {resume.jobs.map((job) => (
-                    <div
-                        key={job.title}
-                        className="p-5 rounded-lg border bg-card text-card-foreground shadow-sm w-full md:w-9/12 mx-auto max-w-[850px] mb-5"
-                    >
-                        <div>
-                            <h1 className="text-xl font-semibold leading-none tracking-tight">{job.title}</h1>
-                            <Separator className="my-2" />
-                            <p className=" font-normal text-base">{job.company}</p>
-                            <span className="flex justify-between items-center">
-                                <p className="text-sm text-muted-foreground">
-                                    {job.start_date} - {job.end_date !== null ? job.end_date : 'Present'}
-                                </p>
-                                <p className="text-sm text-muted-foreground">
-                                    {job.city}, {job.state} {job.country !== 'USA' ? `- ${job.country}` : ''}
-                                </p>
-                            </span>
-                        </div>
+                    <Card title={job.title} key={job.title}>
+                        <p className=" font-normal text-base">{job.company}</p>
+                        <span className="flex justify-between items-center">
+                            <p className="text-sm text-muted-foreground">
+                                {job.start_date} - {job.end_date !== null ? job.end_date : 'Present'}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                                {job.city}, {job.state} {job.country !== 'USA' ? `- ${job.country}` : ''}
+                            </p>
+                        </span>
                         <ul className="list-disc pl-5">
                             {job.descriptions.map((desc, index) => (
                                 <li key={index} className=" font-light">
@@ -66,13 +81,13 @@ export default function ResumePage() {
                                 </li>
                             ))}
                         </ul>
-                    </div>
+                    </Card>
                 ))}
             </div>
-            <div className="container">
-                <h1 className="text-left dark:text-white text-2xl md:text-3xl xl:text-4xl font-medium text-gray-900 w-10/12 p-5">
-                    Skills & Achievements
-                </h1>
+            <div className="container mb-6">
+                <div className={LAYOUT_WIDTH}>
+                    <H2>Skills & Achievements</H2>
+                </div>
                 <div className="p-5 rounded-lg border bg-card text-card-foreground shadow-sm w-full md:w-9/12 mb-5 mx-auto max-w-[850px]">
                     <ul className="list-disc pl-5">
                         {resume.skills.map((skill, index) => (
