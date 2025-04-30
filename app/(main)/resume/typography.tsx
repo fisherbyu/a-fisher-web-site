@@ -20,7 +20,7 @@ export const H1 = ({ children }: TypographyProps) => {
         fontWeight: 600,
         height: 39,
         lineHeight: 1.3,
-        padding: '0 0 32px 0',
+        margin: '0 0 32px 0',
     };
     return <h1 style={styles}>{children}</h1>;
 };
