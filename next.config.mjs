@@ -6,6 +6,10 @@ const nextConfig = {
             hostname: process.env.NEXT_PUBLIC_SUPABASE_URL.replace('https://', '').split('/')[0],
             pathname: '/**'
         }]
+    },
+    webpack: (config) => {
+        config.resolve.symlinks = false;
+        return config;
     }
 };
 
