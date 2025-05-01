@@ -11,9 +11,8 @@ import Utah from '@/public/home/alpine-loop.jpg';
 import HBLL from '@/public/home/hbll.jpg';
 import Philippines from '@/public/home/philippines.jpg';
 // Import Components
-import { Separator } from '@/components/old/ui/separator';
 import GridBlock from '@/components/old/ui/grid-block';
-import { ColumnLayout, ImagePanel, Text, Title } from 'thread-ui';
+import { Divider, ColumnLayout, ImagePanel, Text, Title, H1 } from 'thread-ui';
 
 // Declare Content
 const places: {
@@ -110,8 +109,10 @@ export default function Home() {
                 image={<Image src={ImageAF_3_2} alt="Picture of Andrew Fisher" />}
                 smImage={<Image src={ImageAF_5_4} alt="Picture of Andrew Fisher" />}
             />
-            <Separator className="container w-9/12 my-9" />
-            <h1 className="container font-semibold md:py-6 lg:py-3 text-center text-3xl md:text-4xl xl:text-5xl">About Me</h1>
+            <Divider width="75%" marginY="36px" />
+            <Title align="center" inline>
+                About Me
+            </Title>
             <GridBlock components={places} />
             <GridBlock components={movies} />
         </main>
