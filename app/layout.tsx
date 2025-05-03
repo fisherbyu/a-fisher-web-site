@@ -1,6 +1,7 @@
 import '@/public/styles/globals.css';
 import type { Metadata } from 'next';
 import { Merriweather_Sans } from 'next/font/google';
+import { Providers } from './providers';
 
 // Configure Site
 const MAIN_FONT = Merriweather_Sans({ subsets: ['latin'] });
@@ -17,7 +18,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" style={MAIN_FONT.style}>
-            <body>{children}</body>
+            <Providers>
+                <body>{children}</body>
+            </Providers>
         </html>
     );
 }
