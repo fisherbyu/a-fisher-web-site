@@ -101,7 +101,7 @@ export const NumberInput = ({ name, id = name, title, value, placeholder, requir
             {title && <FormLabel id={id} name={name} title={title} />}
             <div className="flex self-start justify-center items-center">
                 <button type="button" className={bttnLeft} onClick={handleIncrement(-1)}>
-                    <Icon name="CaretLeft" color="grey" size={12} />
+                    <Icon name="CaretLeft" color="gray" size={12} />
                 </button>
                 <input
                     type="number"
@@ -132,7 +132,7 @@ export const NumberInput = ({ name, id = name, title, value, placeholder, requir
                     max={max}
                 />
                 <button type="button" className={bttnRight} onClick={handleIncrement(1)}>
-                    <Icon name="CaretRight" color="grey" size={12} />
+                    <Icon name="CaretRight" color="gray" size={12} />
                 </button>
             </div>
         </InputWrapper>

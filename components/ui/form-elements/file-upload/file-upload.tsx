@@ -166,7 +166,7 @@ export const FileUpload = ({
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
                 >
-                    <Icon name="UploadSimple" size={size === 'sm' ? 24 : 48} color="grey" />
+                    <Icon name="UploadSimple" size={size === 'sm' ? 24 : 48} color="gray" />
                     <div
                         className={clsx('flex gap-2', {
                             'flex-row': size === 'sm',
