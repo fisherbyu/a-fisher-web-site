@@ -1,26 +1,31 @@
 import { getArtists } from '@/lib';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(request: Request) {
     try {
         // Fetch Data, select random
         const data = await getArtists();
-
         const randomIndex = Math.floor(Math.random() * data.length);
         const randomArtist = data[randomIndex];
 
         // Return success
-        return res.status(200).json({
-            status: 'success',
-            message: 'API is working properly',
-            data: randomArtist,
-        });
+        return NextResponse.json(
+            {
+                status: 'success',
+                message: 'API is working properly',
+                data: randomArtist,
+            },
+            { status: 200 }
+        );
     } catch (error) {
         // Handle errors
-        return res.status(500).json({
-            status: 'error',
-            message: 'Failed to fetch artist data',
-            error: error instanceof Error ? error.message : 'Unknown error',
-        });
+        return NextResponse.json(
+            {
+                status: 'error',
+                message: 'Failed to fetch artist data',
+                error: error instanceof Error ? error.message : 'Unknown error',
+            },
+            { status: 500 }
+        );
     }
 }
