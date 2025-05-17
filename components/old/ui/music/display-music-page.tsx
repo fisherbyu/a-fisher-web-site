@@ -27,7 +27,7 @@ export default function MusicDisplayPage({ type }: MusicDisplayPageProps) {
     return (
         <div>
             {content.map((artist, index) => (
-                <MusicDisplay key={artist.name} index={index} components={artist} />
+                <MusicDisplay key={artist.name} type="artist" data={artist} />
             ))}
         </div>
     );
