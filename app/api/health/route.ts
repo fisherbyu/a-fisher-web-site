@@ -21,21 +21,26 @@ export async function GET(request: Request) {
         }).format(new Date());
 
         // Return success
-        return NextResponse.json(
-            {
-                status: 'success',
-                message: 'API is working properly',
-                timestamp: formattedDate,
-                data: randomArtist,
+        // Create the response object
+        const responseObj = {
+            status: 'success',
+            message: 'API is working properly',
+            timestamp: formattedDate,
+            data: randomArtist,
+        };
+
+        // Pretty print the JSON with 2 spaces for indentation
+        const prettyJson = JSON.stringify(responseObj, null, 2);
+
+        // Return success with properly formatted JSON
+        return new Response(prettyJson, {
+            status: 200,
+            headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                Pragma: 'no-cache',
             },
-            {
-                status: 200,
-                headers: {
-                    'Cache-Control': 'no-store, max-age=0',
-                    Pragma: 'no-cache',
-                },
-            }
-        );
+        });
     } catch (error) {
         // Handle errors
         return NextResponse.json(
