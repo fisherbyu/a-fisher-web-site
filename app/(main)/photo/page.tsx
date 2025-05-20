@@ -29,9 +29,10 @@ import Rexburg from '@/public/photography/rexburg.jpg';
 import Wrightslake from '@/public/photography/wrights-lake.jpg';
 import Wrightslake2 from '@/public/photography/wrights-lake-2.jpg';
 import Sacramentostreet from '@/public/photography/sacramento-street.jpg';
-import { StaticImageData } from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import MasonryBlock from '@/components/old/ui/masonry-block';
 import PageTitle from '@/components/old/ui/page-title';
+import { MasonryLayout } from 'thread-ui';
 const title: { title: string; subtitle?: string } = {
     title: 'My Photography',
     subtitle:
@@ -70,14 +71,12 @@ const photos: { src: StaticImageData; alt: string }[] = [
     { src: Alaskariver2, alt: 'Alaskariver2' },
 ];
 
-const components: { title?: string; caption?: string; items: { src: StaticImageData; alt: string }[] } = {
-    items: photos,
-};
 export default function PhotographyPage() {
+    const contents = photos.map((photo) => <Image src={photo.src} alt={photo.alt} />);
     return (
         <main>
             <PageTitle components={title} />
-            <MasonryBlock components={components} />
+            <MasonryLayout components={contents} />
         </main>
     );
 }
