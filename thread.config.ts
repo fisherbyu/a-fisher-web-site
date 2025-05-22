@@ -1,6 +1,14 @@
-import { createTheme } from 'thread-ui';
+import { createTheme, ThemeConfig } from 'thread-ui';
 
-const threadConfig = {
+export const newConfig: ThemeConfig = {
+    primary: {
+        light: '#4f46e5',
+        main: '#4338ca',
+        dark: '#3730a3',
+    },
+};
+
+const oldConfig = {
     colors: {
         primary: {
             light: '#4f46e5',
@@ -14,4 +22,4 @@ const threadConfig = {
 } as const;
 
 // Initialize Theme
-export const ThreadTheme = createTheme(threadConfig);
+export const ThreadTheme = createTheme(oldConfig);
