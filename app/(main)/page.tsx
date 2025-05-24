@@ -16,7 +16,7 @@ import { Divider, ColumnLayout, ImagePanel, Title } from 'thread-ui';
 // Content
 export default function Home() {
     return (
-        <main>
+        <>
             <br />
             {/* Intro Image */}
             <ImagePanel
@@ -80,6 +80,6 @@ export default function Home() {
                     },
                 ]}
             />
-        </main>
+        </>
     );
 }
