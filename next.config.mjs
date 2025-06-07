@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    runtime: 'nodejs18.x',
     images: {
         remotePatterns: [{
             protocol: 'https',
