@@ -1,3 +1,4 @@
+'use client';
 import MusicDisplay from '@/components/old/ui/music-display';
 import { getArtists } from '@/lib/';
 
