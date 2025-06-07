@@ -1,0 +1,22 @@
+[
+    {
+        "id": "5eeefe3c-af8a-44ee-85a7-0608c62ec5bf",
+        "title": "node.js/Express CRUD App",
+        "url": "https://fisherbyu.notion.site/node-js-Express-CRUD-Application-5eeefe3caf8a44ee85a70608c62ec5bf",
+        "icon": {
+            "type": "svg",
+            "content": "https://www.notion.so/icons/snippet_purple.svg"
+        },
+        "img": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb"
+    },
+    {
+        "id": "cdbd5896-c5d5-42b3-a219-26ea2931613e",
+        "title": "Django Basics",
+        "url": "https://fisherbyu.notion.site/Django-Basics-cdbd5896c5d542b3a21926ea2931613e",
+        "icon": {
+            "type": "svg",
+            "content": "https://www.notion.so/icons/script_blue.svg"
+        },
+        "img": "https://images.unsplash.com/photo-1580121441575-41bcb5c6b47c?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb"
+    }
+]

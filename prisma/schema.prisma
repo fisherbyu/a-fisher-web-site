@@ -1,0 +1,152 @@
+// Prisma Schema Definition
+// Connection Configurations
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// Table Definitions
+model Artist {
+    id        Int      @id @default(autoincrement())
+    name      String   @db.VarChar(100)
+    tier      Int
+    rank      Int?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    image      Image?      @relation("ArtistImage")
+    link       Link?       @relation("ArtistLink")
+    attributes Attribute[] @relation("ArtistAttributes")
+    contents   Content[]   @relation("ArtistContents")
+
+    // Indexes
+    @@index([name])
+    @@index([tier])
+}
+
+model Album {
+    id        Int      @id @default(autoincrement())
+    name      String   @db.VarChar(100)
+    rank      Int
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    image      Image?      @relation("AlbumImage")
+    link       Link?       @relation("AlbumLink")
+    attributes Attribute[] @relation("AlbumAttributes")
+    contents   Content[]   @relation("AlbumContents")
+
+    // Indexes
+    @@index([name])
+    @@index([rank])
+}
+
+model Playlist {
+    id        Int      @id @default(autoincrement())
+    title     String   @db.VarChar(100)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    link Link? @relation("PlaylistLink")
+
+    // Indexes
+    @@index([title])
+}
+
+model Link {
+    id         Int      @id @default(autoincrement())
+    appleURI   String   @db.VarChar(255)
+    spotifyURI String   @db.VarChar(255)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    // Relations (Polymorphic, Cascade Deletions)
+    artist     Artist?   @relation("ArtistLink", fields: [artistId], references: [id], onDelete: Cascade)
+    artistId   Int?      @unique
+    album      Album?    @relation("AlbumLink", fields: [albumId], references: [id], onDelete: Cascade)
+    albumId    Int?      @unique
+    playlist   Playlist? @relation("PlaylistLink", fields: [playlistId], references: [id], onDelete: Cascade)
+    playlistId Int?      @unique
+
+    // Constraints Exclusivity
+    @@unique([artistId, id], name: "artist_link")
+    @@unique([albumId, id], name: "album_link")
+    @@unique([playlistId, id], name: "playlist_link")
+    // Indexes
+    @@index([artistId])
+    @@index([albumId])
+    @@index([playlistId])
+}
+
+model Image {
+    id        Int      @id @default(autoincrement())
+    src       String   @db.VarChar(255)
+    alt       String   @db.VarChar(255)
+    height    Int      @db.Integer
+    width     Int      @db.Integer
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations (Polymorphic, Cascade Deletions)
+    artist   Artist? @relation("ArtistImage", fields: [artistId], references: [id], onDelete: Cascade)
+    artistId Int?    @unique
+    album    Album?  @relation("AlbumImage", fields: [albumId], references: [id], onDelete: Cascade)
+    albumId  Int?    @unique
+
+    // Constraints for Exclusivity
+    @@unique([artistId, id], name: "artist_image")
+    @@unique([albumId, id], name: "album_image")
+    // Index for parent IDs
+    @@index([artistId])
+    @@index([albumId])
+}
+
+model Content {
+    id        Int      @id @default(autoincrement())
+    order     Int
+    text      String   @db.Text
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations (Polymorphic, Cascade Deletions)
+    artist   Artist? @relation("ArtistContents", fields: [artistId], references: [id], onDelete: Cascade)
+    artistId Int?
+    album    Album?  @relation("AlbumContents", fields: [albumId], references: [id], onDelete: Cascade)
+    albumId  Int?
+
+    // Constraints for Unique Order by Parent
+    @@unique([artistId, order], name: "artist_content_order")
+    @@unique([albumId, order], name: "album_content_order")
+    // Indexes
+    @@index([artistId])
+    @@index([albumId])
+}
+
+model Attribute {
+    id        Int      @id @default(autoincrement())
+    order     Int
+    title     String   @db.VarChar(100)
+    text      String   @db.Text
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations (Polymorphic, Cascade Deletions)
+    artist   Artist? @relation("ArtistAttributes", fields: [artistId], references: [id], onDelete: Cascade)
+    artistId Int?
+    album    Album?  @relation("AlbumAttributes", fields: [albumId], references: [id], onDelete: Cascade)
+    albumId  Int?
+
+    // Constraints for Unique Order by Parent
+    @@unique([artistId, order], name: "artist_attribute_order")
+    @@unique([albumId, order], name: "album_attribute_order")
+    // Indexes
+    @@index([artistId])
+    @@index([albumId])
+}

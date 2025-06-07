@@ -1,29 +1,28 @@
-import type { Metadata } from "next";
-import { Merriweather_Sans } from "next/font/google";
-import "@/styles/globals.css";
+import '@/public/styles/globals.css';
+import type { Metadata } from 'next';
+import { Merriweather_Sans } from 'next/font/google';
+import { Providers } from './providers';
+import { ThreadTheme } from 'thread-ui';
 
-import { CoreMenu } from "@/components/core/core-menu";
-import CoreFooter from "@/components/core/core-footer";
-
-const coreFont = Merriweather_Sans({ subsets: ["latin"] });
+// Configure Site
+const MAIN_FONT = Merriweather_Sans({ subsets: ['latin'] });
+const background = ThreadTheme.background;
 
 export let metadata: Metadata = {
-  title: "Andrew Fisher",
-  description: "Created by Andrew Fisher",
+    title: 'Andrew Fisher',
+    description: 'Created by Andrew Fisher',
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className={coreFont.className}>
-        <CoreMenu />
-        {children}
-        <CoreFooter />
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en" style={MAIN_FONT.style}>
+            <Providers>
+                <body style={{ backgroundColor: background }}>{children}</body>
+            </Providers>
+        </html>
+    );
 }

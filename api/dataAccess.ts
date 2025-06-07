@@ -1,15 +1,15 @@
 // Import Static Data
-import StaticArtists from "@/api/static_content/artists.json";
-import StaticAlbums from "@/api/static_content/albums.json";
+import StaticArtists from '@/api/static_content/artists.json';
+import StaticAlbums from '@/api/static_content/albums.json';
 
 // Define Types
 export enum DataType {
-    Artist = "Artist",
-    Album = "Album"
+    Artist = 'Artist',
+    Album = 'Album',
 }
 
 // API Endpoint
-const endpoint = "https://api.fisherandrew.org"
+const endpoint = 'https://api.fisherandrew.org';
 
 // Load Static Data if API can't be accessed
 function getStaticData(type: DataType) {
@@ -28,7 +28,7 @@ export async function getData(type: DataType) {
         const response = await fetch(`${endpoint}/${type}`);
 
         if (!response.ok) {
-            throw new Error("Failed to fetch data from API");
+            throw new Error('Failed to fetch data from API');
         }
 
         return await response.json();
@@ -38,4 +38,4 @@ export async function getData(type: DataType) {
 
         return getStaticData(type);
     }
-};
+}
