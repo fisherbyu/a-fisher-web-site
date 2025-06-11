@@ -1,34 +1,37 @@
-import { BaseResponse, HttpMethod, RequestOptions } from '@/types';
-
 /**
- * Makes HTTP request to the specified endpoint
- * @template TRequest - Type of the request body
- * @template TResponse - Type of the response data
- * @param method: HTTTP Method [GET | POST | PUT | PATCH | OPTIONS]
- * @param endpoint Target API Endpoint
- * @param options Request Options { body?: TRequest; queryString?: string; }
- * @returns {Promise<TResponse>} The response data
+ * Makes GET request to the specified endpoint
+ * @template T - Type of the response data
+ * @param endpoint Target API endpoint
+ * @param queryParams Optional query parameters
+ * @returns Promise resolving to response data
  */
-export const makeRequest = async <TRequest, TResponse, TModel>(
-    method: HttpMethod,
-    endpoint: string,
-    options?: RequestOptions<TRequest>
-): Promise<TModel> => {
-    const baseURL = process.env.NEXT_PUBLIC_API_URL;
-    const url = `${baseURL}${endpoint}${options?.queryString || ''}`;
-    try {
-        const response = await fetch(url, {
-            method,
-            credentials: 'include',
-            body: options?.body ? JSON.stringify(options.body) : undefined,
-        });
-        const { data, success, error } = (await response.json()) as BaseResponse<TResponse>;
-        if (!success) throw new Error(`Failed to fetch data for ${endpoint}: ${error?.message}`);
+export const makeRequest = async <T>(endpoint: string, queryParams?: Record<string, string>): Promise<T> => {
+    const baseURL = process.env.NEXT_PUBLIC_API_URL || '';
+    const url = new URL(endpoint, baseURL);
 
-        return data as unknown as TModel;
+    // Add query parameters
+    if (queryParams) {
+        Object.entries(queryParams).forEach(([key, value]) => {
+            url.searchParams.append(key, value);
+        });
+    }
+
+    try {
+        const response = await fetch(url.toString(), {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                Accept: 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        return response.json();
     } catch (error) {
-        console.error(error);
-        // TODO: Create a user friendly way to display errors (toasts?)
-        throw error; // this is done to trigger the useSWR error boundary
+        console.error('GET request failed:', error);
+        throw error;
     }
 };
