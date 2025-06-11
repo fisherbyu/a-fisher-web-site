@@ -6,8 +6,9 @@
  * @returns Promise resolving to response data
  */
 export const makeRequest = async <T>(endpoint: string, queryParams?: Record<string, string>): Promise<T> => {
-    const baseURL = process.env.NEXT_PUBLIC_API_URL || '';
-    const url = new URL(endpoint, baseURL);
+    const baseURL = '/api';
+    const fullUrl = `${baseURL}${endpoint}`;
+    const url = new URL(fullUrl, window.location.origin);
 
     // Add query parameters
     if (queryParams) {
@@ -29,7 +30,8 @@ export const makeRequest = async <T>(endpoint: string, queryParams?: Record<stri
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        return response.json();
+        const data = await response.json();
+        return data as T;
     } catch (error) {
         console.error('GET request failed:', error);
         throw error;
