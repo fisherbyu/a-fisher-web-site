@@ -14,6 +14,6 @@ const fetcher = async (url: string): Promise<Artist[]> => {
     return res.json();
 };
 export default function ArtistContents() {
-    const { data: artists, error } = useSWR('/api/artists', fetcher);
+    const { data: artists, error } = useSWR('/api/artist', fetcher);
     return <div>{artists?.map((artist) => <MusicDisplay key={artist.id} data={artist} type="artist" />)}</div>;
 }
