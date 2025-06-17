@@ -1,14 +1,14 @@
 import Image from 'next/image';
 import GitHubIcon from '@/public/core/github.svg';
 import LinkedInIcon from '@/public/core/linkedin.svg';
-import { Separator } from '@/components/old/ui/separator';
 import AFLogo from '@/public/core/af-logo.svg';
 import Link from 'next/link';
+import { Divider } from 'thread-ui';
 
 export default function CoreFooter() {
     return (
         <footer className="container mx-auto">
-            <Separator />
+            <Divider />
             <div className=" py-12 mx-auto overflow-hidden max-w-7xl ">
                 <p className="mt-8 text-center">
                     <Link href="/">

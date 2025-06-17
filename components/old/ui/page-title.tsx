@@ -1,4 +1,5 @@
-import { Separator } from './separator';
+import { Divider } from 'thread-ui';
+
 interface Components {
     title: string;
     subtitle?: string;
@@ -26,7 +27,7 @@ export default function PageTitle({ components }: PageTitleProps) {
                 </div>
             )}
             <div className="mx-auto py-4 w-6/12">
-                <Separator />
+                <Divider />
             </div>
         </div>
     );

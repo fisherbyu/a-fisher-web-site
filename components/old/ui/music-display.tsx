@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Separator } from '@/components/old/ui/separator';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -7,6 +6,7 @@ import AppleMusicLogo from '@/public/music/apple-music.svg';
 import SpotifyLogo from '@/public/music/spotify.svg';
 import { Album, Artist } from '@/types';
 import { getPublicUrl } from '@/lib';
+import { Divider } from 'thread-ui';
 
 interface MusicBlock {
     name: string;
@@ -64,7 +64,7 @@ export default function MusicDisplay({ data, type }: MusicBlockProps) {
     return (
         <div className="flex items-center justify-center flex-col gap-4 p-4 lg:p-6 w-10/12 max-w-2xl mx-auto border rounded-md mb-3">
             <h1 className="w-full mx-auto text-center text-2xl font-medium">{data.name}</h1>
-            <Separator />
+            <Divider />
             <div className={`w-full mx-auto flex items-center justify-center gap-2 flex-col ${largeDirection}`}>
                 <div className="w-full lg:w-4/12 mx-auto flex items-center justify-center gap-2 lg:gap-3 flex-col">
                     {data.image && (
@@ -87,7 +87,9 @@ export default function MusicDisplay({ data, type }: MusicBlockProps) {
                     </div>
                     {type === 'album' && <>{attributes}</>}
                 </div>
-                <Separator className="lg:hidden my-2 w-9/12" />
+                <div className="lg:hidden my-2 w-9/12">
+                    <Divider />
+                </div>
                 <div className="font-light w-10/12 lg:w-7/12 mx-auto flex items-center justify-center gap-2 flex-col lg:flex-col-reverse">
                     <div className="">{type === 'artist' && <>{attributes}</>}</div>
 

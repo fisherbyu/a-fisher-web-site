@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import { Separator } from '@/components/old/ui/separator';
 import BYULogo from '@/public/resume/byu-logo.png';
 import Image from 'next/image';
 import resume from './resume.json';
 import PageTitle from '@/components/old/ui/page-title';
 import { ReactNode } from 'react';
 import { H2 } from './typography';
+import { Divider } from 'thread-ui';
 
 const title: { title: string; subtitle?: string } = {
     title: 'Resume',
@@ -23,7 +23,7 @@ const Card = ({ size = 'md', title, children }: CardProps) => {
             {title && (
                 <div>
                     <h1 className="text-xl font-semibold leading-none tracking-tight">{title}</h1>
-                    <Separator className="my-2" />
+                    <Divider />
                 </div>
             )}
             {children}
