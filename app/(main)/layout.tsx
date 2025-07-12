@@ -1,3 +1,4 @@
+'use client';
 import '@/public/styles/globals.css';
 import { CoreMenu } from '@/components/old/core/core-menu';
 import Logo from '@/public/core/andrew-fisher-logo.svg';
