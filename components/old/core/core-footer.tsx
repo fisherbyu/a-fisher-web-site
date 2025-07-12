@@ -1,3 +1,4 @@
+'use client';
 import Image from 'next/image';
 import GitHubIcon from '@/public/core/github.svg';
 import LinkedInIcon from '@/public/core/linkedin.svg';
