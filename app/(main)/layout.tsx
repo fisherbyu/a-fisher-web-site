@@ -1,11 +1,7 @@
-'use client';
-import '@/public/styles/globals.css';
-import { CoreMenu } from '@/components/old/core/core-menu';
 import Logo from '@/public/core/andrew-fisher-logo.svg';
 
 import CoreFooter from '@/components/old/core/core-footer';
 import { NavMenu } from 'thread-ui';
-import Link from 'next/link';
 import Image from 'next/image';
 
 export default function MainLayout({
