@@ -1,7 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer thread-reset, tailwind, thread-base, thread-tokens, thread-recipes, thread-utilities;
 
+@layer tailwind {
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+}
 /* @layer base {
     :root {
         --card: 0 0% 100%;
