@@ -1,4 +1,3 @@
-'use client';
 // Import Images
 import Image from 'next/image';
 import ImageAF_3_2 from '@/public/home/andrew-fisher-3-2.jpg';
