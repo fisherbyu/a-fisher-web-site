@@ -30,13 +30,8 @@ import Wrightslake from '@/public/photography/wrights-lake.jpg';
 import Wrightslake2 from '@/public/photography/wrights-lake-2.jpg';
 import Sacramentostreet from '@/public/photography/sacramento-street.jpg';
 import Image, { StaticImageData } from 'next/image';
-import PageTitle from '@/components/old/ui/page-title';
-import { MasonryLayout } from 'thread-ui';
-const title: { title: string; subtitle?: string } = {
-    title: 'My Photography',
-    subtitle:
-        "Here are some of my photos I've taken over the years. I got interested in photography because my sister is an amazing photographer and I love capturing moments.",
-};
+import { MasonryLayout, PageHeader } from 'thread-ui';
+
 const photos: { src: StaticImageData; alt: string }[] = [
     { src: Andrewfisherpoint, alt: 'Andrewfisherpoint' },
     { src: Hope3, alt: 'Hope3' },
@@ -74,7 +69,10 @@ export default function PhotographyPage() {
     const contents = photos.map((photo) => <Image src={photo.src} alt={photo.alt} />);
     return (
         <main>
-            <PageTitle components={title} />
+            <PageHeader
+                title="My Photography"
+                caption="Here are some of my photos I've taken over the years. I got interested in photography because my sister is an amazing photographer and I love capturing moments."
+            />
             <MasonryLayout components={contents} />
         </main>
     );
