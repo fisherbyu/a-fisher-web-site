@@ -1,8 +1,8 @@
 import Logo from '@/public/core/andrew-fisher-logo.svg';
-
-import CoreFooter from '@/components/old/core/core-footer';
-import { NavMenu } from 'thread-ui';
+import AFLogo from '@/public/core/af-logo.svg';
+import { NavMenu, Footer } from 'thread-ui';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function MainLayout({
     children,
@@ -29,9 +29,17 @@ export default function MainLayout({
                     },
                 ]}
             />
-            {/* <CoreMenu /> */}
             <main className="flex-grow">{children}</main>
-            <CoreFooter />
+            <Footer
+                caption="Created By Andrew Fisher"
+                logo={
+                    <Link href="/">
+                        <Image src={AFLogo} alt="AF Logo" />
+                    </Link>
+                }
+                githubLink="https://github.com/fisherbyu"
+                linkedInLink="https://www.linkedin.com/in/fisherandrew777/"
+            />
         </div>
     );
 }
