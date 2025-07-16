@@ -18,7 +18,7 @@ export default function ColdplayPage() {
             <section className="container">
                 {content.map((album, index) => (
                     // <MusicDisplay key={album.id} data={album} type="album" />
-                    <></>
+                    <div key={index}></div>
                 ))}
                 <br />
             </section>
