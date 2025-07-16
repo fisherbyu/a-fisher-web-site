@@ -3,8 +3,7 @@ import BYULogo from '@/public/resume/byu-logo.png';
 import Image from 'next/image';
 import resume from './resume.json';
 import { ReactNode } from 'react';
-import { H2 } from './typography';
-import { Divider, PageHeader } from 'thread-ui';
+import { Divider, PageHeader, H2 } from 'thread-ui';
 
 type CardProps = {
     size?: 'sm' | 'md' | 'lg';
