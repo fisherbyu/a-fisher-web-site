@@ -2,14 +2,9 @@ import type { Metadata } from 'next';
 import BYULogo from '@/public/resume/byu-logo.png';
 import Image from 'next/image';
 import resume from './resume.json';
-import PageTitle from '@/components/old/ui/page-title';
 import { ReactNode } from 'react';
 import { H2 } from './typography';
-import { Divider } from 'thread-ui';
-
-const title: { title: string; subtitle?: string } = {
-    title: 'Resume',
-};
+import { Divider, PageHeader } from 'thread-ui';
 
 type CardProps = {
     size?: 'sm' | 'md' | 'lg';
@@ -35,7 +30,7 @@ export default function ResumePage() {
     const LAYOUT_WIDTH = 'w-full md:w-9/12 mx-auto max-w-[850px]';
     return (
         <main>
-            <PageTitle components={title} />
+            <PageHeader title="Resume" />
             <div className="container mb-6">
                 <div className={LAYOUT_WIDTH}>
                     <H2>Education</H2>
