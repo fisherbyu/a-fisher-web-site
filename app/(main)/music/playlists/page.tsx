@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import DisplayPlaylists from '@/components/old/ui/display-playlists';
-import { PageHeader } from '@/.yalc/thread-ui/dist';
+import { PageHeader } from 'thread-ui';
 
 interface Playlist {
     title: string;
