@@ -30,7 +30,6 @@ import Wrightslake from '@/public/photography/wrights-lake.jpg';
 import Wrightslake2 from '@/public/photography/wrights-lake-2.jpg';
 import Sacramentostreet from '@/public/photography/sacramento-street.jpg';
 import Image, { StaticImageData } from 'next/image';
-import MasonryBlock from '@/components/old/ui/masonry-block';
 import PageTitle from '@/components/old/ui/page-title';
 import { MasonryLayout } from 'thread-ui';
 const title: { title: string; subtitle?: string } = {
