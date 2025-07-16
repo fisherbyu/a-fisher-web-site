@@ -1,12 +1,6 @@
 import type { Metadata } from 'next';
-import PageTitle from '@/components/old/ui/page-title';
 import DisplayPlaylists from '@/components/old/ui/display-playlists';
-
-const title: { title: string; subtitle?: string; center?: boolean } = {
-    title: 'My Playlists',
-    subtitle: 'Here are some of my favorite playlists',
-    center: true,
-};
+import { PageHeader } from '@/.yalc/thread-ui/dist';
 
 interface Playlist {
     title: string;
@@ -40,7 +34,7 @@ const playlists: Playlist[] = [
 export default function PlaylistPage() {
     return (
         <main>
-            <PageTitle components={title} />
+            <PageHeader title="My Playlists" caption="Here are some of my favorite playlists" center />
             <DisplayPlaylists components={playlists} />
         </main>
     );
