@@ -7,7 +7,7 @@ import { prisma, transformAlbum } from '@/lib';
  * @param {AlbumDto} data
  * @returns {Promise<Album>}
  */
-export async function createArtist(data: AlbumDto): Promise<Album> {
+export async function createAlbum(data: AlbumDto): Promise<Album> {
     // Extract Data
     const {
         name,
