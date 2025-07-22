@@ -1,8 +1,9 @@
 'use client';
+import { MusicCard } from '@/components';
 import MusicDisplay from '@/components/old/ui/music-display';
 import { useArtists } from '@/lib';
 
 export default function ArtistContents() {
     const { artists, isLoading, error } = useArtists();
-    return <div>{artists?.map((artist) => <MusicDisplay key={artist.id} data={artist} type="artist" />)}</div>;
+    return <div>{artists?.map((artist, _) => <MusicCard key={_} index={_} item={artist} type="artist" />)}</div>;
 }

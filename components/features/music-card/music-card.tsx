@@ -5,7 +5,7 @@ import { Divider } from 'thread-ui';
 import Image from 'next/image';
 import { getPublicUrl } from '@/lib';
 import Link from 'next/link';
-export const MusicCard = ({ key, item, type }: MusicCardProps) => {
+export const MusicCard = ({ index, item, type }: MusicCardProps) => {
     // Generate Links
     const musicLinks =
         type === 'artist'
@@ -19,7 +19,7 @@ export const MusicCard = ({ key, item, type }: MusicCardProps) => {
               };
 
     // Switch Direction every other card
-    const largeDirection = key % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse';
+    const largeDirection = index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse';
 
     // Build Out Tags
     const attributes = (
