@@ -21,7 +21,7 @@ export const getArtists = async (): Promise<Artist[]> => {
         },
     });
 
-    return await data.map((artist) => transformArtist(artist));
+    return data.map((artist) => transformArtist(artist));
 };
 
 export const fetchArtists = async (): Promise<ApiResponse<Artist[]>> => {
