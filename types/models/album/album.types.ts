@@ -4,7 +4,7 @@ import { DtoId } from '../dto';
 export type Album = {
     id: number;
     name: string;
-    rank: number;
+    rank?: number;
     contents: Content[];
     attributes: Attribute[];
     link?: Link;
@@ -15,6 +15,6 @@ export type AlbumDto = Omit<Album, 'id' | 'contents' | 'attributes' | 'link' | '
     id: DtoId;
     contents: ContentDto[];
     attributes: AttributeDto[];
-    link?: LinkDto;
+    link: LinkDto;
     image: ImageDto;
 };

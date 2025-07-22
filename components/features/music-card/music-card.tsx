@@ -5,7 +5,7 @@ import { Divider } from 'thread-ui';
 import Image from 'next/image';
 import { getPublicUrl } from '@/lib';
 import Link from 'next/link';
-export const MusicCard = ({ key, item, type }: MusicCardProps) => {
+export const MusicCard = ({ index, item, type }: MusicCardProps) => {
     // Generate Links
     const musicLinks =
         type === 'artist'
@@ -19,11 +19,11 @@ export const MusicCard = ({ key, item, type }: MusicCardProps) => {
               };
 
     // Switch Direction every other card
-    const largeDirection = key % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse';
+    const largeDirection = index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse';
 
     // Build Out Tags
     const attributes = (
-        <div className="text-sm text-center flex flex-col gap-1">
+        <div className="text-sm text-center flex flex-col gap-1 max-h-16 overflow-scroll">
             {item.attributes.map((attribute, index) => (
                 <span key={index}>
                     <h3 className=" font-extralight">{attribute.title}</h3>
@@ -34,7 +34,9 @@ export const MusicCard = ({ key, item, type }: MusicCardProps) => {
     );
 
     return (
-        <div className="flex items-center justify-center flex-col gap-4 p-4 lg:p-6 w-10/12 max-w-2xl mx-auto border rounded-md mb-3">
+        <div
+            className={`flex items-center justify-center flex-col gap-4 p-4 lg:p-6 w-10/12 mx-auto border rounded-md mb-3 ${type === 'artist' ? 'max-w-2xl' : 'max-w-4xl'}`}
+        >
             <h1 className="w-full mx-auto text-center text-2xl font-medium">{item.name}</h1>
             <Divider />
             <div className={`w-full mx-auto flex items-center justify-center gap-2 flex-col ${largeDirection}`}>

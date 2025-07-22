@@ -1,17 +1,16 @@
 'use server';
-import { Artist, ArtistDto } from '@/types';
-import { prisma, transformArtist } from '@/lib';
+import { Album, AlbumDto } from '@/types';
+import { prisma, transformAlbum } from '@/lib';
 
 /**
- * Server Action to Create Artist
- * @param {CreateArtistInput} data
- * @returns {Promise<Artist>}
+ * Server Action to Create Album
+ * @param {AlbumDto} data
+ * @returns {Promise<Album>}
  */
-export async function createArtist(data: ArtistDto): Promise<Artist> {
+export async function createAlbum(data: AlbumDto): Promise<Album> {
     // Extract Data
     const {
         name,
-        tier,
         rank,
         link: { id: linkId, ...linkData },
         image: { id: imgId, ...imgData },
@@ -23,11 +22,9 @@ export async function createArtist(data: ArtistDto): Promise<Artist> {
     const contents = contentsWithIds.map(({ id, ...rest }) => rest);
     const attributes = attributesWithIds.map(({ id, ...rest }) => rest);
 
-    // Add to Database
-    const artist = await prisma.artist.create({
+    const album = await prisma.album.create({
         data: {
             name,
-            tier,
             rank,
             link: {
                 create: linkData,
@@ -42,7 +39,7 @@ export async function createArtist(data: ArtistDto): Promise<Artist> {
                 create: attributes,
             },
         },
-        // Return full Artist Object
+        // Return full Album Object
         include: {
             link: true,
             image: true,
@@ -59,5 +56,5 @@ export async function createArtist(data: ArtistDto): Promise<Artist> {
         },
     });
 
-    return transformArtist(artist);
+    return transformAlbum(album);
 }

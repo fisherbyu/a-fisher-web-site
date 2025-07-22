@@ -4,9 +4,6 @@ export * from './actions';
 // Hooks
 export * from './hooks';
 
-// HTTP Actions
-export * from './http';
-
 // Prisma Connection/Singleton
 export * from './prisma';
 

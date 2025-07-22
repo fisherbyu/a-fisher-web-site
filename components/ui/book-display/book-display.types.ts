@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export type BaseItem = {
     id: string | number;
 };
@@ -11,4 +13,5 @@ export type BookDisplayProps<T extends BaseItem> = {
     className?: string;
     listClassName?: string;
     detailClassName?: string;
+    defaultPage?: ReactNode;
 };
