@@ -35,7 +35,7 @@ export const MusicCard = ({ index, item, type }: MusicCardProps) => {
 
     return (
         <div
-            className={`flex items-center justify-center flex-col gap-4 p-4 lg:p-6 w-10/12 mx-auto border rounded-md mb-3 ${type === 'artist' ? 'max-w-2xl' : 'max-w-3xl'}`}
+            className={`flex items-center justify-center flex-col gap-4 p-4 lg:p-6 w-10/12 mx-auto border rounded-md mb-3 ${type === 'artist' ? 'max-w-2xl' : 'max-w-4xl'}`}
         >
             <h1 className="w-full mx-auto text-center text-2xl font-medium">{item.name}</h1>
             <Divider />
