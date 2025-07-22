@@ -56,42 +56,44 @@ export const AlbumForm = ({ initialData, onSucess }: FormProps) => {
     const [files, setFiles] = useState<FileWithAlt[]>([]);
     const [replaceImage, setReplaceImage] = useState(false);
 
-    <form className="container">
-        <div className="text-3xl">{initialData ? 'Edit' : 'Create'} Album</div>
-        <Divider width="100%" />
-        <div className="grid gap-10 grid-cols-1 md:grid-cols-2">
-            <div>
-                <AlbumInfoForm data={albumInfo} onChange={setAlbumInfo} />
-                <LinkForm data={link} onChange={setLink} />
-                {image && !replaceImage ? (
-                    <div className="mt-3">
-                        <ImageDisplay
-                            src={getPublicUrl(image.src)}
-                            action={() => {
-                                setReplaceImage(true);
-                            }}
+    return (
+        <form className="container">
+            <div className="text-3xl">{initialData ? 'Edit' : 'Create'} Album</div>
+            <Divider width="100%" />
+            <div className="grid gap-10 grid-cols-1 md:grid-cols-2">
+                <div>
+                    <AlbumInfoForm data={albumInfo} onChange={setAlbumInfo} />
+                    <LinkForm data={link} onChange={setLink} />
+                    {image && !replaceImage ? (
+                        <div className="mt-3">
+                            <ImageDisplay
+                                src={getPublicUrl(image.src)}
+                                action={() => {
+                                    setReplaceImage(true);
+                                }}
+                            />
+                        </div>
+                    ) : (
+                        <FileUpload
+                            title="Add Image"
+                            name="image"
+                            allowedFileTypes={['image/*']}
+                            supportedFormatsText="Supports all Image Types"
+                            files={files}
+                            setFiles={setFiles}
+                            maxNumberFiles={1}
+                            size="md"
                         />
-                    </div>
-                ) : (
-                    <FileUpload
-                        title="Add Image"
-                        name="image"
-                        allowedFileTypes={['image/*']}
-                        supportedFormatsText="Supports all Image Types"
-                        files={files}
-                        setFiles={setFiles}
-                        maxNumberFiles={1}
-                        size="md"
-                    />
-                )}
+                    )}
+                </div>
+                <div className="flex flex-col gap-3">
+                    <AttributesForm data={attributes} onChange={setAttributes} onAdd={addAttribute} />
+                    <ContentsForm data={contents} onChange={setContents} onAdd={addContent} />
+                </div>
             </div>
-            <div className="flex flex-col gap-3">
-                <AttributesForm data={attributes} onChange={setAttributes} onAdd={addAttribute} />
-                <ContentsForm data={contents} onChange={setContents} onAdd={addContent} />
+            <div className="flex flex-row justify-end">
+                <Button margin="0px">Submit</Button>
             </div>
-        </div>
-        <div className="flex flex-row justify-end">
-            <Button margin="0px">Submit</Button>
-        </div>
-    </form>;
+        </form>
+    );
 };
