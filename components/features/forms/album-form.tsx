@@ -57,11 +57,11 @@ export const AlbumForm = ({ initialData, onSucess }: FormProps) => {
 
     // Submission
     const handleSubmit = async () => {
-        // Edit Artist
+        // Edit Album
         if (initialData) {
             console.log(initialData);
         }
-        // Create Artist
+        // Create Album
         else if (files[0]) {
             try {
                 const file = files[0];
