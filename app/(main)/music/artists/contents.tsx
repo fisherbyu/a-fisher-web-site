@@ -1,6 +1,5 @@
 'use client';
 import { MusicCard } from '@/components';
-import MusicDisplay from '@/components/old/ui/music-display';
 import { useArtists } from '@/lib';
 
 export default function ArtistContents() {
