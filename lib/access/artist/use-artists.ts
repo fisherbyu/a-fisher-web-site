@@ -1,5 +1,4 @@
 import { getArtists } from '@/lib/actions';
-import { makeRequest } from '@/lib/http';
 import { Artist } from '@/types';
 import useSWR from 'swr';
 
