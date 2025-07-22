@@ -36,8 +36,9 @@ export default function AlbumContents() {
         <BookDisplay<Album>
             items={albums}
             renderListItem={displayArtistListItem}
-            renderDetail={(artist) => <EditAlbumForm data={artist} />}
-            listTitle="Artists"
+            renderDetail={(album) => <EditAlbumForm data={album} />}
+            listTitle="Albums"
+            defaultPage={<AlbumForm />}
         />
     );
 }
