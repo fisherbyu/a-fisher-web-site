@@ -1,5 +1,4 @@
 import { fetchArtists } from '@/lib/actions';
-import { Artist } from '@/types';
 import useSWR from 'swr';
 
 export const useArtists = () => {
