@@ -1,6 +1,6 @@
 'use client';
 import MusicDisplay from '@/components/old/ui/music-display';
-import { useArtists } from '@/lib/access';
+import { useArtists } from '@/lib';
 
 export default function ArtistContents() {
     const { artists, isLoading, error } = useArtists();
