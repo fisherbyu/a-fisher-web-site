@@ -15,6 +15,6 @@ export type AlbumDto = Omit<Album, 'id' | 'contents' | 'attributes' | 'link' | '
     id: DtoId;
     contents: ContentDto[];
     attributes: AttributeDto[];
-    link?: LinkDto;
+    link: LinkDto;
     image: ImageDto;
 };
