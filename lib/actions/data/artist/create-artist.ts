@@ -4,7 +4,7 @@ import { prisma, transformArtist } from '@/lib';
 
 /**
  * Server Action to Create Artist
- * @param {CreateArtistInput} data
+ * @param {ArtistDto} data
  * @returns {Promise<Artist>}
  */
 export async function createArtist(data: ArtistDto): Promise<Artist> {
