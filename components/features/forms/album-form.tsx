@@ -7,8 +7,7 @@ import { FileUpload } from '@/components';
 import { LinkForm } from './link-form';
 import { ContentsForm } from './contents-form';
 import { AttributesForm } from '@/components';
-// import { createArtist } from '@/lib';
-import { getPublicUrl, uploadImage } from '@/lib';
+import { createAlbum, getPublicUrl, uploadImage } from '@/lib';
 import { FileWithAlt } from '@/components/ui/form-elements/file-upload/file-upload.types';
 import { ImageDisplay } from '@/components/ui/form-elements/file-upload/previews';
 
@@ -56,6 +55,41 @@ export const AlbumForm = ({ initialData, onSucess }: FormProps) => {
     const [files, setFiles] = useState<FileWithAlt[]>([]);
     const [replaceImage, setReplaceImage] = useState(false);
 
+    // Submission
+    const handleSubmit = async () => {
+        // Edit Artist
+        if (initialData) {
+            console.log(initialData);
+        }
+        // Create Artist
+        else if (files[0]) {
+            try {
+                const file = files[0];
+                const newImage = await uploadImage({
+                    file: file,
+                    alt: file.alt || '',
+                    filePath: 'music/album/',
+                });
+                setImage({
+                    id: image.id,
+                    ...newImage,
+                });
+                const dto: AlbumDto = {
+                    id: crypto.randomUUID(),
+                    name: albumInfo.name,
+                    rank: albumInfo.rank,
+                    contents: contents,
+                    attributes: attributes,
+                    link: link,
+                    image: image,
+                };
+                console.log(createAlbum(dto));
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+
     return (
         <form className="container">
             <div className="text-3xl">{initialData ? 'Edit' : 'Create'} Album</div>
@@ -92,7 +126,9 @@ export const AlbumForm = ({ initialData, onSucess }: FormProps) => {
                 </div>
             </div>
             <div className="flex flex-row justify-end">
-                <Button margin="0px">Submit</Button>
+                <Button margin="0px" onClick={handleSubmit}>
+                    Submit
+                </Button>
             </div>
         </form>
     );
