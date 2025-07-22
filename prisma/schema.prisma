@@ -32,7 +32,7 @@ model Artist {
 model Album {
     id        Int      @id @default(autoincrement())
     name      String   @db.VarChar(100)
-    rank      Int
+    rank      Int?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
