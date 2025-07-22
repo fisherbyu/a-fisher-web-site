@@ -1,51 +1,51 @@
 import { Album } from '@/types';
 
 export type PrismaAlbum = {
-    name: string;
     id: number;
-    rank: number;
+    name: string;
+    rank: number | null;
     createdAt: Date;
     updatedAt: Date;
-    link: {
-        id: number;
-        createdAt: Date;
-        updatedAt: Date;
-        artistId: number | null;
-        albumId: number | null;
-        appleURI: string;
-        spotifyURI: string;
-        playlistId: number | null;
-    } | null;
-    image: {
-        id: number;
-        createdAt: Date;
-        updatedAt: Date;
-        artistId: number | null;
-        albumId: number | null;
-        src: string;
-        alt: string;
-        height: number;
-        width: number;
-    } | null;
     contents: {
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         order: number;
         text: string;
+        createdAt: Date;
+        updatedAt: Date;
         artistId: number | null;
         albumId: number | null;
     }[];
     attributes: {
         id: number;
+        order: number;
+        text: string;
+        title: string;
         createdAt: Date;
         updatedAt: Date;
-        order: number;
-        title: string;
-        text: string;
         artistId: number | null;
         albumId: number | null;
     }[];
+    link: {
+        id: number;
+        appleURI: string;
+        spotifyURI: string;
+        createdAt: Date;
+        updatedAt: Date;
+        artistId: number | null;
+        albumId: number | null;
+        playlistId: number | null;
+    } | null;
+    image: {
+        id: number;
+        src: string;
+        alt: string;
+        height: number;
+        width: number;
+        createdAt: Date;
+        updatedAt: Date;
+        artistId: number | null;
+        albumId: number | null;
+    } | null;
 };
 
 export const transformAlbum = (data: PrismaAlbum): Album => {
