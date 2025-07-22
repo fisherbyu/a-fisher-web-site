@@ -1,8 +1,7 @@
-import Logo from '@/public/core/andrew-fisher-logo.svg';
-import AFLogo from '@/public/core/af-logo.svg';
 import { NavMenu, Footer } from 'thread-ui';
-import Image from 'next/image';
 import Link from 'next/link';
+import { AndrewFisherLogo } from '@/components';
+import { AFLogo } from '@/components';
 
 export default function MainLayout({
     children,
@@ -12,7 +11,7 @@ export default function MainLayout({
     return (
         <div className="flex flex-col min-h-screen">
             <NavMenu
-                logo={{ href: '/', logo: <Image src={Logo} alt="Andrew Fisher" className="cursor-pointer" /> }}
+                logo={{ href: '/', logo: <AndrewFisherLogo /> }}
                 items={[
                     { href: '/resume', title: 'Resume' },
                     { href: '/development', title: 'Development' },
@@ -34,7 +33,7 @@ export default function MainLayout({
                 caption="Created By Andrew Fisher"
                 logo={
                     <Link href="/">
-                        <Image src={AFLogo} alt="AF Logo" />
+                        <AFLogo />
                     </Link>
                 }
                 githubLink="https://github.com/fisherbyu"
