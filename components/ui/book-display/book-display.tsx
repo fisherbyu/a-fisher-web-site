@@ -11,10 +11,17 @@ export const BookDisplay = <T extends BaseItem>({
     className = '',
     listClassName = '',
     detailClassName = '',
+    defaultPage,
 }: BookDisplayProps<T>) => {
     const [selectedId, setSelectedId] = useState<string | number | null>(initialSelectedId || (items.length > 0 ? items[0].id : null));
 
     const selectedItem = items.find((item) => item.id === selectedId) || null;
+
+    const unselectedPage = defaultPage ? (
+        defaultPage
+    ) : (
+        <div className="flex items-center justify-center h-full text-gray-500">Select an item to view details</div>
+    );
 
     return (
         <div className={`flex w-full h-full ${className}`}>
@@ -35,13 +42,7 @@ export const BookDisplay = <T extends BaseItem>({
             </div>
 
             {/* Detail Panel */}
-            <div className={`w-full p-4 ${detailClassName}`}>
-                {selectedItem ? (
-                    renderDetail(selectedItem)
-                ) : (
-                    <div className="flex items-center justify-center h-full text-gray-500">Select an item to view details</div>
-                )}
-            </div>
+            <div className={`w-full p-4 ${detailClassName}`}>{selectedItem ? renderDetail(selectedItem) : unselectedPage}</div>
         </div>
     );
 };
