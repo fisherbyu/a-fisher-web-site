@@ -31,7 +31,7 @@ export const fetchArtists = async (): Promise<ApiResponse<Artist[]>> => {
         };
     } catch (error) {
         return {
-            error: 'Error fetching Artists from DB',
+            error: 'Failed to fetch Artists from DB',
             message: error instanceof Error ? error.message : 'Unknown error fetching artists',
         };
     }
