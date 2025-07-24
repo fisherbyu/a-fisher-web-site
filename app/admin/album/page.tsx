@@ -1,5 +1,5 @@
 import AlbumContents from './contents';
 
-export default async function ArtistAdmin() {
+export default function ArtistAdmin() {
     return <AlbumContents />;
 }
