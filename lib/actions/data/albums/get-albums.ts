@@ -1,6 +1,5 @@
 'use server';
-import { prisma } from '@/lib/prisma';
-import { transformAlbum } from '@/lib/utils';
+import { prisma, transformAlbum } from '@/lib';
 import { ApiResponse, Album } from '@/types';
 
 export const getAlbums = async (): Promise<Album[]> => {
