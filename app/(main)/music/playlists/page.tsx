@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import DisplayPlaylists from '@/components/old/ui/display-playlists';
 import { PageHeader } from 'thread-ui';
 import { PlaylistContents } from './content';
 
@@ -13,5 +12,5 @@ export default function PlaylistPage() {
 }
 
 export let metadata: Metadata = {
-    title: 'My Top Playlists',
+    title: 'My Playlists',
 };
