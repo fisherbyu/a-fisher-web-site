@@ -1,5 +1,5 @@
 'use client';
-import { fetchArtists } from '@/lib/actions';
+import { fetchArtists } from '@/lib';
 import useSWR from 'swr';
 
 export const useArtists = () => {
