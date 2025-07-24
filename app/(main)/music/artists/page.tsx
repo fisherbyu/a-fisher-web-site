@@ -5,10 +5,10 @@ import { PageHeader } from 'thread-ui';
 
 export default function ArtistPage() {
     return (
-        <main>
+        <>
             <PageHeader title="My Favorite Artists" caption="Check out some of my Favorite Artists" center />
             <ArtistContents />
-        </main>
+        </>
     );
 }
 

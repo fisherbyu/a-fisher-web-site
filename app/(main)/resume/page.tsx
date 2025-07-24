@@ -28,7 +28,7 @@ const Card = ({ size = 'md', title, children }: CardProps) => {
 export default function ResumePage() {
     const LAYOUT_WIDTH = 'w-full md:w-9/12 mx-auto max-w-[850px]';
     return (
-        <main>
+        <>
             <PageHeader title="Resume" />
             <div className="container mb-6">
                 <div className={LAYOUT_WIDTH}>
@@ -90,7 +90,7 @@ export default function ResumePage() {
                     </ul>
                 </div>
             </div>
-        </main>
+        </>
     );
 }
 

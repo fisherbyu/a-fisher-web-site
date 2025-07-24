@@ -5,7 +5,7 @@ import RecipieData from './recipes.json';
 export default function FoodPage() {
     const recipes = RecipieData as InfoCardProps[];
     return (
-        <main>
+        <>
             <PageHeader
                 title="My Recipes"
                 caption="I've loved cooking and baking for as long as I remember.    Its a way for me to express love to others while fulfilling their basic needs and a creative outlet that never runs dry.    Here are some of my favorite recipes."
@@ -18,7 +18,7 @@ export default function FoodPage() {
                         <InfoCard key={index} title={recipe.title} url={recipe.url} icon={recipe.icon} img={recipe.img} />
                     ))}
             </section>
-        </main>
+        </>
     );
 }
 

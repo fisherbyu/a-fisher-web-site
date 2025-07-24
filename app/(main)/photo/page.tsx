@@ -68,13 +68,13 @@ const photos: { src: StaticImageData; alt: string }[] = [
 export default function PhotographyPage() {
     const contents = photos.map((photo) => <Image src={photo.src} alt={photo.alt} />);
     return (
-        <main>
+        <>
             <PageHeader
                 title="My Photography"
                 caption="Here are some of my photos I've taken over the years. I got interested in photography because my sister is an amazing photographer and I love capturing moments."
             />
             <MasonryLayout components={contents} />
-        </main>
+        </>
     );
 }
 
