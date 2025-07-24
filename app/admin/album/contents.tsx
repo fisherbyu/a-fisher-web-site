@@ -1,6 +1,6 @@
 'use client';
 import { AlbumForm, BookDisplay } from '@/components';
-import { fetchAlbums, getAlbums } from '@/lib';
+import { fetchAlbums, getAlbums, useAlbums } from '@/lib';
 import { Album } from '@/types';
 import { useEffect, useState } from 'react';
 
@@ -9,22 +9,8 @@ const EditAlbumForm = ({ data }: { data: Album }) => {
 };
 
 export default function AlbumContents() {
-    const [albums, setAlbums] = useState<Album[]>([]);
+    const { albums, isLoading, error } = useAlbums();
     const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        async function fetchArtists() {
-            try {
-                const data = await getAlbums();
-                setAlbums(data);
-            } catch (error) {
-                console.error('Failed to fetch albums:', error);
-            } finally {
-                setLoading(false);
-            }
-        }
-        fetchAlbums();
-    }, []);
 
     const displayArtistListItem = (item: Album) => (
         <div>
@@ -34,7 +20,7 @@ export default function AlbumContents() {
 
     return (
         <BookDisplay<Album>
-            items={albums}
+            items={albums ?? []}
             renderListItem={displayArtistListItem}
             renderDetail={(album) => <EditAlbumForm data={album} />}
             listTitle="Albums"

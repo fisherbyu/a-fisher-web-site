@@ -1,4 +1,4 @@
-import { SignOutButton, ArtistForm } from '@/components';
+import { SignOutButton } from '@/components';
 
 export default async function Admin() {
     return (
@@ -7,7 +7,6 @@ export default async function Admin() {
                 <h1 className="text-3xl">Admin</h1>
                 <SignOutButton />
             </div>
-            <ArtistForm />
         </div>
     );
 }
