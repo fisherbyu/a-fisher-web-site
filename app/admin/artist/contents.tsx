@@ -1,8 +1,7 @@
 'use client';
 import { ArtistForm, BookDisplay } from '@/components';
-import { getArtists, useArtists } from '@/lib';
+import { useArtists } from '@/lib';
 import { Artist } from '@/types';
-import { useEffect, useState } from 'react';
 
 const EditArtistForm = ({ data }: { data: Artist }) => {
     return <ArtistForm key={data.id} initialData={data} />;
@@ -10,7 +9,6 @@ const EditArtistForm = ({ data }: { data: Artist }) => {
 
 export default function ArtistContents() {
     const { artists, isLoading, error } = useArtists();
-    const [loading, setLoading] = useState(true);
 
     const displayArtistListItem = (item: Artist) => (
         <div>

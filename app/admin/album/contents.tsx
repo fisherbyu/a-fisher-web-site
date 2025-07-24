@@ -1,8 +1,7 @@
 'use client';
 import { AlbumForm, BookDisplay } from '@/components';
-import { fetchAlbums, getAlbums, useAlbums } from '@/lib';
+import { useAlbums } from '@/lib';
 import { Album } from '@/types';
-import { useEffect, useState } from 'react';
 
 const EditAlbumForm = ({ data }: { data: Album }) => {
     return <AlbumForm key={data.id} initialData={data} />;
@@ -10,7 +9,6 @@ const EditAlbumForm = ({ data }: { data: Album }) => {
 
 export default function AlbumContents() {
     const { albums, isLoading, error } = useAlbums();
-    const [loading, setLoading] = useState(true);
 
     const displayArtistListItem = (item: Album) => (
         <div>
