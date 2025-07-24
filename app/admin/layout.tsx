@@ -39,7 +39,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         ],
                     },
                 ]}
-            />{' '}
+            />
             <div className="h-full flex flex-row">
                 <SideNav links={adminLinks} basePath="/admin" />
                 {children}
