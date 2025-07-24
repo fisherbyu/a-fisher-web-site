@@ -19,6 +19,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             path: '/album',
             icon: 'VinylRecord',
         },
+        {
+            title: 'Playlists',
+            path: '/playlist',
+            icon: 'Playlist',
+        },
     ];
     return (
         <div className="h-screen overflow-hidden">
