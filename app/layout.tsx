@@ -1,4 +1,5 @@
 import '@/public/styles/globals.css';
+import { ThreadTheme } from 'thread-ui';
 import type { Metadata } from 'next';
 import { Merriweather_Sans } from 'next/font/google';
 
@@ -17,7 +18,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" style={MAIN_FONT.style}>
-            <body>{children}</body>
+            <body style={{ backgroundColor: ThreadTheme.background }}>{children}</body>
         </html>
     );
 }
