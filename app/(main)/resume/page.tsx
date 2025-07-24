@@ -47,13 +47,7 @@ export default function ResumePage() {
                     </div>
                     <h2 className=" text-lg font-normal leading-none tracking-tight">{resume.education[0].degree}</h2>
                     <p className="text-sm text-muted-foreground">{resume.education[0].college}</p>
-                    <p className="pb-1">
-                        {resume.education[0].gpa && (
-                            <>
-                                <b>GPA:</b> {resume.education[0].gpa}
-                            </>
-                        )}
-                    </p>
+                    <p className="pb-1"></p>
                     <p className=" text-xs">{resume.education[0].additionals}</p>
                 </div>
             </div>
