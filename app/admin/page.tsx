@@ -1,5 +1,9 @@
 import { SignOutButton } from '@/components';
+import { Metadata } from 'next';
 
+export let metadata: Metadata = {
+    title: 'Admin Home',
+};
 export default function Admin() {
     return (
         <div className="w-full h-full py-5 px-8 flex flex-col">
