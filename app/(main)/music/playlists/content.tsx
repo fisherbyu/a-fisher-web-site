@@ -5,7 +5,6 @@ import AppleMusicLogo from '@/public/music/apple-music.svg';
 import SpotifyLogo from '@/public/music/spotify.svg';
 import { ColumnItem, ColumnLayout } from 'thread-ui';
 import { usePlaylists } from '@/lib';
-import { Playlist } from '@/types';
 
 export const PlaylistContents = () => {
     const { playlists, isLoading, error } = usePlaylists();
