@@ -21,7 +21,7 @@ export default function Home() {
             <ImagePanel
                 title="I'm Andrew!"
                 contents={[
-                    "I'm a Master of Information Systems Managment Student at BYU interested in software development. I love serving and getting to know people and using technology to create powerful solutions. I love music and music history and am an avid cook and baker. Thanks for visiting my site!",
+                    'I love music, history, and cooking for my friends.  I use technology to solve problems for people.  I recently graduated from BYU as a Master of Information Systems Managment.',
                 ]}
                 image={<Image src={ImageAF_3_2} alt="Picture of Andrew Fisher" />}
                 smImage={<Image src={ImageAF_5_4} alt="Picture of Andrew Fisher" />}
@@ -51,7 +51,7 @@ export default function Home() {
                     {
                         title: 'BYU',
                         description:
-                            "I'm currently studying at BYU.    I love learning in such a spiritual environment and I've made lifelong friends during my time here.",
+                            'I recently graduated from BYU.    I loved learning in such a spiritual environment and I made lifelong friends during my time here.',
                         content: <Image src={HBLL} alt="HBLL Library at BYU" />,
                     },
                     {
