@@ -13,6 +13,19 @@ export default function DevelopmentPage() {
             />
             <section className="container">
                 <h1 className="text-left dark:text-white text-2xl md:text-3xl xl:text-4xl font-medium text-gray-900 w-10/12 p-5">
+                    Projects
+                </h1>
+                <div className="grid grid-cols-1 gap-12 mt-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 ">
+                    <InfoCard
+                        title="Thread-UI"
+                        icon="GithubLogoIcon"
+                        url="https://github.com/fisherbyu/thread-ui"
+                        img="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Npm-logo.svg/1200px-Npm-logo.svg.png"
+                    />
+                </div>
+            </section>
+            <section className="container">
+                <h1 className="text-left dark:text-white text-2xl md:text-3xl xl:text-4xl font-medium text-gray-900 w-10/12 p-5">
                     Articles
                 </h1>
                 <div className="grid grid-cols-1 gap-12 mt-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 ">
