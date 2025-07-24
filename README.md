@@ -1,3 +1,3 @@
-## fisherandrew.org
+# fisherandrew.org
 
-This is a Next.js application I created to showcase my interests and development ability. Many of the project components are parameterized to display different data in different ways. Feel free to take any of my elements!
+This is a Next.js application I created to showcase my interests and development ability. I built most of the site using [Thread-UI](https://github.com/fisherbyu/thread-ui), a UI library I built using React. Feel free to explore!
