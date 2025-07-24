@@ -4,39 +4,13 @@ import { useState } from 'react';
 import AppleMusicLogo from '@/public/music/apple-music.svg';
 import SpotifyLogo from '@/public/music/spotify.svg';
 import { ColumnItem, ColumnLayout } from 'thread-ui';
-
-interface Playlist {
-    title: string;
-    appleURI: string;
-    spotifyURI: string;
-}
-
-const playlists: Playlist[] = [
-    {
-        title: 'Autumn Yellow',
-        appleURI: 'autumn-yellow/pl.u-NpXmEkVC4YpKoW',
-        spotifyURI: '3t7Mg9EtMDpu7730lsvolB',
-    },
-    {
-        title: 'Cooking Up Bops',
-        appleURI: 'cooking-up-bops/pl.u-8aAVp8qCvla2z5',
-        spotifyURI: '3Lr4DjCEJETTCXBw93hZgm',
-    },
-    {
-        title: 'Spring Violet',
-        appleURI: 'spring-violet/pl.u-jV892oDCDGqLxJ',
-        spotifyURI: '3xSOnUvh7ixFG7pg8toTJy',
-    },
-    {
-        title: 'Summer Pop',
-        appleURI: 'summer-pop/pl.u-kv9l1ZVsJzWZrE',
-        spotifyURI: '6Qbl1IHrmDJJzagNdFfMV3',
-    },
-];
+import { usePlaylists } from '@/lib';
+import { Playlist } from '@/types';
 
 export const PlaylistContents = () => {
+    const { playlists, isLoading, error } = usePlaylists();
     // iFrame Constuction Logic
-    const getAppleFrame = (uri: string) => {
+    const getAppleFrame = (uri?: string) => {
         const link = `https://embed.music.apple.com/us/playlist/${uri}`;
         return (
             <iframe
@@ -49,7 +23,7 @@ export const PlaylistContents = () => {
         );
     };
 
-    const getSpotifyFrame = (uri: string) => {
+    const getSpotifyFrame = (uri?: string) => {
         const link = `https://open.spotify.com/embed/playlist/${uri}?utm_source=generator`;
         return (
             <iframe
@@ -74,29 +48,23 @@ export const PlaylistContents = () => {
         setDisplayType('Spotify');
     }
 
-    const displayFrame = (playlist: Playlist) => {
-        if (displayType == 'Apple') {
-            return getAppleFrame(playlist.appleURI);
-        } else {
-            return getSpotifyFrame(playlist.spotifyURI);
-        }
-    };
+    const applePlaylists: ColumnItem[] =
+        playlists?.map((playlist) => ({
+            content: (
+                <div key={playlist.title} className="w-full md:w-11/12 lg:w-full mx-auto">
+                    {getAppleFrame(playlist.link?.appleURI)}
+                </div>
+            ),
+        })) || [];
 
-    const applePlaylists: ColumnItem[] = playlists.map((playlist) => ({
-        content: (
-            <div key={playlist.title} className="w-full md:w-11/12 lg:w-full mx-auto">
-                {getAppleFrame(playlist.appleURI)}
-            </div>
-        ),
-    }));
-
-    const spotifyPlaylists: ColumnItem[] = playlists.map((playlist) => ({
-        content: (
-            <div key={playlist.title} className="w-full md:w-11/12 lg:w-full mx-auto">
-                {getSpotifyFrame(playlist.spotifyURI)}
-            </div>
-        ),
-    }));
+    const spotifyPlaylists: ColumnItem[] =
+        playlists?.map((playlist) => ({
+            content: (
+                <div key={playlist.title} className="w-full md:w-11/12 lg:w-full mx-auto">
+                    {getSpotifyFrame(playlist.link?.spotifyURI)}
+                </div>
+            ),
+        })) || [];
 
     return (
         <div className="container">
