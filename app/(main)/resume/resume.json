@@ -16,16 +16,29 @@
             "degree": "Master of Information Systems Managment",
             "graduation_month": "April",
             "graduation_year": "2025",
-            "gpa": "3.70",
-            "additionals": ["Specialized Courses: Python, C#, JavaScript, C++, Swift Web Publishing"]
+            "additionals": ["Specialized Courses: JavaScript, React, Swift, C#, Python"]
         }
     ],
     "jobs": [
         {
+            "title": "Software Engineer, Front-End",
+            "company": "BambooHR",
+            "start_date": "05/2025",
+            "end_date": null,
+            "city": "Draper",
+            "state": "UT",
+            "country": "USA",
+            "descriptions": [
+                "Led refactor of entire Reporting List Pages for more streamlined and cohesive UI.",
+                "Plan, Develop and Ensure Code quality, while reaching development contribution and planning metrics.",
+                "Rewrote Report Builder Controls"
+            ]
+        },
+        {
             "title": "Full-Stack Developer + Systems Manager",
             "company": "Triark Roofing Co.",
             "start_date": "04/2021",
-            "end_date": null,
+            "end_date": "04/2024",
             "city": "Roseville",
             "state": "CA",
             "country": "USA",
@@ -66,11 +79,9 @@
         }
     ],
     "skills": [
-        "Proficient in JavaScript, Python, C#, ASP.NET Core, SQL, HTML5, CSS",
-        "Experienced with Django, C++, Node.js, Java, Bootstrap, VBA, jQuery, and Git",
+        "Proficient in TypeScript, React, NEXT.js, Python, C#, ASP.NET Core, SQL, HTML5, CSS",
+        "Experienced with Python, C++, Node.js, and Git",
         "Fluent Tagalog",
-        "Program Director, Kids who Code 2022",
-        "Deputy Campaign Manager, Kiley for Assembly",
         "Enjoy playing guitar, listening to music, watching movies and cooking/baking",
         "Eagle Scout"
     ]
