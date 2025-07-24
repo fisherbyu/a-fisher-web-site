@@ -2,12 +2,7 @@ import { ThreadTheme } from 'thread-ui';
 
 export const AndrewFisherLogo = () => {
     return (
-        <svg
-            width="429"
-            height="37.4552224952868"
-            viewBox="0 0 369.54838709677415 32.26460853492785"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg width="100%" viewBox="0 0 369.54838709677415 32.26460853492785" xmlns="http://www.w3.org/2000/svg">
             <defs id="SvgjsDefs5961"></defs>
             <g
                 id="SvgjsG5962"
