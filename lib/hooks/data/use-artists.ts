@@ -1,3 +1,4 @@
+'use client';
 import { fetchArtists } from '@/lib/actions';
 import useSWR from 'swr';
 

@@ -1,3 +1,4 @@
+'use client';
 import { fetchAlbums } from '@/lib/actions';
 import useSWR from 'swr';
 
