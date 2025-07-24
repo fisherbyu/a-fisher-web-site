@@ -1,4 +1,4 @@
-import { Link } from '@/types';
+import { Link, LinkDto } from '@/types';
 import { DtoId } from '../dto';
 
 export type Playlist = {
@@ -7,6 +7,7 @@ export type Playlist = {
     link?: Link;
 };
 
-export type PlaylistDto = Omit<Playlist, 'id'> & {
+export type PlaylistDto = Omit<Playlist, 'id' | 'link'> & {
     id: DtoId;
+    link: LinkDto;
 };
