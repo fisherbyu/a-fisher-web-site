@@ -1,1 +1,1 @@
-export { getRecipes } from './get-recipes';
+export { getRecipes, fetchRecipes } from './get-recipes';
