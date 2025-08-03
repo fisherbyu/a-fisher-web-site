@@ -5,3 +5,4 @@ export * from './content';
 export * from './image';
 export * from './link';
 export * from './playlist';
+export * from './recipe';
