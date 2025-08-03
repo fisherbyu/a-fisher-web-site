@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
     try {
-        const data = getRecipes();
+        const data = await getRecipes();
 
         return NextResponse.json(data, {
             status: 200,
