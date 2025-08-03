@@ -2,7 +2,7 @@
 import { notion } from '@/lib/notion';
 import { transformRecipe } from '@/lib/utils';
 import { ApiResponse } from '@/types';
-import { Recipe } from '@/types/models/recipe';
+import { Recipe } from '@/types';
 
 const RECIPE_DB_ID = '9d17ef1c79914432896a680416f9ba1b';
 
