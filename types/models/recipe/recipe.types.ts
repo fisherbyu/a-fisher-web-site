@@ -1,4 +1,4 @@
-import { InfoCardProps } from '@/.yalc/thread-ui/dist';
+import { InfoCardProps } from 'thread-ui';
 
 export type Recipe = InfoCardProps & {
     id: string;

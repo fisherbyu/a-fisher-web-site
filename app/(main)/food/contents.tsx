@@ -1,6 +1,6 @@
 'use client';
 
-import { InfoCard } from '@/.yalc/thread-ui/dist';
+import { InfoCard } from 'thread-ui';
 import { useRecipes } from '@/lib';
 
 export default function RecipeContents() {
