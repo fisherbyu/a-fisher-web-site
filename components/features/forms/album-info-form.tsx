@@ -21,7 +21,7 @@ export const AlbumInfoForm = ({ data, onChange }: AlbumInfoFormProps) => {
         <div>
             <TextInput name="name" title="Name" value={data.name} onChange={handleChange} required />
             <div className="grid grid-cols-2">
-                <NumberInput name="rank" title="Rank" value={data.rank} onChange={handleChange} required min={1} max={5} />
+                <NumberInput name="rank" title="Rank" value={data.rank} onChange={handleChange} required min={1} />
             </div>
         </div>
     );
