@@ -1,16 +1,24 @@
 'use client';
 
-import { InfoCard } from 'thread-ui';
+import { ColumnLayout, InfoCard } from 'thread-ui';
 import { useRecipes } from '@/lib';
 
 export default function RecipeContents() {
     const { recipes, isLoading, error } = useRecipes();
 
     return (
-        <section className="grid grid-cols-1 gap-1 mt-8 md:grid-cols-2 lg:grid-cols-3 ">
-            {recipes
-                ?.sort((a, b) => a.title.localeCompare(b.title))
-                .map((recipe, _) => <InfoCard key={_} title={recipe.title} url={recipe.url} icon={recipe.icon} img={recipe.img} />)}
-        </section>
+        <>
+            <ColumnLayout
+                mdcol={2}
+                lgcol={3}
+                items={
+                    recipes
+                        ?.sort((a, b) => a.title.localeCompare(b.title))
+                        .map((recipe, _) => ({
+                            content: <InfoCard key={_} title={recipe.title} url={recipe.url} icon={recipe.icon} img={recipe.img} />,
+                        })) ?? []
+                }
+            />
+        </>
     );
 }
