@@ -1,2 +1,3 @@
 export { createArtist } from './create-artist';
-export { getArtists, fetchArtists } from './get-artists';
+export { getArtists } from './get-artists';
+export { fetchArtists } from './fetch-artists';
