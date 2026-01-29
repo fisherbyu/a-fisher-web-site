@@ -1,6 +1,6 @@
 'use server';
 import { prisma, transformAlbum } from '@/lib';
-import { ApiResponse, Album } from '@/types';
+import { Album } from '@/types';
 
 export const getAlbums = async (): Promise<Album[]> => {
     const data = await prisma.album.findMany({
@@ -21,17 +21,4 @@ export const getAlbums = async (): Promise<Album[]> => {
     });
 
     return data.map((artist) => transformAlbum(artist));
-};
-
-export const fetchAlbums = async (): Promise<ApiResponse<Album[]>> => {
-    try {
-        return {
-            data: await getAlbums(),
-        };
-    } catch (error) {
-        return {
-            error: 'Failed to fetch Albums from DB',
-            message: error instanceof Error ? error.message : 'Unknown Error fetching albums',
-        };
-    }
 };
