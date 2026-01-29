@@ -12,16 +12,3 @@ export const getPlaylists = async (): Promise<Playlist[]> => {
 
     return data.map((playlist) => transformPlaylist(playlist));
 };
-
-export const fetchPlaylist = async (): Promise<ApiResponse<Playlist[]>> => {
-    try {
-        return {
-            data: await getPlaylists(),
-        };
-    } catch (error) {
-        return {
-            error: 'Failed to fetch Playlists from DB',
-            message: error instanceof Error ? error.message : 'Unknown Error fetching playlists',
-        };
-    }
-};

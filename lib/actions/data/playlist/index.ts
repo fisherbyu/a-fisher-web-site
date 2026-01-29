@@ -1,2 +1,3 @@
 export { createPlaylist } from './create-playlist';
-export { getPlaylists, fetchPlaylist } from './get-playlists';
+export { getPlaylists } from './get-playlists';
+export { fetchPlaylists } from './fetch-playlists';
