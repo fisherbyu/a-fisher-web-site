@@ -16,7 +16,7 @@ export type Album = {
     rank?: number;
     contents: Content[];
     attributes: Attribute[];
-    link?: Link;
+    link: Link;
     image: Image;
 };
 
