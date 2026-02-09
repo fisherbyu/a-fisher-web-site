@@ -1,4 +1,13 @@
-import { Attribute, AttributeDto, Content, ContentDto, Image, ImageDto, Link, LinkDto } from '@/types';
+import {
+    Attribute,
+    AttributeDto,
+    Content,
+    ContentDto,
+    Image,
+    ImageDto,
+    Link,
+    LinkDto,
+} from '@/types';
 import { DtoId } from '../dto';
 
 export type Album = {
@@ -7,8 +16,8 @@ export type Album = {
     rank?: number;
     contents: Content[];
     attributes: Attribute[];
-    link?: Link;
-    image?: Image;
+    link: Link;
+    image: Image;
 };
 
 export type AlbumDto = Omit<Album, 'id' | 'contents' | 'attributes' | 'link' | 'image'> & {
