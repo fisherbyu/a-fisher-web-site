@@ -26,7 +26,7 @@
         "swr": "^2.3.3",
         "tailwind-merge": "^2.2.1",
         "tailwindcss-animate": "^1.0.7",
-        "thread-ui": "^0.1.11"
+        "thread-ui": "^0.2.0"
     },
     "devDependencies": {
         "@types/node": "^20",
