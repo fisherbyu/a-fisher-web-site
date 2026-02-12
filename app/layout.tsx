@@ -19,7 +19,7 @@ export default function RootLayout({
     return (
         <html lang="en" style={MAIN_FONT.style} suppressHydrationWarning>
             <head>
-                <ThreadScript defaultMode="dark" />
+                <ThreadScript defaultMode="system" />
             </head>
             <body style={{ backgroundColor: ThreadTheme.background }}>{children}</body>
         </html>
