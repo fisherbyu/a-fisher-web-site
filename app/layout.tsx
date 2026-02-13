@@ -1,5 +1,5 @@
 import '@/public/styles/globals.css';
-import { ThreadTheme } from 'thread-ui';
+import { ThreadTheme, ThreadScript } from 'thread-ui';
 import type { Metadata } from 'next';
 import { Merriweather_Sans } from 'next/font/google';
 
@@ -17,7 +17,10 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" style={MAIN_FONT.style}>
+        <html lang="en" style={MAIN_FONT.style} suppressHydrationWarning>
+            <head>
+                <ThreadScript defaultMode="system" />
+            </head>
             <body style={{ backgroundColor: ThreadTheme.background }}>{children}</body>
         </html>
     );

@@ -2,41 +2,7 @@ import type { Metadata } from 'next';
 import BYULogo from '@/public/resume/byu-logo.png';
 import Image from 'next/image';
 import resume from './resume.json';
-import { ReactNode } from 'react';
-import { Divider, PageHeader, H2, List, OrderedList, Card, H3, Text, H1 } from 'thread-ui';
-
-type CardProps = {
-    size?: 'sm' | 'md' | 'lg';
-    title?: string;
-    children: ReactNode;
-};
-
-// const Card = ({ size = 'md', title, children }: CardProps) => {
-//     const feature = true;
-
-//     if (feature) {
-//         return (
-//             <ThreadCard
-//                 surfaceColor="surface"
-//                 title={{ text: title || '', divider: true, align: 'left' }}
-//                 size="md"
-//             >
-//                 {children}
-//             </ThreadCard>
-//         );
-//     }
-//     return (
-//         <div className="p-5 rounded-lg border bg-card text-card-foreground shadow-sm w-full md:w-9/12 mx-auto max-w-[850px] mb-5">
-//             {title && (
-//                 <div>
-//                     <h1 className="text-xl font-semibold leading-none tracking-tight">{title}</h1>
-//                     <Divider />
-//                 </div>
-//             )}
-//             {children}
-//         </div>
-//     );
-// };
+import { PageHeader, H2, List, Card, H3, Text, H1 } from 'thread-ui';
 
 export default function ResumePage() {
     const LAYOUT_WIDTH = 'w-full md:w-9/12 mx-auto max-w-[850px]';
@@ -102,6 +68,6 @@ export default function ResumePage() {
     );
 }
 
-export let metadata: Metadata = {
+export const metadata: Metadata = {
     title: 'My Resume',
 };

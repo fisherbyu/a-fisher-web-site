@@ -1,6 +1,6 @@
 import { ThemeConfig } from 'thread-ui';
 
-export const ThreadTheme: ThemeConfig = {
+export const ThreadThemeConfig: ThemeConfig = {
     primary: {
         light: '#4f46e5',
         main: '#4338ca',
