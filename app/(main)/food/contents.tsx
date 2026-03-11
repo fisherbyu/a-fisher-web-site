@@ -1,13 +1,33 @@
 'use client';
-import { ColumnLayout, InfoCard, SkeletonLayout, SortControls } from 'thread-ui';
+import {
+    ColumnLayout,
+    InfoCard,
+    InlineFilterControls,
+    SkeletonLayout,
+    SortControls,
+    useSortControls,
+    useFilterControls,
+} from 'thread-ui';
 import { useRecipes } from '@/lib';
-import { useSortControls } from 'thread-ui';
 
 export default function RecipeContents() {
     const { recipes, isLoading, error } = useRecipes();
 
-    const { sortedData, sortControlsProps } = useSortControls({
+    const TYPE_OPTIONS = ['Main', 'Side', 'Dessert', 'Bread', 'Sauce', 'Condiment'];
+
+    const { filteredData, filterControlsProps } = useFilterControls({
         data: recipes || [],
+        fields: [
+            {
+                key: 'type',
+                label: 'Type',
+                options: TYPE_OPTIONS,
+            },
+        ],
+    });
+
+    const { sortedData, sortControlsProps } = useSortControls({
+        data: filteredData || [],
         fields: [
             {
                 key: 'type',
@@ -31,7 +51,13 @@ export default function RecipeContents() {
 
     return (
         <>
-            <div className="max-w-[1400px] px-16 mx-auto">
+            <div className="max-w-[1400px] px-16 mx-auto flex flex-col items-start gap-2">
+                <InlineFilterControls
+                    fieldTitleDisplay="none"
+                    color="secondary"
+                    hideReset
+                    {...filterControlsProps}
+                />
                 <SortControls color="secondary" {...sortControlsProps} />
             </div>
             <ColumnLayout
