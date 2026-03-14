@@ -7,6 +7,7 @@ import {
     DataDisplayControls,
 } from 'thread-ui';
 import { useRecipes } from '@/lib';
+import { LoadingError } from '@/components';
 export default function RecipeContents() {
     const { recipes, isLoading, error } = useRecipes();
 
@@ -34,6 +35,10 @@ export default function RecipeContents() {
         return (
             <SkeletonLayout mdcol={2} lgcol={3} rows={3} itemConfig={{ h: '238px', w: '391px' }} />
         );
+    }
+
+    if (error) {
+        return <LoadingError />;
     }
 
     return (
