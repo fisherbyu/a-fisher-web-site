@@ -7,11 +7,18 @@ TSX := $(NPX) tsx
 PRETTIER := $(NPX) prettier
 PLOP := $(NPX) plop
 NEXT := $(NPX) next
+YALC := $(NPX) yalc
 
 # Default target
 .DEFAULT_GOAL := help
 
 # Internal Helpers
+.PHONY: yalc-add-thread
+yalc-add-thread: # Add yalc copy of thread, install packages
+	$(YALC) add thread-ui
+	npm install
+
+
 .PHONY: clean-thread
 clean-thread: # Remove cache and thread-ui
 	rm -rf node_modules/thread-ui
@@ -34,3 +41,6 @@ build: ## Build Next.js Application
 dev: ## Start Next.js Development Server
 	@echo 'Starting Development Server'
 	$(NEXT) dev
+
+.PHONY: refresh
+refresh: clean-thread yalc-add-thread dev ## Reset local thread-ui instance and start server
