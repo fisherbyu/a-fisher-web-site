@@ -2,11 +2,7 @@
 import {
     ColumnLayout,
     InfoCard,
-    InlineFilterControls,
     SkeletonLayout,
-    SortControls,
-    useSortControls,
-    useFilterControls,
     useDataDisplayControls,
     DataDisplayControls,
 } from 'thread-ui';
