@@ -1,5 +1,5 @@
 'use client';
-import { MediaCard, SkeletonLayout } from 'thread-ui';
+import { Container, MediaCard, SkeletonLayout } from 'thread-ui';
 import { getMusicLink, getPublicUrl, useAlbums } from '@/lib';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -23,37 +23,43 @@ export default function AlbumContents() {
     }
 
     return (
-        <div className="flex flex-col gap-4">
-            {albums?.map((album, _) => (
-                <MediaCard
-                    key={_}
-                    title={album.name}
-                    description={album.contents.map((content) => content.text)}
-                    details={album.attributes.map((attribute) => ({
-                        title: attribute.title,
-                        details: attribute.text,
-                    }))}
-                    detailsPosition="image"
-                    image={
-                        <Image
-                            src={getPublicUrl(album.image.src)}
-                            alt={album.image.alt}
-                            height={album.image.height}
-                            width={album.image.width}
-                        />
-                    }
-                    imagePosition={_ % 2 === 0 ? 'right' : 'left'}
-                    size="lg"
-                    links={[
-                        <Link href={getMusicLink(album.link.appleURI, 'album', 'apple')}>
-                            <Image className=" w-5" src={AppleMusicLogo} alt="Logo, Apple Music" />
-                        </Link>,
-                        <Link href={getMusicLink(album.link.spotifyURI, 'album', 'spotify')}>
-                            <Image className=" w-5" src={SpotifyLogo} alt="Logo, Spotify" />
-                        </Link>,
-                    ]}
-                />
-            ))}
-        </div>
+        <Container>
+            <div className="flex flex-col gap-4">
+                {albums?.map((album, _) => (
+                    <MediaCard
+                        key={_}
+                        title={album.name}
+                        description={album.contents.map((content) => content.text)}
+                        details={album.attributes.map((attribute) => ({
+                            title: attribute.title,
+                            details: attribute.text,
+                        }))}
+                        detailsPosition="image"
+                        image={
+                            <Image
+                                src={getPublicUrl(album.image.src)}
+                                alt={album.image.alt}
+                                height={album.image.height}
+                                width={album.image.width}
+                            />
+                        }
+                        imagePosition={_ % 2 === 0 ? 'right' : 'left'}
+                        size="lg"
+                        links={[
+                            <Link href={getMusicLink(album.link.appleURI, 'album', 'apple')}>
+                                <Image
+                                    className=" w-5"
+                                    src={AppleMusicLogo}
+                                    alt="Logo, Apple Music"
+                                />
+                            </Link>,
+                            <Link href={getMusicLink(album.link.spotifyURI, 'album', 'spotify')}>
+                                <Image className=" w-5" src={SpotifyLogo} alt="Logo, Spotify" />
+                            </Link>,
+                        ]}
+                    />
+                ))}
+            </div>
+        </Container>
     );
 }
