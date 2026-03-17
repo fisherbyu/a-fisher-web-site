@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import AppleMusicLogo from '@/public/music/apple-music.svg';
 import SpotifyLogo from '@/public/music/spotify.svg';
-import { ColumnItem, ColumnLayout, SkeletonLayout } from 'thread-ui';
+import { ColumnItem, ColumnLayout, Container, SkeletonLayout } from 'thread-ui';
 import { usePlaylists } from '@/lib';
 import { LoadingError } from '@/components';
 
@@ -75,14 +75,14 @@ export const PlaylistContents = () => {
 
     if (isLoading) {
         return (
-            <div className="w-10/12 pt-8 mx-auto">
+            <Container>
                 <SkeletonLayout mdcol={1} lgcol={2} itemConfig={{ h: '200px', w: '100%' }} />;
-            </div>
+            </Container>
         );
     }
 
     return (
-        <div className="container">
+        <Container as="section">
             <div className="mx-auto flex flex-row items-center justify-center gap-2 pb-4">
                 <button className="cursor-pointer" onClick={switchToApple}>
                     <Image className=" w-9" src={AppleMusicLogo} alt="Logo, Apple Music" />
@@ -97,6 +97,6 @@ export const PlaylistContents = () => {
             <div id="spotify" className={displayType === 'Spotify' ? '' : 'hidden'}>
                 <ColumnLayout mdcol={1} lgcol={2} items={spotifyPlaylists} />
             </div>
-        </div>
+        </Container>
     );
 };
