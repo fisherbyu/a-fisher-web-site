@@ -44,7 +44,12 @@ export default function RecipeContents() {
     return (
         <>
             <div className="max-w-[1400px] px-16 mx-auto flex flex-col items-start gap-2">
-                <DataDisplayControls {...dataDisplayControlsProps} />
+                <DataDisplayControls
+                    showFilterLabel
+                    showSortLabel
+                    size="sm"
+                    {...dataDisplayControlsProps}
+                />
             </div>
             <ColumnLayout
                 mdcol={2}
