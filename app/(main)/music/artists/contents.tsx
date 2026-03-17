@@ -5,9 +5,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import AppleMusicLogo from '@/public/music/apple-music.svg';
 import SpotifyLogo from '@/public/music/spotify.svg';
+import { LoadingError } from '@/components';
 
 export default function ArtistContents() {
     const { artists, isLoading, error } = useArtists();
+
+    if (error) {
+        return <LoadingError />;
+    }
 
     if (isLoading) {
         return (
