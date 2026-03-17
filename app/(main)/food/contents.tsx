@@ -5,6 +5,7 @@ import {
     SkeletonLayout,
     useDataDisplayControls,
     DataDisplayControls,
+    Container,
 } from 'thread-ui';
 import { useRecipes } from '@/lib';
 import { LoadingError } from '@/components';
@@ -42,7 +43,7 @@ export default function RecipeContents() {
     }
 
     return (
-        <>
+        <Container>
             <div className="max-w-[1400px] px-16 mx-auto flex flex-col items-start gap-2">
                 <DataDisplayControls
                     showFilterLabel
@@ -68,6 +69,6 @@ export default function RecipeContents() {
                     })) ?? []
                 }
             />
-        </>
+        </Container>
     );
 }
