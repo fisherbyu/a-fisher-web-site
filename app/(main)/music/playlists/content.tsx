@@ -5,53 +5,57 @@ import AppleMusicLogo from '@/public/music/apple-music.svg';
 import SpotifyLogo from '@/public/music/spotify.svg';
 import { ColumnItem, ColumnLayout, SkeletonLayout } from 'thread-ui';
 import { usePlaylists } from '@/lib';
+import { LoadingError } from '@/components';
+
+const AppleMusicFrame = ({ uri }: { uri?: string }) => {
+    const link = `https://embed.music.apple.com/us/playlist/${uri}`;
+
+    return (
+        <iframe
+            allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+            width="100%"
+            height="450"
+            sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation fullscreen picture-in-picture"
+            src={link}
+        ></iframe>
+    );
+};
+
+const SpotifyFrame = ({ uri }: { uri?: string }) => {
+    const link = `https://open.spotify.com/embed/playlist/${uri}?utm_source=generator`;
+
+    return (
+        <iframe
+            src={link}
+            width="100%"
+            height="352"
+            frameBorder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+        ></iframe>
+    );
+};
 
 export const PlaylistContents = () => {
+    // Fetch Playlists
     const { playlists, isLoading, error } = usePlaylists();
-    // iFrame Constuction Logic
-    const getAppleFrame = (uri?: string) => {
-        const link = `https://embed.music.apple.com/us/playlist/${uri}`;
-        return (
-            <iframe
-                allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
-                width="100%"
-                height="450"
-                sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation fullscreen picture-in-picture"
-                src={link}
-            ></iframe>
-        );
-    };
-
-    const getSpotifyFrame = (uri?: string) => {
-        const link = `https://open.spotify.com/embed/playlist/${uri}?utm_source=generator`;
-        return (
-            <iframe
-                src={link}
-                width="100%"
-                height="352"
-                frameBorder="0"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
-            ></iframe>
-        );
-    };
 
     // Determine which to Display
     const [displayType, setDisplayType] = useState<'Apple' | 'Spotify'>('Apple');
 
-    function switchToApple() {
+    const switchToApple = () => {
         setDisplayType('Apple');
-    }
+    };
 
-    function switchToSpotify() {
+    const switchToSpotify = () => {
         setDisplayType('Spotify');
-    }
+    };
 
     const applePlaylists: ColumnItem[] =
         playlists?.map((playlist) => ({
             content: (
                 <div key={playlist.title} className="w-full md:w-11/12 lg:w-full mx-auto">
-                    {getAppleFrame(playlist.link?.appleURI)}
+                    <AppleMusicFrame uri={playlist.link?.appleURI} />
                 </div>
             ),
         })) || [];
@@ -60,10 +64,14 @@ export const PlaylistContents = () => {
         playlists?.map((playlist) => ({
             content: (
                 <div key={playlist.title} className="w-full md:w-11/12 lg:w-full mx-auto">
-                    {getSpotifyFrame(playlist.link?.spotifyURI)}
+                    <SpotifyFrame uri={playlist.link?.spotifyURI} />
                 </div>
             ),
         })) || [];
+
+    if (error) {
+        return <LoadingError />;
+    }
 
     if (isLoading) {
         return (
@@ -76,10 +84,10 @@ export const PlaylistContents = () => {
     return (
         <div className="container">
             <div className="mx-auto flex flex-row items-center justify-center gap-2 pb-4">
-                <button className="" onClick={switchToApple}>
+                <button className="cursor-pointer" onClick={switchToApple}>
                     <Image className=" w-9" src={AppleMusicLogo} alt="Logo, Apple Music" />
                 </button>
-                <button className="" onClick={switchToSpotify}>
+                <button className="cursor-pointer" onClick={switchToSpotify}>
                     <Image className=" w-9" src={SpotifyLogo} alt="Logo, Spotify" />
                 </button>
             </div>
