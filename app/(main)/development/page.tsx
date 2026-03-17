@@ -34,7 +34,15 @@ export default function DevelopmentPage() {
                 mdcol={2}
                 lgcol={3}
                 items={articles.map((article, index) => ({
-                    content: <InfoCard key={index} title={article.title} url={article.url} icon={article.icon} img={article.img} />,
+                    content: (
+                        <InfoCard
+                            key={index}
+                            title={article.title}
+                            url={article.url}
+                            icon={article.icon}
+                            img={article.img}
+                        />
+                    ),
                 }))}
             />
         </>
