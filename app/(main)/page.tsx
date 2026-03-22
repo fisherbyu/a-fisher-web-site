@@ -56,7 +56,7 @@ export default function Home() {
                     },
                     {
                         title: 'Utah',
-                        description: "I'm lucky to live in Utah, its such a pretty place with so much to do.",
+                        description: "I'm lucky to live in Utah, it's such a pretty place with so much to do.",
                         content: <Image src={Utah} alt="Autumn leaves in Alpine Loop, Provo Canyon" />,
                     },
                 ]}
