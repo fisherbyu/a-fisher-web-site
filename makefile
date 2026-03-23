@@ -30,6 +30,20 @@ clean-thread: # Remove cache and thread-ui
 	rm -rf node_modules/thread-ui
 	rm -rf .next/cache/webpack
 
+.PHONY: docker-build
+docker-build: # Build Docker image with build-time env vars
+	docker build \
+		--build-arg NEXT_PUBLIC_SUPABASE_URL=$(NEXT_PUBLIC_SUPABASE_URL) \
+		--build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=$(NEXT_PUBLIC_SUPABASE_ANON_KEY) \
+		--build-arg NEXT_PUBLIC_BUCKET_NAME=$(NEXT_PUBLIC_BUCKET_NAME) \
+		--build-arg NEXT_PUBLIC_BASE_SRC=$(NEXT_PUBLIC_BASE_SRC) \
+		--build-arg NEXT_PUBLIC_API_URL=$(NEXT_PUBLIC_API_URL) \
+		-t a-fisher-web-site:test .
+
+.PHONY: docker-run
+docker-run: # Run Docker container with runtime env vars from .env
+	docker run -p 3000:3000 --env-file .env a-fisher-web-site:test
+
 
 # Build Targets
 .PHONY: help
@@ -51,16 +65,5 @@ dev: ## Start Next.js Development Server
 .PHONY: refresh
 refresh: clean-thread yalc-add-thread dev ## Reset local thread-ui instance and start server
 
-.PHONY: docker-build
-docker-build:
-	docker build \
-		--build-arg NEXT_PUBLIC_SUPABASE_URL=$(NEXT_PUBLIC_SUPABASE_URL) \
-		--build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=$(NEXT_PUBLIC_SUPABASE_ANON_KEY) \
-		-t a-fisher-web-site:test .
-
-.PHONY: docker-run
-docker-run:
-	docker run -p 3000:3000 a-fisher-web-site:test
-
-.PHONY: docker-dev
-docker-dev: docker-build docker-run
+.PHONY: up
+up: docker-build docker-run ## Build and run Docker container
