@@ -16,6 +16,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Ensure all NEXT_PUBLIC_* vars are present at build time to be inlined by Next.js
+ARG NEXT_PUBLIC_SUPABASE_URL
 ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
 ARG NEXT_PUBLIC_BUCKET_NAME
 ARG NEXT_PUBLIC_BASE_SRC
