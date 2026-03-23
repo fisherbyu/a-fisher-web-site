@@ -53,8 +53,8 @@ help: ## Show this help message
 	@echo 'Available targets:'
 	@cat $(MAKEFILE_LIST) | grep -E '^[a-zA-Z_-]+:.*?## .*$$' | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: build
-build: ## Build Next.js Application
+.PHONY: build-next
+build-next: ## Build Next.js Application
 	$(NEXT) build
 
 .PHONY: dev
@@ -65,5 +65,8 @@ dev: ## Start Next.js Development Server
 .PHONY: refresh
 refresh: clean-thread yalc-add-thread dev ## Reset local thread-ui instance and start server
 
+.PHONY: build
+build: docker-build ## Build Docker Image
+
 .PHONY: up
-up: docker-build docker-run ## Build and run Docker container
+up: docker-run ## Run Docker container
