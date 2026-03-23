@@ -4,10 +4,7 @@ services:
         ports:
             - '3000:3000'
         env_file:
-            - /srv/your-site/.env.production # lives on the server, never in the repo
-        volumes:
-            # Only needed if you go with Option B for file assets
-            # - /srv/your-site/uploads:/app/public/uploads
+            - /srv/a-fisher-web-site/.env
         restart: unless-stopped
 
     app-green:
@@ -15,7 +12,5 @@ services:
         ports:
             - '3001:3000'
         env_file:
-            - /srv/your-site/.env
-        volumes:
-            # - /srv/your-site/uploads:/app/public/uploads
+            - /srv/a-fisher-web-site/.env
         restart: unless-stopped
