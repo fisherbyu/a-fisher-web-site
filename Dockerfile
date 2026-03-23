@@ -15,12 +15,17 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Inject build-time env vars (non-secret, e.g. NEXT_PUBLIC_*)
-# Secrets like Supabase keys are passed at runtime, not baked in
-ARG NEXT_PUBLIC_SUPABASE_URL
+# Ensure all NEXT_PUBLIC_* vars are present at build time to be inlined by Next.js
 ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+ARG NEXT_PUBLIC_BUCKET_NAME
+ARG NEXT_PUBLIC_BASE_SRC
+ARG NEXT_PUBLIC_API_URL
+
 ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
 ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+ENV NEXT_PUBLIC_BUCKET_NAME=$NEXT_PUBLIC_BUCKET_NAME
+ENV NEXT_PUBLIC_BASE_SRC=$NEXT_PUBLIC_BASE_SRC
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
 RUN npm run build
 
@@ -33,9 +38,12 @@ ENV NODE_ENV=production
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/client
 
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
+# Runtime vars (NOTION_API_KEY, DATABASE_URL) are injected via --env-file at docker run
 CMD ["node", "server.js"]
