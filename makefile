@@ -14,8 +14,8 @@ YALC := $(NPX) yalc
 
 # Download ENV
 ifneq (,$(wildcard .env))
-  include .env
-  export
+	include .env
+	export
 endif
 
 # Internal Helpers
