@@ -12,6 +12,12 @@ YALC := $(NPX) yalc
 # Default target
 .DEFAULT_GOAL := help
 
+# Download ENV
+ifneq (,$(wildcard .env))
+  include .env
+  export
+endif
+
 # Internal Helpers
 .PHONY: yalc-add-thread
 yalc-add-thread: # Add yalc copy of thread, install packages
@@ -44,3 +50,17 @@ dev: ## Start Next.js Development Server
 
 .PHONY: refresh
 refresh: clean-thread yalc-add-thread dev ## Reset local thread-ui instance and start server
+
+.PHONY: docker-build
+docker-build:
+	docker build \
+		--build-arg NEXT_PUBLIC_SUPABASE_URL=$(NEXT_PUBLIC_SUPABASE_URL) \
+		--build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=$(NEXT_PUBLIC_SUPABASE_ANON_KEY) \
+		-t a-fisher-web-site:test .
+
+.PHONY: docker-run
+docker-run:
+	docker run -p 3000:3000 a-fisher-web-site:test
+
+.PHONY: docker-dev
+docker-dev: docker-build docker-run
