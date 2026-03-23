@@ -10,5 +10,5 @@ export const getPlaylists = async (): Promise<Playlist[]> => {
         },
     });
 
-    return data.map((playlist) => transformPlaylist(playlist));
+    return data.map(transformPlaylist);
 };

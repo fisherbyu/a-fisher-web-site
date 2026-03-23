@@ -20,5 +20,5 @@ export const getAlbums = async (): Promise<Album[]> => {
         },
     });
 
-    return data.map((artist) => transformAlbum(artist));
+    return data.map(transformAlbum);
 };
