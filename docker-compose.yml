@@ -1,0 +1,17 @@
+services:
+  app-blue:
+    image: ghcr.io/fisherbyu/a-fisher-web-site:latest
+    container_name: blue-af-web-app
+    ports:
+      - '3000:3000'
+    env_file:
+      - /srv/a-fisher-web-site/.env
+    restart: unless-stopped
+  app-green:
+    image: ghcr.io/fisherbyu/a-fisher-web-site:latest
+    container_name: green-af-web-app
+    ports:
+      - '3001:3000'
+    env_file:
+      - /srv/a-fisher-web-site/.env
+    restart: unless-stopped

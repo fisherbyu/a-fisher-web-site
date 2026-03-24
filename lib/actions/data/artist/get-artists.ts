@@ -21,5 +21,5 @@ export const getArtists = async (): Promise<Artist[]> => {
         },
     });
 
-    return data.map((artist) => transformArtist(artist));
+    return data.map(transformArtist);
 };
