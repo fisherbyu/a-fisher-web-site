@@ -73,7 +73,7 @@ export default function PhotographyPage() {
                 title="My Photography"
                 caption="Here are some of my photos I've taken over the years. I got interested in photography because my sister is an amazing photographer and I love capturing moments."
             />
-            <MasonryLayout items={contents} />
+            <MasonryLayout items={contents} container />
         </>
     );
 }
