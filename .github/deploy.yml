@@ -2,7 +2,7 @@ name: Deploy
 
 on:
     push:
-        branches: [main]
+        branches: [container-setup]
 
 env:
     REGISTRY: ghcr.io
@@ -13,7 +13,7 @@ jobs:
         runs-on: ubuntu-latest
         permissions:
             contents: read
-            packages: write\
+            packages: write
 
         steps:
             - name: Checkout
@@ -35,6 +35,8 @@ jobs:
                   build-args: |
                       NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
                       NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+                      NEXT_PUBLIC_BUCKET_NAME=${{ secrets.NEXT_PUBLIC_BUCKET_NAME }}
+                      NEXT_PUBLIC_BASE_SRC=${{ secrets.NEXT_PUBLIC_BASE_SRC }}
 
             - name: Deploy to server
               uses: appleboy/ssh-action@v1
@@ -42,4 +44,5 @@ jobs:
                   host: ${{ secrets.SERVER_HOST }}
                   username: ${{ secrets.SERVER_USER }}
                   key: ${{ secrets.SERVER_SSH_KEY }}
+                  port: 2222
                   script: bash /srv/a-fisher-web-site/deploy.sh
