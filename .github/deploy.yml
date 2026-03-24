@@ -42,4 +42,4 @@ jobs:
                   host: ${{ secrets.SERVER_HOST }}
                   username: ${{ secrets.SERVER_USER }}
                   key: ${{ secrets.SERVER_SSH_KEY }}
-                  script: bash /srv/your-site/deploy.sh
+                  script: bash /srv/a-fisher-web-site/deploy.sh
