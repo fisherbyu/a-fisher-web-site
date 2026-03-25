@@ -34,7 +34,7 @@ export default function RecipeContents() {
 
     if (isLoading) {
         return (
-            <SkeletonLayout mdcol={2} lgcol={3} rows={3} itemConfig={{ h: '238px', w: '391px' }} />
+            <SkeletonLayout mdcol={2} lgcol={3} rows={3} itemConfig={{ h: '238px', w: '100%' }} />
         );
     }
 
@@ -44,7 +44,7 @@ export default function RecipeContents() {
 
     return (
         <Container>
-            <div className="max-w-[1400px] px-16 mx-auto flex flex-col items-start gap-2">
+            <div className="sm:px-2 lg:px-4 mx-auto flex flex-col items-start gap-2">
                 <DataDisplayControls
                     showFilterLabel
                     showSortLabel
@@ -68,6 +68,7 @@ export default function RecipeContents() {
                         ),
                     })) ?? []
                 }
+                container={false}
             />
         </Container>
     );
