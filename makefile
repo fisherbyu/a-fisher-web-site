@@ -56,6 +56,10 @@ docker-push: # Build for linux/amd64 and push to GHCR
 docker-run: # Run Docker container with runtime env vars from .env
 	docker run -p 3000:3000 --env-file .env a-fisher-web-site:test
 
+.PHONY: docker-stop
+docker-stop: # Stop running Docker container
+	docker stop $$(docker ps -q --filter ancestor=a-fisher-web-site:test)
+
 
 # Build Targets
 .PHONY: help
@@ -82,6 +86,9 @@ build: docker-build ## Build Local Docker Image
 
 .PHONY: up
 up: docker-run ## Run Docker container
+
+.PHONY: down
+down: docker-stop ## Stop Docker container
 
 .PHONY: push
 push: docker-push ## Build Docker Image and Push to Registry
