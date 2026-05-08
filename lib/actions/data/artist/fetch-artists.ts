@@ -1,15 +1,12 @@
 'use client';
-import { ApiResponse, Artist } from '@/types';
+import { Artist } from '@/types';
 
-export const fetchArtists = async (): Promise<ApiResponse<Artist[]>> => {
-    try {
-        const response = await fetch('/api/artist');
-        const data = await response.json();
-        return { data };
-    } catch (error) {
-        return {
-            error: 'Failed to fetch Artists',
-            message: error instanceof Error ? error.message : 'Unknown error fetching Artists',
-        };
+export const fetchArtists = async (): Promise<Artist[]> => {
+    const response = await fetch('/api/artist');
+    if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.message ?? 'Failed to fetch Artists');
     }
+    const data = await response.json();
+    return data.data ?? data;
 };
