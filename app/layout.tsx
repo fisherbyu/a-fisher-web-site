@@ -1,4 +1,5 @@
 import '@/public/styles/globals.css';
+import 'thread-ui/thread.css';
 import { ThreadTheme, ThreadScript } from 'thread-ui';
 import type { Metadata } from 'next';
 import { Merriweather_Sans } from 'next/font/google';
