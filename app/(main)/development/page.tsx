@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import ArticleData from './articles.json';
 import { ColumnLayout, InfoCard, InfoCardProps, PageHeader } from 'thread-ui';
+import ReactLogo from '@/public/development/react-logo.png';
+import Image from 'next/image';
 
 export default function DevelopmentPage() {
     const articles = ArticleData as InfoCardProps[];
@@ -23,7 +25,7 @@ export default function DevelopmentPage() {
                                 title="Thread-UI"
                                 icon="GithubLogoIcon"
                                 url="https://github.com/fisherbyu/thread-ui"
-                                img="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Npm-logo.svg/1200px-Npm-logo.svg.png"
+                                image={<Image src={ReactLogo} alt="React Logo" />}
                             />
                         ),
                     },
@@ -40,7 +42,7 @@ export default function DevelopmentPage() {
                             title={article.title}
                             url={article.url}
                             icon={article.icon}
-                            img={article.img}
+                            image={article.image}
                         />
                     ),
                 }))}

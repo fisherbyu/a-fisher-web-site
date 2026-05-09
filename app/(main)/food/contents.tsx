@@ -63,7 +63,7 @@ export default function RecipeContents() {
                                 title={recipe.title}
                                 url={recipe.url}
                                 icon={recipe.icon}
-                                img={recipe.img}
+                                image={recipe.image}
                             />
                         ),
                     })) ?? []
