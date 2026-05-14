@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import AppleMusicLogo from '@/public/music/apple-music.svg';
 import SpotifyLogo from '@/public/music/spotify.svg';
-import { ColumnItem, ColumnLayout, Container, SkeletonLayout } from 'thread-ui';
+import { ColumnItem, ColumnLayout, Container, SkeletonLayoutLoader } from 'thread-ui';
 import { usePlaylists } from '@/lib';
 import { LoadingError } from '@/components';
 
@@ -76,7 +76,7 @@ export const PlaylistContents = () => {
     if (isLoading) {
         return (
             <Container>
-                <SkeletonLayout mdcol={1} lgcol={2} itemConfig={{ h: '200px', w: '100%' }} />;
+                <SkeletonLayoutLoader mdcol={1} lgcol={2} itemConfig={{ h: '200px', w: '100%' }} />;
             </Container>
         );
     }

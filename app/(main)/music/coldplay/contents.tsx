@@ -1,5 +1,5 @@
 'use client';
-import { Container, MediaCard, SkeletonLayout } from 'thread-ui';
+import { Container, MediaCard, SkeletonLayoutLoader } from 'thread-ui';
 import { getMusicLink, getPublicUrl, useAlbums } from '@/lib';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -17,14 +17,14 @@ export default function AlbumContents() {
     if (isLoading) {
         return (
             <div className="max-w-96 mx-auto">
-                <SkeletonLayout mdcol={1} itemConfig={{ h: '200px', w: '100%' }} />;
+                <SkeletonLayoutLoader mdcol={1} itemConfig={{ h: '200px', w: '100%' }} />;
             </div>
         );
     }
 
     return (
         <Container>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-8">
                 {albums?.map((album, _) => (
                     <MediaCard
                         key={_}
