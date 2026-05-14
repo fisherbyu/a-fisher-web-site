@@ -22,7 +22,7 @@ export default function RootLayout({
             <head>
                 <ThreadScript defaultMode="system" />
             </head>
-            <body style={{ backgroundColor: ThreadTheme.background }}>{children}</body>
+            <body style={{ backgroundColor: ThreadTheme.surface }}>{children}</body>
         </html>
     );
 }
