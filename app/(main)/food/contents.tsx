@@ -2,13 +2,14 @@
 import {
     ColumnLayout,
     InfoCard,
-    SkeletonLayout,
+    SkeletonLayoutLoader,
     useDataDisplayControls,
     DataDisplayControls,
     Container,
 } from 'thread-ui';
 import { useRecipes } from '@/lib';
 import { LoadingError } from '@/components';
+
 export default function RecipeContents() {
     const { recipes, isLoading, error } = useRecipes();
 
@@ -34,7 +35,12 @@ export default function RecipeContents() {
 
     if (isLoading) {
         return (
-            <SkeletonLayout mdcol={2} lgcol={3} rows={3} itemConfig={{ h: '238px', w: '100%' }} />
+            <SkeletonLayoutLoader
+                mdcol={2}
+                lgcol={3}
+                rows={3}
+                itemConfig={{ h: '238px', w: '100%' }}
+            />
         );
     }
 
