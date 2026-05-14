@@ -17,7 +17,7 @@ export default function ArtistContents() {
     if (isLoading) {
         return (
             <div className="max-w-96 mx-auto">
-                <SkeletonLayoutLoader mdcol={1} itemConfig={{ h: '200px', w: '100%' }} />;
+                <SkeletonLayoutLoader mdcol={1} itemConfig={{ h: '200px', w: '100%' }} />
             </div>
         );
     }
