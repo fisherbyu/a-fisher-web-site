@@ -66,7 +66,9 @@ const photos: { src: StaticImageData; alt: string }[] = [
 ];
 
 export default function PhotographyPage() {
-    const contents = photos.map((photo) => <Image src={photo.src} alt={photo.alt} />);
+    const contents = photos.map((photo) => (
+        <Image placeholder="blur" src={photo.src} alt={photo.alt} />
+    ));
     return (
         <>
             <PageHeader

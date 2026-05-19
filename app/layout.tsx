@@ -1,11 +1,28 @@
 import '@/public/styles/globals.css';
 import 'thread-ui/thread.css';
-import { ThreadTheme, ThreadScript } from 'thread-ui';
+import { ThreadTheme, ThreadScript, ThemeProvider } from 'thread-ui';
 import type { Metadata } from 'next';
-import { Merriweather_Sans } from 'next/font/google';
+import { Noto_Sans, Libre_Baskerville, Victor_Mono } from 'next/font/google';
 
-// Configure Site
-const MAIN_FONT = Merriweather_Sans({ subsets: ['latin'] });
+const heading = Libre_Baskerville({
+    subsets: ['latin'],
+    weight: ['400', '500', '600', '700'],
+    variable: '--font-heading',
+});
+
+const body = Noto_Sans({
+    subsets: ['latin'],
+    weight: ['400', '500', '600', '700'],
+    variable: '--font-body',
+});
+
+const code = Victor_Mono({
+    subsets: ['latin'],
+    weight: ['400', '500', '600', '700'],
+    variable: '--font-code',
+});
+
+const fontVariables = `${heading.variable} ${body.variable} ${code.variable}`;
 
 export let metadata: Metadata = {
     title: 'Andrew Fisher',
@@ -18,11 +35,24 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" style={MAIN_FONT.style} suppressHydrationWarning>
+        <html lang="en" className={fontVariables} suppressHydrationWarning>
             <head>
                 <ThreadScript defaultMode="system" />
             </head>
-            <body style={{ backgroundColor: ThreadTheme.surface }}>{children}</body>
+            <body style={{ backgroundColor: ThreadTheme.surface }}>
+                <ThemeProvider
+                    theme={{
+                        typography: {
+                            fontFamilies: {
+                                heading: `var(--font-heading)`,
+                                body: `var(--font-body)`,
+                            },
+                        },
+                    }}
+                >
+                    {children}
+                </ThemeProvider>
+            </body>
         </html>
     );
 }

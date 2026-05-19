@@ -25,7 +25,7 @@ export default function ResumePage() {
                             </div>
                         </div>
                         <H3 inline>{resume.education[0].degree}</H3>
-                        <Text color="text-secondary" bold size="md">
+                        <Text color="text-secondary" weight="semibold" size="md">
                             {resume.education[0].college}
                         </Text>
                         <br />
@@ -41,7 +41,7 @@ export default function ResumePage() {
                                 key={job.title}
                                 fullWidth
                             >
-                                <Text bold>{job.company}</Text>
+                                <Text weight="semibold">{job.company}</Text>
                                 <span className="flex justify-between items-center">
                                     <Text size="sm">
                                         {job.start_date} -{' '}
