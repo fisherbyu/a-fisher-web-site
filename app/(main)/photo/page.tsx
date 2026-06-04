@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import type { StaticImageData } from 'next/image';
 import Blake from '@/public/photography/blake.jpg';
 import Ptarmiganlake from '@/public/photography/ptarmigan-lake.jpg';
 import Provocanyon4 from '@/public/photography/provo-canyon-4.jpg';
@@ -29,8 +30,8 @@ import Rexburg from '@/public/photography/rexburg.jpg';
 import Wrightslake from '@/public/photography/wrights-lake.jpg';
 import Wrightslake2 from '@/public/photography/wrights-lake-2.jpg';
 import Sacramentostreet from '@/public/photography/sacramento-street.jpg';
-import Image, { StaticImageData } from 'next/image';
-import { MasonryLayout, PageHeader } from 'thread-ui';
+import { PageHeader } from 'thread-ui';
+import PhotosContents from './contents';
 
 const photos: { src: StaticImageData; alt: string }[] = [
     { src: Andrewfisherpoint, alt: 'Andrewfisherpoint' },
@@ -66,16 +67,13 @@ const photos: { src: StaticImageData; alt: string }[] = [
 ];
 
 export default function PhotographyPage() {
-    const contents = photos.map((photo) => (
-        <Image placeholder="blur" src={photo.src} alt={photo.alt} />
-    ));
     return (
         <>
             <PageHeader
                 title="My Photography"
                 caption="Here are some of my photos I've taken over the years. I got interested in photography because my sister is an amazing photographer and I love capturing moments."
             />
-            <MasonryLayout items={contents} container />
+            <PhotosContents photos={photos} />
         </>
     );
 }
