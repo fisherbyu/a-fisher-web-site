@@ -28,7 +28,7 @@ export default function MainLayout({
                     },
                 ]}
             />
-            <main className="flex-grow">{children}</main>
+            <main className="flex-grow pt-10">{children}</main>
             <Footer
                 bg="surface"
                 caption="Created By Andrew Fisher"
