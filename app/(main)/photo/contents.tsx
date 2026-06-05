@@ -11,25 +11,35 @@ export default function PhotosContents({ photos }: PhotosContentsProps) {
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const masonryItems = photos.map((photo, index) => (
-        <button
-            className=" hover:cursor-pointer"
-            onClick={() => {
-                setSelectedIndex(index);
-                setIsLightboxOpen(true);
-            }}
-        >
+    const masonryItems = photos.map((photo, index) => {
+        const openLightbox = () => {
+            setSelectedIndex(index);
+            setIsLightboxOpen(true);
+        };
+
+        return (
             <Image
+                key={index}
                 style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '100%' }}
                 placeholder="blur"
                 src={photo.src}
                 alt={photo.alt}
+                role="button"
+                tabIndex={0}
+                onClick={openLightbox}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openLightbox();
+                    }
+                }}
+                className="hover:cursor-pointer"
             />
-        </button>
-    ));
+        );
+    });
 
-    const lightboxItems = photos.map((photo) => (
-        <Image placeholder="blur" src={photo.src} alt={photo.alt} />
+    const lightboxItems = photos.map((photo, index) => (
+        <Image key={index} placeholder="blur" src={photo.src} alt={photo.alt} />
     ));
 
     return (
