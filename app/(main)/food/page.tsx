@@ -7,7 +7,7 @@ export default function FoodPage() {
         <>
             <PageHeader
                 title="My Recipes"
-                caption="I've loved cooking and baking for as long as I remember.    Its a way for me to express love to others while fulfilling their basic needs and a creative outlet that never runs dry.    Here are some of my favorite recipes."
+                description="I've loved cooking and baking for as long as I remember.    Its a way for me to express love to others while fulfilling their basic needs and a creative outlet that never runs dry.    Here are some of my favorite recipes."
                 center
             />
             <RecipeContents />

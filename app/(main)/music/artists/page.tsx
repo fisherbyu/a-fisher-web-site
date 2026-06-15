@@ -6,7 +6,11 @@ import { PageHeader } from 'thread-ui';
 export default function ArtistPage() {
     return (
         <>
-            <PageHeader title="My Favorite Artists" caption="Check out some of my Favorite Artists" center />
+            <PageHeader
+                title="My Favorite Artists"
+                description="Check out some of my Favorite Artists"
+                center
+            />
             <ArtistContents />
         </>
     );

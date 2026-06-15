@@ -31,7 +31,7 @@ export default function MainLayout({
             <main className="flex-grow pt-10">{children}</main>
             <Footer
                 bg="surface"
-                caption="Created By Andrew Fisher"
+                description="Created By Andrew Fisher"
                 logo={
                     <Link href="/">
                         <AFLogo />

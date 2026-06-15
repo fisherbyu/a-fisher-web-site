@@ -5,7 +5,11 @@ import { PlaylistContents } from './content';
 export default function PlaylistPage() {
     return (
         <>
-            <PageHeader title="My Playlists" caption="Here are some of my favorite playlists" center />
+            <PageHeader
+                title="My Playlists"
+                description="Here are some of my favorite playlists"
+                center
+            />
             <PlaylistContents />
         </>
     );

@@ -11,7 +11,7 @@ export default function DevelopmentPage() {
         <>
             <PageHeader
                 title="My Software Projects"
-                caption="Here is where I'll display projects I've worked on to display some of the things I've learned or taught myself.    I've also written a few articles on different technologies to serve as guides/quick references."
+                description="Here is where I'll display projects I've worked on to display some of the things I've learned or taught myself.    I've also written a few articles on different technologies to serve as guides/quick references."
                 center
             />
             <ColumnLayout

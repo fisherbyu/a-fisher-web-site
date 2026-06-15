@@ -71,7 +71,7 @@ export default function PhotographyPage() {
         <>
             <PageHeader
                 title="My Photography"
-                caption="Here are some of my photos I've taken over the years. I got interested in photography because my sister is an amazing photographer and I love capturing moments."
+                description="Here are some of my photos I've taken over the years. I got interested in photography because my sister is an amazing photographer and I love capturing moments."
             />
             <PhotosContents photos={photos} />
         </>

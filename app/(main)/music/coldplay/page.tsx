@@ -6,7 +6,11 @@ import AlbumContents from './contents';
 export default function ArtistPage() {
     return (
         <>
-            <PageHeader title="Coldplay Albums" caption="My review of each Coldplay Album" center />
+            <PageHeader
+                title="Coldplay Albums"
+                description="My review of each Coldplay Album"
+                center
+            />
             <AlbumContents />
         </>
     );
