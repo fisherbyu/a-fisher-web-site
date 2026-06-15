@@ -3,14 +3,16 @@ import Image from 'next/image';
 import ImageAF_3_2 from '@/public/home/andrew-fisher-3-2.jpg';
 import ImageAF_5_4 from '@/public/home/andrew-fisher-5-4.jpg';
 import Folsom from '@/public/home/folsom.jpg';
-import LaLaLand from '@/public/home/movies/lalaland.jpg';
-import WalterMitty from '@/public/home/movies/waltermitty.jpg';
-import SpiderMan from '@/public/home/movies/spiderman.jpg';
+import LaLaLand from '@/public/home/movies/la-la-land.webp';
+import WalterMitty from '@/public/home/movies/the-secret-life-of-walter-mitty.webp';
+import SpiderMan from '@/public/home/movies/spiderman-into-the-spider-verse.webp';
+import WonderfulLife from '@/public/home/movies/its-a-wonderful-life.webp';
+import ProjectHailMary from '@/public/home/movies/project-hail-mary.webp';
 import Utah from '@/public/home/alpine-loop.jpg';
 import HBLL from '@/public/home/hbll.jpg';
 import Philippines from '@/public/home/philippines.jpg';
 // Import Components
-import { Divider, ColumnLayout, ImagePanel, Title, SkeletonLoader } from 'thread-ui';
+import { Divider, ColumnLayout, ImagePanel, Title, Carousel } from 'thread-ui';
 
 // Content
 export default function Home() {
@@ -95,11 +97,12 @@ export default function Home() {
                 ]}
             />
             {/* Favorite Movies */}
-            <ColumnLayout
+            <Carousel
                 title="My Favorite Movies"
-                caption="These are my absolute favorite movies and I return to them time and time again"
-                mdcol={1}
-                lgcol={3}
+                description="These are my absolute favorite movies and I return to them time and time again"
+                mdCols={3}
+                controlsPosition="below"
+                itemWrapper="cardFrame"
                 items={[
                     {
                         content: (
@@ -125,6 +128,24 @@ export default function Home() {
                                 placeholder="blur"
                                 src={SpiderMan}
                                 alt="Spider Man: Into the Spiderverse Movie Poster"
+                            />
+                        ),
+                    },
+                    {
+                        content: (
+                            <Image
+                                placeholder="blur"
+                                src={ProjectHailMary}
+                                alt="Project Hail Mary Movie Poster"
+                            />
+                        ),
+                    },
+                    {
+                        content: (
+                            <Image
+                                placeholder="blur"
+                                src={WonderfulLife}
+                                alt="It's a Wonderful Life Movie Poster"
                             />
                         ),
                     },
