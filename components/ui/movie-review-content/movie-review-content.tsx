@@ -16,7 +16,7 @@ export const MovieReviewContent = ({ title, stars, review }: MovieReviewContentP
     });
 
     return (
-        <>
+        <div className="py-4">
             <H3 color="white" inline>
                 {title}
             </H3>
@@ -28,6 +28,6 @@ export const MovieReviewContent = ({ title, stars, review }: MovieReviewContentP
                     {review}
                 </Text>
             )}
-        </>
+        </div>
     );
 };
