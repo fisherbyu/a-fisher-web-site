@@ -40,13 +40,7 @@ export default function PhotosContents({ photos }: PhotosContentsProps) {
                 className="hover:cursor-pointer"
             />
         );
-        const masonryItem = photo.info ? (
-            <MediaOverlay key={index} overlay={photo.info}>
-                {masonryPhoto}
-            </MediaOverlay>
-        ) : (
-            masonryPhoto
-        );
+        const masonryItem = masonryPhoto;
 
         const trackItem = (
             <Image
@@ -63,7 +57,7 @@ export default function PhotosContents({ photos }: PhotosContentsProps) {
 
         const fullPhoto = <Image key={index} placeholder="blur" src={photo.src} alt={photo.alt} />;
         const lightboxItem = photo.info ? (
-            <MediaOverlay key={index} overlay={photo.info}>
+            <MediaOverlay fit="fill" key={index} overlay={photo.info}>
                 {fullPhoto}
             </MediaOverlay>
         ) : (
