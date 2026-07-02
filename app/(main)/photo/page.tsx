@@ -32,8 +32,9 @@ import Wrightslake2 from '@/public/photography/wrights-lake-2.jpg';
 import Sacramentostreet from '@/public/photography/sacramento-street.jpg';
 import { PageHeader } from 'thread-ui';
 import PhotosContents from './contents';
+import { ReactNode } from 'react';
 
-const photos: { src: StaticImageData; alt: string }[] = [
+const photos: { src: StaticImageData; alt: string; info?: ReactNode }[] = [
     { src: Andrewfisherpoint, alt: 'Andrewfisherpoint' },
     { src: Hope3, alt: 'Hope3' },
     { src: Hope1, alt: 'Hope1' },
