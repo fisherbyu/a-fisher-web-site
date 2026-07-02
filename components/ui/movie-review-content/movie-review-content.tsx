@@ -3,7 +3,7 @@ import { H3, Icon, Text, ThreadTheme } from 'thread-ui';
 type MovieReviewContentProps = {
     title: string;
     stars: number;
-    review: string;
+    review?: string;
 };
 
 const STAR_COUNT = 5;
@@ -23,9 +23,11 @@ export const MovieReviewContent = ({ title, stars, review }: MovieReviewContentP
             <div style={{ color: ThreadTheme.white }} className="flex flex-row">
                 {stars_}
             </div>
-            <Text color="white" inline>
-                {review}
-            </Text>
+            {review && (
+                <Text color="white" inline>
+                    {review}
+                </Text>
+            )}
         </>
     );
 };
