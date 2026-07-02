@@ -12,7 +12,8 @@ import Utah from '@/public/home/alpine-loop.jpg';
 import HBLL from '@/public/home/hbll.jpg';
 import Philippines from '@/public/home/philippines.jpg';
 // Import Components
-import { Divider, ColumnLayout, ImagePanel, Title, Carousel } from 'thread-ui';
+import { Divider, ColumnLayout, ImagePanel, Title, Carousel, MediaOverlay } from 'thread-ui';
+import { MovieReviewContent } from '@/components';
 
 // Content
 export default function Home() {
@@ -106,47 +107,81 @@ export default function Home() {
                 items={[
                     {
                         content: (
-                            <Image
-                                placeholder="blur"
-                                src={LaLaLand}
-                                alt="La La Land Movie Poster"
-                            />
+                            <MediaOverlay
+                                overlay={<MovieReviewContent title="La La Land" stars={5} />}
+                            >
+                                <Image
+                                    placeholder="blur"
+                                    src={LaLaLand}
+                                    alt="La La Land Movie Poster"
+                                />
+                            </MediaOverlay>
                         ),
                     },
                     {
                         content: (
-                            <Image
-                                placeholder="blur"
-                                src={WalterMitty}
-                                alt="The Secret Life of Walter Mitty Movie Poster"
-                            />
+                            <MediaOverlay
+                                overlay={
+                                    <MovieReviewContent
+                                        title="The Secret Life of Walter Mitty"
+                                        stars={5}
+                                    />
+                                }
+                            >
+                                <Image
+                                    placeholder="blur"
+                                    src={WalterMitty}
+                                    alt="The Secret Life of Walter Mitty Movie Poster"
+                                />
+                            </MediaOverlay>
                         ),
                     },
                     {
                         content: (
-                            <Image
-                                placeholder="blur"
-                                src={SpiderMan}
-                                alt="Spider Man: Into the Spiderverse Movie Poster"
-                            />
+                            <MediaOverlay
+                                overlay={
+                                    <MovieReviewContent
+                                        title="Spider-Man: Into the Spider-Verse"
+                                        stars={4.5}
+                                    />
+                                }
+                            >
+                                <Image
+                                    placeholder="blur"
+                                    src={SpiderMan}
+                                    alt="Spider Man: Into the Spiderverse Movie Poster"
+                                />
+                            </MediaOverlay>
                         ),
                     },
                     {
                         content: (
-                            <Image
-                                placeholder="blur"
-                                src={ProjectHailMary}
-                                alt="Project Hail Mary Movie Poster"
-                            />
+                            <MediaOverlay
+                                overlay={
+                                    <MovieReviewContent title="Project Hail Mary" stars={4.5} />
+                                }
+                            >
+                                <Image
+                                    placeholder="blur"
+                                    src={ProjectHailMary}
+                                    alt="Project Hail Mary Movie Poster"
+                                />
+                            </MediaOverlay>
                         ),
                     },
                     {
                         content: (
-                            <Image
-                                placeholder="blur"
-                                src={WonderfulLife}
-                                alt="It's a Wonderful Life Movie Poster"
-                            />
+                            <MediaOverlay
+                                overlay={
+                                    <MovieReviewContent title="It's a Wonderful Life" stars={4.5} />
+                                }
+                            >
+                                <Image
+                                    placeholder="blur"
+                                    src={WonderfulLife}
+                                    alt="It's a Wonderful Life Movie Poster"
+                                />
+                            </MediaOverlay>
                         ),
                     },
                 ]}
