@@ -1,9 +1,10 @@
+import { ReactNode } from 'react';
 import { H3, Icon, Text, ThreadTheme } from 'thread-ui';
 
 type MovieReviewContentProps = {
     title: string;
     stars: number;
-    review?: string;
+    review?: string | ReactNode;
 };
 
 const STAR_COUNT = 5;
@@ -15,6 +16,15 @@ export const MovieReviewContent = ({ title, stars, review }: MovieReviewContentP
         return <Icon filled={filled || half} key={i} name={half ? 'StarHalf' : 'Star'} size={8} />;
     });
 
+    const review_ =
+        typeof review === 'string' ? (
+            <Text color="white" inline>
+                {review}
+            </Text>
+        ) : (
+            review
+        );
+
     return (
         <div className="py-4">
             <H3 color="white" inline>
@@ -23,11 +33,7 @@ export const MovieReviewContent = ({ title, stars, review }: MovieReviewContentP
             <div style={{ color: ThreadTheme.white }} className="flex flex-row">
                 {stars_}
             </div>
-            {review && (
-                <Text color="white" inline>
-                    {review}
-                </Text>
-            )}
+            {review_}
         </div>
     );
 };
