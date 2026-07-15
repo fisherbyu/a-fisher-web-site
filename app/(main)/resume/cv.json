@@ -1,0 +1,123 @@
+{
+    "user": {
+        "id": 1,
+        "firstname": "Andrew",
+        "lastname": "Fisher",
+        "linkedin_url": "https://www.linkedin.com/in/fisherandrew777/",
+        "website_url": "https://fisherandrew.org",
+        "github_url": "https://github.com/fisherbyu"
+    },
+    "education": [
+        {
+            "id": 1,
+            "institution": "Brigham Young University",
+            "city": "Provo",
+            "state": "Utah",
+            "college": "Marriott School of Business",
+            "degree": "Master of Information Systems Management",
+            "graduation_month": "April",
+            "graduation_year": "2025",
+            "additionals": ["GPA 3.58", "Completed IS 543: Mobile Platform Development"]
+        }
+    ],
+    "teaching": [
+        {
+            "title": "Author, Node.js/Express Application Guide",
+            "company": "Brigham Young University",
+            "start_date": "2023",
+            "end_date": null,
+            "city": "Provo",
+            "state": "UT",
+            "country": "USA",
+            "descriptions": [
+                "Compiled personal course notes into a step-by-step quick-start guide for building and deploying a database-backed Express application, from project initialization through deployment on AWS EC2, with runnable code at each step",
+                "Expanded and formalized the guide the following year to serve as a companion reference during the Node.js unit, adding terminology definitions and library documentation",
+                "Published at fisherandrew.org and shared with subsequent IS cohorts for continued student use"
+            ]
+        },
+        {
+            "title": "Program Director, Kids Who Code",
+            "company": "Freedom Prep Academy",
+            "start_date": "09/2022",
+            "end_date": "12/2022",
+            "city": "Provo",
+            "state": "UT",
+            "country": "USA",
+            "descriptions": [
+                "Taught weekly Python programming classes to 25+ elementary school students across a full semester",
+                "Designed lessons that introduced programming fundamentals to students with no prior technical background"
+            ]
+        },
+        {
+            "title": "Security Champion",
+            "company": "BambooHR",
+            "start_date": "2026",
+            "end_date": null,
+            "city": "Draper",
+            "state": "UT",
+            "country": "USA",
+            "descriptions": [
+                "Selected as team Security Champion; deliver monthly security training to engineering team and serve as the team's first point of review on secure development practices"
+            ]
+        }
+    ],
+    "jobs": [
+        {
+            "title": "Software Engineer",
+            "company": "BambooHR",
+            "start_date": "05/2025",
+            "end_date": null,
+            "city": "Draper",
+            "state": "UT",
+            "country": "USA",
+            "descriptions": [
+                "Build production AI agents that generate data-driven insights for HR managers, including a subagent to evaluate individual time-off usage through standard-deviation and recency analysis to surface burnout risk, feeding a downstream agent that produces natural-language recommendations",
+                "Architected and shipped InsightsBar, a shared carousel component consumed by other product teams, establishing a single consistent insights UI across the application",
+                "Delivered the complete front-end effort to migrate all BambooHR customers (30,000+ companies) from the legacy reports experience to a new custom report builder platform, including filter and sort controls, bug remediation, in-app states directing customers through the transition, and pagination and shared state management to scale the reports page for post-migration data volumes",
+                "Designed and delivered a permissions-based routing system to programmatically generate the reporting application's React Router routes with permissions bound to each page, eliminating an entire class of outages, and simplifying developer experience",
+                "Built reliable back-navigation with fallbacks across the reporting application, spanning both the legacy frontend and micro-frontend architectures"
+            ]
+        },
+        {
+            "title": "Full Stack Developer / Systems Manager",
+            "company": "Triark Roofing Co.",
+            "start_date": "04/2021",
+            "end_date": "04/2025",
+            "city": "Roseville",
+            "state": "CA",
+            "country": "USA",
+            "descriptions": [
+                "Designed and implemented a centralized email template management system in Python/Django, consolidating creation, updating, and deployment of 40+ client-facing templates",
+                "Built and deployed a custom IT support ticketing system, and configured CRM automations that streamlined data management across the company",
+                "Authored training materials, including slide decks and activity diagrams, for multiple employee position groups to support onboarding and skill development"
+            ]
+        }
+    ],
+    "projects": [
+        {
+            "name": "thread-ui",
+            "description": "Author and maintainer of an open-source React component library (TypeScript, Panda CSS, CVA), with over 40 components, foundational design system and customizable theme. Published to npm under MIT license with a Storybook documentation site at thread.fisherandrew.org, deployed via a Dockerized CI/CD pipeline"
+        },
+        {
+            "name": "fisherandrew.org",
+            "description": "Self-hosted Next.js personal site running on a home Ubuntu server behind Cloudflare, with a blue/green Docker deployment pipeline via GitHub Actions"
+        },
+        {
+            "name": "Set",
+            "description": "SwiftUI implementation of the Set card game; MVVM architecture and application state management. Built in IS 543 coursework (github.com/fisherbyu)"
+        },
+        {
+            "name": "Meal En Place",
+            "description": "SwiftUI recipe application with SwiftData persistence. Built in IS 543 coursework (github.com/fisherbyu)"
+        }
+    ],
+    "skills": [
+        "Languages & Frameworks: TypeScript/JavaScript, React, Next.js, Python, Swift/SwiftUI, C#, SQL, ASP.NET Core, Django",
+        "Tools & Practices: Xcode, Git, Docker, Agile, CI/CD, generative AI development tools including Claude Code",
+        "Volunteer Representative, The Church of Jesus Christ of Latter-day Saints - Cauayan, Philippines (Aug 2018 - Mar 2020). Taught a structured curriculum in Tagalog to individuals and families; trained and mentored new representatives in language, protocol, effective teaching, and goal setting; coordinated with regional leadership",
+        "Fluent in Tagalog",
+        "Deputy Campaign Manager, Kiley for Assembly",
+        "Eagle Scout",
+        "Building electric guitar; play acoustic guitar; enjoy cooking and baking"
+    ]
+}
