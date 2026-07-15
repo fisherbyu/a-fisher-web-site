@@ -4,6 +4,7 @@
         "firstname": "Andrew",
         "lastname": "Fisher",
         "linkedin_url": "https://www.linkedin.com/in/fisherandrew777/",
+        "website_url": "https://fisherandrew.org",
         "github_url": "https://github.com/fisherbyu"
     },
     "education": [
@@ -13,15 +14,17 @@
             "city": "Provo",
             "state": "Utah",
             "college": "Marriott School of Business",
-            "degree": "Master of Information Systems Managment",
+            "degree": "Master of Information Systems Management",
             "graduation_month": "April",
             "graduation_year": "2025",
-            "additionals": ["Specialized Courses: JavaScript, React, Swift, C#, Python"]
+            "additionals": [
+                "Specialized Courses: Python, C#, JavaScript, C++, Swift, Next.js, Data Structures, Machine Learning, Cybersecurity, Database Systems, Enterprise Infrastructure (AWS), Data Analytics"
+            ]
         }
     ],
     "jobs": [
         {
-            "title": "Software Engineer, Front-End",
+            "title": "Software Engineer",
             "company": "BambooHR",
             "start_date": "05/2025",
             "end_date": null,
@@ -29,39 +32,25 @@
             "state": "UT",
             "country": "USA",
             "descriptions": [
-                "Led refactor of entire Reporting List Pages for more streamlined and cohesive UI.",
-                "Plan, Develop and Ensure Code quality, while reaching development contribution and planning metrics.",
-                "Rewrote Report Builder Controls"
+                "Build production AI agents that generate data-driven insights for HR managers, including a subagent to evaluate individual time-off usage through standard-deviation and recency analysis to surface burnout risk, feeding a downstream agent that produces natural-language recommendations",
+                "Architected and shipped InsightsBar, a shared carousel component consumed by other product teams, establishing a single consistent insights UI across the application",
+                "Delivered the complete front-end effort to migrate all BambooHR customers (30,000+ companies) from the legacy reports experience to a new custom report builder platform, including filter and sort controls, bug remediation, in-app states directing customers through the transition, and pagination and shared state management to scale the reports page for post-migration data volumes",
+                "Designed and delivered a permissions-based routing system to programmatically generate the reporting application's React Router routes with permissions bound to each page, eliminating an entire class of outages, and simplifying developer experience",
+                "Built reliable back-navigation with fallbacks across the reporting application, spanning both the legacy frontend and micro-frontend architectures"
             ]
         },
         {
-            "title": "Full-Stack Developer + Systems Manager",
+            "title": "Full Stack Developer / Systems Manager",
             "company": "Triark Roofing Co.",
             "start_date": "04/2021",
-            "end_date": "04/2024",
+            "end_date": "04/2025",
             "city": "Roseville",
             "state": "CA",
             "country": "USA",
             "descriptions": [
-                "Designed and implemented a centralized email template management system using Python Django, optimizing the creation, updating, and deployment of over 40 email templates, resulting in increased productivity and consistency in client communication materials",
-                "Developing application to streamline roof data collection and automate inspection report generation, to reduce previous process duration by 75%",
-                "Manage CRM implementation, configuring automations, and providing continuous support, leading to streamlined data management and improved operational efficiency",
-                "Created customized training materials (including slideshows and activity diagrams) for various employee position groups, ensuring smooth onboarding and skill development while actively contributing to CRM troubleshooting and maintenance",
-                "Designed and launched company website while implementing a review campaign that substantially elevated the companies online reputation, boosting reviews from 3 to over 30"
-            ]
-        },
-        {
-            "title": "Team Lead, On-Campus Internship Team",
-            "company": "Philippines Collegiate Vocational Fund",
-            "start_date": "09/2021",
-            "end_date": "12/2021",
-            "city": "Provo",
-            "state": "UT",
-            "country": "USA",
-            "descriptions": [
-                "Led OCI team in planning, creation, and delivery of 2 inspirational/promotional videos, 2 sharable business models, and a redesign of the PCVF website",
-                "Conducted weekly team meetings, ensuring alignment on project objectives.  Proactively followed up with team members and promoted collaborative atmosphere through engaging team-building exercises",
-                "Coordinated expectations, progress, and implementation with PCVF management"
+                "Designed and implemented a centralized email template management system in Python/Django, consolidating creation, updating, and deployment of 40+ client-facing templates",
+                "Built and deployed a custom IT support ticketing system, and configured CRM automations that streamlined data management across the company",
+                "Authored training materials, including slide decks and activity diagrams, for multiple employee position groups to support onboarding and skill development"
             ]
         },
         {
@@ -73,15 +62,17 @@
             "state": "Isabela",
             "country": "Philippines",
             "descriptions": [
-                "Trained two new missionaries, including mentorship in: instruction in mission protocol, effective teaching and proselyting, and accountable goal setting",
-                "Improved statistic success by 250% while leading assigned area over 7 months through effective coordination with regional leadership, leading mission wide statistics"
+                "Trained two new missionaries, including mentorship in: Tagalog, protocol, effective teaching and proselyting, and accountable goal setting",
+                "Improved statistic success by 250% while leading assigned area over 7 months through effective coordination with regional leadership, leading regional statistics"
             ]
         }
     ],
     "skills": [
-        "Proficient in TypeScript, React, NEXT.js, Python, C#, ASP.NET Core, SQL, HTML5, CSS",
-        "Experienced with Python, C++, Node.js, and Git",
+        "Proficient in TypeScript/JavaScript, React, NEXT.js",
+        "Experienced with Python, Swift/Swift UI, ASP.NET Core, SQL",
         "Fluent Tagalog",
+        "Program Director, Kids who Code 2022",
+        "Deputy Campaign Manager, Kiley for Assembly",
         "Enjoy playing guitar, listening to music, watching movies and cooking/baking",
         "Eagle Scout"
     ]
