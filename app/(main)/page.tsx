@@ -24,7 +24,7 @@ export default function Home() {
             <ImagePanel
                 title="I'm Andrew!"
                 contents={[
-                    'I love music, history, and cooking for my friends.  I use technology to solve problems for people.  I recently graduated from BYU as a Master of Information Systems Managment.',
+                    'I love music, history, and cooking for my friends.  I use technology to solve problems for people.  I recently graduated from BYU as a Master of Information Systems Management.',
                 ]}
                 image={
                     <Image
