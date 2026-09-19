@@ -43,6 +43,7 @@
     "overrides": {
         "next": {
             "postcss": "$postcss"
-        }
+        },
+        "deepmerge-ts": "^8.0.0"
     }
 }
