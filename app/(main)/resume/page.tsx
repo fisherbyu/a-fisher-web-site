@@ -18,8 +18,8 @@ export default function ResumePage() {
                             <div>
                                 <H2 inline>{resume.education[0].institution}</H2>
                                 <Text size="xs">
-                                    {resume.education[0].graduation_month}{' '}
-                                    {resume.education[0].graduation_year} -{' '}
+                                    {resume.education[0].graduation_month}
+                                    {resume.education[0].graduation_year} -
                                     {resume.education[0].city}, {resume.education[0].state}
                                 </Text>
                             </div>
@@ -44,11 +44,10 @@ export default function ResumePage() {
                                 <Text weight="semibold">{job.company}</Text>
                                 <span className="flex justify-between items-center">
                                     <Text size="sm">
-                                        {job.start_date} -{' '}
-                                        {job.end_date !== null ? job.end_date : 'Present'}
+                                        {`${job.start_date} - ${job.end_date !== null ? job.end_date : 'Present'}`}
                                     </Text>
                                     <Text size="sm">
-                                        {job.city}, {job.state}{' '}
+                                        {job.city}, {job.state}
                                         {job.country !== 'USA' ? `- ${job.country}` : ''}
                                     </Text>
                                 </span>
