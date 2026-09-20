@@ -1,16 +1,4 @@
-import {
-    Album,
-    Attribute,
-    AttributeDto,
-    Content,
-    ContentDto,
-    Image,
-    ImageDto,
-    Link,
-    LinkDto,
-    MusicItem,
-} from '@/types';
-import { DtoId } from '../dto';
+import type { Album, MusicItem } from '@/types';
 import { Prettify } from 'thread-ui';
 
 export type Artist = Prettify<
