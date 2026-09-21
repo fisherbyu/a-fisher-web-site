@@ -1,29 +1,12 @@
-import {
-    Attribute,
-    AttributeDto,
-    Content,
-    ContentDto,
-    Image,
-    ImageDto,
-    Link,
-    LinkDto,
-} from '@/types';
-import { DtoId } from '../dto';
+import type { MusicItem } from '@/types';
+import type { Prettify } from 'thread-ui';
 
-export type Album = {
-    id: number;
-    name: string;
-    rank?: number;
-    contents: Content[];
-    attributes: Attribute[];
-    link: Link;
-    image: Image;
-};
-
-export type AlbumDto = Omit<Album, 'id' | 'contents' | 'attributes' | 'link' | 'image'> & {
-    id: DtoId;
-    contents: ContentDto[];
-    attributes: AttributeDto[];
-    link: LinkDto;
-    image: ImageDto;
-};
+export type Album = Prettify<
+    {
+        id: number;
+        title: string;
+        releaseDate: Date;
+        contents: string[];
+        favoriteTracks: string[];
+    } & MusicItem
+>;
