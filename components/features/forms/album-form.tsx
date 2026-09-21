@@ -1,12 +1,11 @@
 'use client';
-import { Button, Divider, FileUpload } from 'thread-ui';
+import { Button, Divider, FileUpload, UploadableFile } from 'thread-ui';
 import { AlbumInfoData, AlbumInfoForm } from './album-info-form';
 import { Album, AlbumInput } from '@/types';
 import { useState } from 'react';
 import { LinkData, LinkForm } from './link-form';
 import { ContentData, ContentsForm, fromContentData, toContentData } from './contents-form';
 import { createAlbum, getPublicUrl, joinList, splitList, uploadImage } from '@/lib';
-import { FileWithAlt } from '@/components/ui/form-elements/file-upload/file-upload.types';
 import { ImageDisplay } from '@/components/ui/form-elements/file-upload/previews';
 
 type FormProps = {
@@ -46,7 +45,7 @@ export const AlbumForm = ({ artistId, initialData, onSuccess }: FormProps) => {
 
     // Image (existing image on edit; new uploads come from files)
     const existingImage = initialData?.image;
-    const [files, setFiles] = useState<FileWithAlt[]>([]);
+    const [files, setFiles] = useState<UploadableFile[]>([]);
     const [replaceImage, setReplaceImage] = useState(false);
 
     // Submission
