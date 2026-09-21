@@ -1,4 +1,4 @@
-import type { MusicItem } from '@/types';
+import type { Artist, MusicItem } from '@/types';
 import type { Prettify } from 'thread-ui';
 
 export type Album = Prettify<
@@ -8,5 +8,6 @@ export type Album = Prettify<
         releaseDate: Date;
         contents: string[];
         favoriteTracks: string[];
+        artistId: Artist['id'];
     } & MusicItem
 >;
