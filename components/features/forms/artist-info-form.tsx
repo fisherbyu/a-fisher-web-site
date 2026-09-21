@@ -36,22 +36,14 @@ export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
                 title="Favorite Tracks"
                 value={data.favoriteTracks}
                 onChange={handleChange}
-                placeholder="Yellow, Up&Up, Coloratura"
             />
             <TextInput
                 name="favoriteAlbums"
                 title="Favorite Albums"
                 value={data.favoriteAlbums}
                 onChange={handleChange}
-                placeholder="Parachutes, X&Y"
             />
-            <TextInput
-                name="genres"
-                title="Genres"
-                value={data.genres}
-                onChange={handleChange}
-                placeholder="Alternative, Rock"
-            />
+            <TextInput name="genres" title="Genres" value={data.genres} onChange={handleChange} />
         </div>
     );
 };
