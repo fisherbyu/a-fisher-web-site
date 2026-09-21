@@ -1,28 +1,26 @@
+import { Prisma } from '@prisma/client';
 import { Playlist } from '@/types';
 
-export type PrismaPlaylist = {
-    id: number;
-    title: string;
-    link: {
-        id: number;
-        appleURI: string;
-        spotifyURI: string;
-        createdAt: Date;
-        updatedAt: Date;
-        artistId: number | null;
-        albumId: number | null;
-        playlistId: number | null;
-    } | null;
-};
+/** Query shape `transformPlaylist` expects. Use this as the `include` in every Playlist query. */
+export const playlistInclude = {
+    link: true,
+} satisfies Prisma.PlaylistInclude;
+
+/** A `Playlist` as returned by a query using `playlistInclude`. */
+export type PrismaPlaylist = Prisma.PlaylistGetPayload<{ include: typeof playlistInclude }>;
 
 export const transformPlaylist = (data: PrismaPlaylist): Playlist => {
+    const { link } = data;
+
+    if (!link) throw new Error(`Playlist ${data.id} is missing a link`);
+
     return {
         id: data.id,
         title: data.title,
         link: {
-            id: data.link!.id,
-            appleURI: data.link!.appleURI,
-            spotifyURI: data.link!.spotifyURI,
+            id: link.id,
+            appleURI: link.appleURI,
+            spotifyURI: link.spotifyURI,
         },
     };
 };

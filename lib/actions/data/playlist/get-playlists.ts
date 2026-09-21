@@ -1,7 +1,7 @@
 'use server';
 import { prisma } from '@/lib/prisma';
 import { transformPlaylist } from '@/lib';
-import { ApiResponse, Playlist } from '@/types';
+import { Playlist } from '@/types';
 
 export const getPlaylists = async (): Promise<Playlist[]> => {
     const data = await prisma.playlist.findMany({

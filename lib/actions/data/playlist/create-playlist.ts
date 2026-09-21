@@ -1,24 +1,21 @@
 'use server';
-import { Playlist, PlaylistDto } from '@/types';
+import { Playlist, PlaylistInput } from '@/types';
 import { prisma, transformPlaylist } from '@/lib';
 
 /**
  * Server Action to Create Playlist
- * @param {PlaylistDto} data
+ * @param {PlaylistInput} data
  * @returns {Promise<Playlist>}
  */
-export async function createPlaylist(data: PlaylistDto): Promise<Playlist> {
+export async function createPlaylist(data: PlaylistInput): Promise<Playlist> {
     // Extract Data
-    const {
-        title,
-        link: { id: linkId, ...linkData },
-    } = data;
+    const { title, link } = data;
 
     const playlist = await prisma.playlist.create({
         data: {
             title,
             link: {
-                create: linkData,
+                create: link,
             },
         },
         include: {
