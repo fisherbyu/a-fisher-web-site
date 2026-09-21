@@ -1,1 +1,1 @@
-export type { Playlist, PlaylistDto } from './playlist.types';
+export type { Playlist } from './playlist.types';
