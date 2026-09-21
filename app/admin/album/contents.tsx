@@ -1,7 +1,8 @@
 'use client';
 import { useState } from 'react';
-import { AlbumForm, BookDisplay, Dropdown } from '@/components';
+import { AlbumForm, BookDisplay } from '@/components';
 import { useAlbums, useArtists } from '@/lib';
+import { Dropdown } from 'thread-ui';
 import { Album } from '@/types';
 
 const EditAlbumForm = ({ data }: { data: Album }) => {
@@ -18,7 +19,6 @@ const CreateAlbumForm = () => {
     return (
         <div>
             <Dropdown
-                label="Artist"
                 value={artistId}
                 options={artistOptions}
                 onSelect={(value) => setArtistId(Number(value))}
