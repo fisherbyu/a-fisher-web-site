@@ -25,40 +25,51 @@ export default function ArtistContents() {
     return (
         <Container>
             <div className="flex flex-col gap-4">
-                {artists?.map((artist, _) => (
-                    <MediaCard
-                        key={_}
-                        title={artist.name}
-                        description={artist.contents.map((content) => content.text)}
-                        details={artist.attributes.map((attribute) => ({
-                            title: attribute.title,
-                            details: attribute.text,
-                        }))}
-                        detailsPosition="text"
-                        image={
-                            <Image
-                                src={getPublicUrl(artist.image.src)}
-                                alt={artist.image.alt}
-                                height={artist.image.height}
-                                width={artist.image.width}
-                            />
-                        }
-                        imagePosition={_ % 2 === 0 ? 'right' : 'left'}
-                        size="md"
-                        links={[
-                            <Link href={getMusicLink(artist.link.appleURI, 'artist', 'apple')}>
+                {artists?.map((artist, _) => {
+                    const favoriteAlbums = {
+                        title: `Favorite Album${artist.favoriteAlbums.length > 1 ? 's' : ''}:`,
+                        details: artist.favoriteAlbums.join(', '),
+                    };
+
+                    const favoriteTracks = {
+                        title: `Favorite Track${artist.favoriteTracks.length > 1 ? 's' : ''}:`,
+                        details: artist.favoriteTracks.join(', '),
+                    };
+
+                    return (
+                        <MediaCard
+                            key={_}
+                            title={artist.name}
+                            description={artist.contents.map((content) => content)}
+                            details={[favoriteAlbums, favoriteTracks]}
+                            detailsPosition="text"
+                            image={
                                 <Image
-                                    className=" w-5"
-                                    src={AppleMusicLogo}
-                                    alt="Logo, Apple Music"
+                                    src={getPublicUrl(artist.image.src)}
+                                    alt={artist.image.alt}
+                                    height={artist.image.height}
+                                    width={artist.image.width}
                                 />
-                            </Link>,
-                            <Link href={getMusicLink(artist.link.spotifyURI, 'artist', 'spotify')}>
-                                <Image className=" w-5" src={SpotifyLogo} alt="Logo, Spotify" />
-                            </Link>,
-                        ]}
-                    />
-                ))}
+                            }
+                            imagePosition={_ % 2 === 0 ? 'right' : 'left'}
+                            size="md"
+                            links={[
+                                <Link href={getMusicLink(artist.link.appleURI, 'artist', 'apple')}>
+                                    <Image
+                                        className=" w-5"
+                                        src={AppleMusicLogo}
+                                        alt="Logo, Apple Music"
+                                    />
+                                </Link>,
+                                <Link
+                                    href={getMusicLink(artist.link.spotifyURI, 'artist', 'spotify')}
+                                >
+                                    <Image className=" w-5" src={SpotifyLogo} alt="Logo, Spotify" />
+                                </Link>,
+                            ]}
+                        />
+                    );
+                })}
             </div>
         </Container>
     );
