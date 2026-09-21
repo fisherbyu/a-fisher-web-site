@@ -1,10 +1,10 @@
 'use client';
 import { Button, Divider } from 'thread-ui';
-import { Link, LinkDto, Playlist, PlaylistDto } from '@/types';
-import { useId, useState } from 'react';
-import { LinkForm } from './link-form';
+import { Playlist, PlaylistInput } from '@/types';
+import { useState } from 'react';
+import { LinkData, LinkForm } from './link-form';
 import { TextInput } from '@/components/ui';
-import { createPlaylist, HandleInputChanges } from '@/lib';
+import { createPlaylist } from '@/lib';
 
 type PlaylistFormProps = {
     initialData?: Playlist;
@@ -13,27 +13,32 @@ type PlaylistFormProps = {
 
 export const PlaylistForm = ({ initialData, onSuccess }: PlaylistFormProps) => {
     // Extract or Init Data
-    const [title, setTitle] = useState(initialData?.title || '');
+    const [title, setTitle] = useState(initialData?.title ?? '');
 
-    const [link, setLink] = useState<Link | LinkDto>(initialData?.link || { id: useId(), appleURI: '', spotifyURI: '' });
+    const [link, setLink] = useState<LinkData>({
+        appleURI: initialData?.link?.appleURI ?? '',
+        spotifyURI: initialData?.link?.spotifyURI ?? '',
+    });
 
     // Handle Submission
     const handleSubmit = async () => {
         // Edit Playlist
         if (initialData) {
             console.log(initialData);
-        } else {
-            const dto: PlaylistDto = {
-                id: crypto.randomUUID(),
-                title,
-                link,
-            };
+            return;
+        }
 
-            try {
-                console.log(createPlaylist(dto));
-            } catch (error) {
-                console.log(error);
-            }
+        // Create Playlist
+        const input: PlaylistInput = {
+            title,
+            link,
+        };
+
+        try {
+            const playlist = await createPlaylist(input);
+            onSuccess?.(playlist);
+        } catch (error) {
+            console.log(error);
         }
     };
 
@@ -42,7 +47,13 @@ export const PlaylistForm = ({ initialData, onSuccess }: PlaylistFormProps) => {
             <div className="text-3xl">{initialData ? 'Edit' : 'Create'} Playlist</div>
             <Divider width="100%" />
             <div className="w-56">
-                <TextInput name="title" title="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                <TextInput
+                    name="title"
+                    title="Title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    required
+                />
                 <LinkForm data={link} onChange={setLink} />
                 <div className="flex w-full justify-end pt-4">
                     <Button margin="0 0 0 0" onClick={handleSubmit}>
