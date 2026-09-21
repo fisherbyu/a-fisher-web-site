@@ -1,10 +1,31 @@
 'use client';
-import { AlbumForm, BookDisplay } from '@/components';
-import { useAlbums } from '@/lib';
+import { useState } from 'react';
+import { AlbumForm, BookDisplay, Dropdown } from '@/components';
+import { useAlbums, useArtists } from '@/lib';
 import { Album } from '@/types';
 
 const EditAlbumForm = ({ data }: { data: Album }) => {
-    return <AlbumForm key={data.id} initialData={data} />;
+    return <AlbumForm key={data.id} artistId={data.artistId} initialData={data} />;
+};
+
+// Create flow: pick the Artist first, since every Album belongs to one
+const CreateAlbumForm = () => {
+    const { artists } = useArtists();
+    const [artistId, setArtistId] = useState<number>();
+
+    const artistOptions = (artists ?? []).map(({ id, name }) => ({ label: name, value: id }));
+
+    return (
+        <div>
+            <Dropdown
+                label="Artist"
+                value={artistId}
+                options={artistOptions}
+                onSelect={(value) => setArtistId(Number(value))}
+            />
+            {artistId !== undefined && <AlbumForm key={artistId} artistId={artistId} />}
+        </div>
+    );
 };
 
 export default function AlbumContents() {
@@ -12,7 +33,7 @@ export default function AlbumContents() {
 
     const displayArtistListItem = (item: Album) => (
         <div>
-            <div className="font-medium">{item.name}</div>
+            <div className="font-medium">{item.title}</div>
         </div>
     );
 
@@ -22,7 +43,7 @@ export default function AlbumContents() {
             renderListItem={displayArtistListItem}
             renderDetail={(album) => <EditAlbumForm data={album} />}
             listTitle="Albums"
-            defaultPage={<AlbumForm />}
+            defaultPage={<CreateAlbumForm />}
         />
     );
 }
