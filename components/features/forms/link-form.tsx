@@ -1,4 +1,4 @@
-import { TextInput } from '@/components/ui';
+import { TextInput } from 'thread-ui';
 import { HandleInputChanges } from '@/lib';
 import { Link } from '@/types';
 

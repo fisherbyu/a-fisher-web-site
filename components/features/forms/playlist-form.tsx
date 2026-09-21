@@ -3,7 +3,7 @@ import { Button, Divider } from 'thread-ui';
 import { Playlist, PlaylistInput } from '@/types';
 import { useState } from 'react';
 import { LinkData, LinkForm } from './link-form';
-import { TextInput } from '@/components/ui';
+import { TextInput } from 'thread-ui';
 import { createPlaylist } from '@/lib';
 
 type PlaylistFormProps = {

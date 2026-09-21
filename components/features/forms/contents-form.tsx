@@ -1,4 +1,5 @@
-import { ReorderableList, TextInput } from '@/components/ui';
+import { ReorderableList } from '@/components/ui';
+import { TextInput } from 'thread-ui';
 import { EditableListItem } from '@/components/ui/form-elements/editable-list-item';
 import { ItemChangeProp } from '@/components/ui/reorderable-list/sortable-item';
 import { useDebounce } from '@/lib';

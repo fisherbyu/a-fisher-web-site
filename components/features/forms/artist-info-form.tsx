@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput } from '@/components';
+import { TextInput } from 'thread-ui';
 import { HandleInputChanges } from '@/lib';
 
 // Form-only Artist fields; list fields are comma-separated strings, split on submit

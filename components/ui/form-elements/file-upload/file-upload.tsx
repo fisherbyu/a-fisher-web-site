@@ -2,7 +2,7 @@
 import { useState, useCallback } from 'react';
 import { Icon, Button, Divider } from 'thread-ui';
 import clsx from 'clsx';
-import { TextInput } from '../text-input';
+import { TextInput } from 'thread-ui';
 import { FileUploadProps, FileWithAlt } from './file-upload.types';
 import { FilePreview, ImageDisplay } from './previews';
 import { isFileImageType } from '@/lib';
@@ -153,7 +153,8 @@ export const FileUpload = ({
                     className={clsx(
                         'border-2 mx-auto border-dashed rounded-lg text-center flex items-center',
                         {
-                            'flex-row justify-center items-center gap-7 p-3': size === 'sm' || size === 'md',
+                            'flex-row justify-center items-center gap-7 p-3':
+                                size === 'sm' || size === 'md',
                             'p-8': size === 'md' || size === 'lg',
                             'flex-col': size === 'lg',
                         },
@@ -174,8 +175,16 @@ export const FileUpload = ({
                         })}
                     >
                         <span>
-                            {!(size === 'sm') && <p className="text-sm text-gray-600">Drag and drop your file here</p>}
-                            {supportedFormatsText && <span className="text-xs text-gray-500">{supportedFormatsText}</span>}
+                            {!(size === 'sm') && (
+                                <p className="text-sm text-gray-600">
+                                    Drag and drop your file here
+                                </p>
+                            )}
+                            {supportedFormatsText && (
+                                <span className="text-xs text-gray-500">
+                                    {supportedFormatsText}
+                                </span>
+                            )}
                         </span>
 
                         <div>
@@ -235,7 +244,11 @@ export const FileUpload = ({
                 ) : (
                     // Preview Selected File
                     <div className="flex gap-4 flex-col  w-full  mx-auto md:justify-between items-center">
-                        {preview ? <ImageDisplay src={preview} /> : <FilePreview file={selectedFile} />}
+                        {preview ? (
+                            <ImageDisplay src={preview} />
+                        ) : (
+                            <FilePreview file={selectedFile} />
+                        )}
                         <div className="w-full flex flex-row justify-start">
                             <div className="w-full">
                                 <TextInput
@@ -245,12 +258,19 @@ export const FileUpload = ({
                                     onChange={(e) => setCustomFilename(e.target.value)}
                                     required
                                 />
-                                <p className="text-xs text-gray-500 pl-1 mt-1">Extension: .{selectedFile.name.split('.').pop()}</p>
+                                <p className="text-xs text-gray-500 pl-1 mt-1">
+                                    Extension: .{selectedFile.name.split('.').pop()}
+                                </p>
                                 {status && <p className="text-sm text-gray-600 pl-1">{status}</p>}
                             </div>
                             {isFileImageType(selectedFile) && (
                                 <div className="w-full">
-                                    <TextInput name="alt" title="Alt Text:" value={alt} onChange={(e) => setAlt(e.target.value)} />
+                                    <TextInput
+                                        name="alt"
+                                        title="Alt Text:"
+                                        value={alt}
+                                        onChange={(e) => setAlt(e.target.value)}
+                                    />
                                 </div>
                             )}
                         </div>
