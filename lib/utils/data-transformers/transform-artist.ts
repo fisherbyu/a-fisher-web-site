@@ -1,73 +1,43 @@
+import { Prisma } from '@prisma/client';
 import { Artist } from '@/types';
 
-export type PrismaArtist = {
-    id: number;
-    name: string;
-    tier: number;
-    rank: number | null;
-    createdAt: Date;
-    updatedAt: Date;
-    contents: {
-        id: number;
-        order: number;
-        text: string;
-        createdAt: Date;
-        updatedAt: Date;
-        artistId: number | null;
-        albumId: number | null;
-    }[];
-    attributes: {
-        id: number;
-        order: number;
-        text: string;
-        title: string;
-        createdAt: Date;
-        updatedAt: Date;
-        artistId: number | null;
-        albumId: number | null;
-    }[];
-    link: {
-        id: number;
-        appleURI: string;
-        spotifyURI: string;
-        createdAt: Date;
-        updatedAt: Date;
-        artistId: number | null;
-        albumId: number | null;
-        playlistId: number | null;
-    } | null;
-    image: {
-        id: number;
-        src: string;
-        alt: string;
-        height: number;
-        width: number;
-        createdAt: Date;
-        updatedAt: Date;
-        artistId: number | null;
-        albumId: number | null;
-    } | null;
-};
+/** Query shape `transformArtist` expects. Use this as the `include` in every Artist query. */
+export const artistInclude = {
+    musicItem: {
+        include: { link: true, image: true, genres: { include: { genre: true } } },
+    },
+} satisfies Prisma.ArtistInclude;
+
+/** An `Artist` as returned by a query using `artistInclude`. */
+export type PrismaArtist = Prisma.ArtistGetPayload<{ include: typeof artistInclude }>;
 
 export const transformArtist = (data: PrismaArtist): Artist => {
+    const { link, image, genres } = data.musicItem;
+
+    if (!link) throw new Error(`Artist ${data.id} is missing a link`);
+    if (!image) throw new Error(`Artist ${data.id} is missing an image`);
+
     return {
         id: data.id,
         name: data.name,
-        tier: data.tier,
-        rank: data.rank ?? undefined,
         contents: data.contents,
-        attributes: data.attributes,
+        favoriteTracks: data.favoriteTracks,
+        favoriteAlbums: data.favoriteAlbums,
         link: {
-            id: data.link!.id,
-            appleURI: data.link!.appleURI,
-            spotifyURI: data.link!.spotifyURI,
+            id: link.id,
+            appleURI: link.appleURI,
+            spotifyURI: link.spotifyURI,
         },
         image: {
-            id: data.image!.id,
-            src: data.image!.src,
-            alt: data.image!.alt,
-            height: data.image!.height,
-            width: data.image!.width,
+            id: image.id,
+            src: image.src,
+            alt: image.alt,
+            height: image.height,
+            width: image.width,
         },
+        genres: genres.map(({ genre }) => ({
+            id: genre.id,
+            name: genre.name,
+        })),
     };
 };
