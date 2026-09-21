@@ -2,13 +2,26 @@ import { ReorderableList, TextInput } from '@/components/ui';
 import { EditableListItem } from '@/components/ui/form-elements/editable-list-item';
 import { ItemChangeProp } from '@/components/ui/reorderable-list/sortable-item';
 import { useDebounce } from '@/lib';
-import { Content } from '@/types';
 import { ReactNode, useState } from 'react';
 import { Divider, Icon } from 'thread-ui';
 
-export type ContentData = Omit<Content, 'id'> & {
-    id: string | number;
+// Form-only paragraph row; `id` is a local React key and never leaves the form
+export type ContentData = {
+    id: string;
+    order: number;
+    text: string;
 };
+
+// Stored paragraphs -> keyed form rows
+export const toContentData = (contents: string[]): ContentData[] =>
+    contents.map((text, order) => ({ id: crypto.randomUUID(), order, text }));
+
+// Keyed form rows -> ordered paragraphs, dropping blanks
+export const fromContentData = (data: ContentData[]): string[] =>
+    [...data]
+        .sort((a, b) => a.order - b.order)
+        .map(({ text }) => text.trim())
+        .filter(Boolean);
 
 type ContentFormProps = {
     data: ContentData[];
@@ -38,7 +51,9 @@ const EditContents = (props: EditContentsProps) => {
     }, 500); // 500ms delay
 
     // Handle Local Updates
-    const handleLocalUpdate = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const handleLocalUpdate = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    ) => {
         const { name, value } = e.target;
         const newData = { ...contentData, [name]: value };
 
@@ -51,9 +66,17 @@ const EditContents = (props: EditContentsProps) => {
 
     const displayContents = <div className="w-full truncate">{contentData.text}</div>;
 
-    const editContentData = <TextInput name="text" value={contentData.text} onChange={handleLocalUpdate} multiline />;
+    const editContentData = (
+        <TextInput name="text" value={contentData.text} onChange={handleLocalUpdate} multiline />
+    );
 
-    return <EditableListItem dragHandle={dragHandle} display={displayContents} edit={editContentData} />;
+    return (
+        <EditableListItem
+            dragHandle={dragHandle}
+            display={displayContents}
+            edit={editContentData}
+        />
+    );
 };
 
 export const ContentsForm = ({ data, onChange, onAdd }: ContentFormProps) => {
