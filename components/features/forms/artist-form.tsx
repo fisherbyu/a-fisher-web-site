@@ -1,14 +1,13 @@
 'use client';
 import { Button, Divider } from 'thread-ui';
 import { ArtistInfoData, ArtistInfoForm } from './artist-info-form';
-import { Artist, ArtistDto, Attribute, AttributeDto, Content, ContentDto, Image, ImageDto, Link, LinkDto } from '@/types';
-import { useId, useState } from 'react';
+import { Artist, ArtistInput } from '@/types';
+import { useState } from 'react';
 import { FileUpload } from '@/components';
-import { LinkForm } from './link-form';
-import { ContentsForm } from './contents-form';
-import { AttributesForm } from '@/components';
+import { LinkData, LinkForm } from './link-form';
+import { ContentData, ContentsForm, fromContentData, toContentData } from './contents-form';
 import { createArtist } from '@/lib';
-import { getPublicUrl, uploadImage } from '@/lib';
+import { getPublicUrl, joinList, splitList, uploadImage } from '@/lib';
 import { FileWithAlt } from '@/components/ui/form-elements/file-upload/file-upload.types';
 import { ImageDisplay } from '@/components/ui/form-elements/file-upload/previews';
 
@@ -21,15 +20,18 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
     // Extract or Init Data
     // Artist Info
     const [artistInfo, setArtistInfo] = useState<ArtistInfoData>({
-        name: initialData?.name || '',
-        tier: initialData?.tier || 1,
-        rank: initialData?.rank,
+        name: initialData?.name ?? '',
+        favoriteTracks: joinList(initialData?.favoriteTracks ?? []),
+        favoriteAlbums: joinList(initialData?.favoriteAlbums ?? []),
+        genres: joinList(initialData?.genres.map(({ name }) => name) ?? []),
     });
 
     // Contents
-    const [contents, setContents] = useState<Array<Content | ContentDto>>(initialData?.contents || []);
+    const [contents, setContents] = useState<ContentData[]>(() =>
+        toContentData(initialData?.contents ?? [])
+    );
     const addContent = () => {
-        const newContent: ContentDto = {
+        const newContent: ContentData = {
             id: crypto.randomUUID(),
             text: '',
             order: contents.length,
@@ -37,23 +39,14 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
         setContents([...contents, newContent]);
     };
 
-    // Attributes
-    const [attributes, setAttributes] = useState<Array<Attribute | AttributeDto>>(initialData?.attributes || []);
-    const addAttribute = () => {
-        const newAttribute: AttributeDto = {
-            id: crypto.randomUUID(),
-            title: '',
-            text: '',
-            order: attributes.length,
-        };
-        setAttributes([...attributes, newAttribute]);
-    };
-
     // Link
-    const [link, setLink] = useState<Link | LinkDto>(initialData?.link || { id: useId(), appleURI: '', spotifyURI: '' });
+    const [link, setLink] = useState<LinkData>({
+        appleURI: initialData?.link.appleURI ?? '',
+        spotifyURI: initialData?.link.spotifyURI ?? '',
+    });
 
-    // Image
-    const [image, setImage] = useState<Image | ImageDto>(initialData?.image || { id: useId(), src: '', alt: '', height: 0, width: 0 });
+    // Image (existing image on edit; new uploads come from files)
+    const existingImage = initialData?.image;
     const [files, setFiles] = useState<FileWithAlt[]>([]);
     const [replaceImage, setReplaceImage] = useState(false);
 
@@ -62,34 +55,40 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
         // Edit Artist
         if (initialData) {
             console.log(initialData);
+            return;
         }
-        // Create Artist
-        else if (files[0]) {
-            try {
-                const file = files[0];
-                const newImage = await uploadImage({
-                    file: file,
-                    alt: file.alt || '',
-                    filePath: 'music/artists/',
-                });
-                setImage({
-                    id: image.id,
-                    ...newImage,
-                });
-                const dto: ArtistDto = {
-                    id: crypto.randomUUID(),
-                    name: artistInfo.name,
-                    tier: artistInfo.tier,
-                    rank: artistInfo.rank,
-                    contents: contents,
-                    attributes: attributes,
-                    link: link,
-                    image: image,
-                };
-                console.log(createArtist(dto));
-            } catch (error) {
-                console.log(error);
-            }
+
+        // Create Artist (image required)
+        const file = files[0];
+        if (!file) return;
+
+        try {
+            const uploaded = await uploadImage({
+                file: file,
+                alt: file.alt || '',
+                filePath: 'music/artists/',
+            });
+
+            const input: ArtistInput = {
+                name: artistInfo.name,
+                contents: fromContentData(contents),
+                favoriteTracks: splitList(artistInfo.favoriteTracks),
+                favoriteAlbums: splitList(artistInfo.favoriteAlbums),
+                link,
+                // Pick fields explicitly so extra upload metadata never reaches Prisma
+                image: {
+                    src: uploaded.src,
+                    alt: uploaded.alt,
+                    height: uploaded.height,
+                    width: uploaded.width,
+                },
+                genres: splitList(artistInfo.genres).map((name) => ({ name })),
+            };
+
+            const artist = await createArtist(input);
+            onSuccess?.(artist);
+        } catch (error) {
+            console.log(error);
         }
     };
 
@@ -101,10 +100,10 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
                 <div>
                     <ArtistInfoForm data={artistInfo} onChange={setArtistInfo} />
                     <LinkForm data={link} onChange={setLink} />
-                    {image && !replaceImage ? (
+                    {existingImage && !replaceImage ? (
                         <div className="mt-3">
                             <ImageDisplay
-                                src={getPublicUrl(image.src)}
+                                src={getPublicUrl(existingImage.src)}
                                 action={() => {
                                     setReplaceImage(true);
                                 }}
@@ -124,7 +123,6 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
                     )}
                 </div>
                 <div className="flex flex-col gap-3">
-                    <AttributesForm data={attributes} onChange={setAttributes} onAdd={addAttribute} />
                     <ContentsForm data={contents} onChange={setContents} onAdd={addContent} />
                 </div>
             </div>
