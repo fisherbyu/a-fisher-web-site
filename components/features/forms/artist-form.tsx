@@ -1,9 +1,8 @@
 'use client';
-import { Button, Divider } from 'thread-ui';
+import { Button, Divider, FileUpload } from 'thread-ui';
 import { ArtistInfoData, ArtistInfoForm } from './artist-info-form';
 import { Artist, ArtistInput } from '@/types';
 import { useState } from 'react';
-import { FileUpload } from '@/components';
 import { LinkData, LinkForm } from './link-form';
 import { ContentData, ContentsForm, fromContentData, toContentData } from './contents-form';
 import { createArtist } from '@/lib';
@@ -118,8 +117,8 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
                             name="image"
                             allowedFileTypes={['image/*']}
                             supportedFormatsText="Supports all Image Types"
-                            files={files}
-                            setFiles={setFiles}
+                            value={files}
+                            onChange={setFiles}
                             maxNumberFiles={1}
                             size="md"
                         />

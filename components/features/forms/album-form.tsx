@@ -1,9 +1,8 @@
 'use client';
-import { Button, Divider } from 'thread-ui';
+import { Button, Divider, FileUpload } from 'thread-ui';
 import { AlbumInfoData, AlbumInfoForm } from './album-info-form';
 import { Album, AlbumInput } from '@/types';
 import { useState } from 'react';
-import { FileUpload } from '@/components';
 import { LinkData, LinkForm } from './link-form';
 import { ContentData, ContentsForm, fromContentData, toContentData } from './contents-form';
 import { createAlbum, getPublicUrl, joinList, splitList, uploadImage } from '@/lib';
@@ -119,8 +118,8 @@ export const AlbumForm = ({ artistId, initialData, onSuccess }: FormProps) => {
                             name="image"
                             allowedFileTypes={['image/*']}
                             supportedFormatsText="Supports all Image Types"
-                            files={files}
-                            setFiles={setFiles}
+                            value={files}
+                            onChange={setFiles}
                             maxNumberFiles={1}
                             size="md"
                         />
