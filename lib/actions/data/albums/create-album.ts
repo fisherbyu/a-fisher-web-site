@@ -1,59 +1,51 @@
 'use server';
-import { Album, AlbumDto } from '@/types';
-import { prisma, transformAlbum } from '@/lib';
+import { Album, AlbumInput } from '@/types';
+import { prisma, transformAlbum, albumInclude } from '@/lib';
 
 /**
  * Server Action to Create Album
- * @param {AlbumDto} data
+ * @param {AlbumInput} data
  * @returns {Promise<Album>}
  */
-export async function createAlbum(data: AlbumDto): Promise<Album> {
+export async function createAlbum(data: AlbumInput): Promise<Album> {
     // Extract Data
-    const {
-        name,
-        rank,
-        link: { id: linkId, ...linkData },
-        image: { id: imgId, ...imgData },
-        contents: contentsWithIds,
-        attributes: attributesWithIds,
-    } = data;
-
-    // Remove IDs from arrays
-    const contents = contentsWithIds.map(({ id, ...rest }) => rest);
-    const attributes = attributesWithIds.map(({ id, ...rest }) => rest);
+    const { title, releaseDate, artistId, contents, favoriteTracks, link, image, genres } = data;
 
     const album = await prisma.album.create({
         data: {
-            name,
-            rank,
-            link: {
-                create: linkData,
+            title,
+            releaseDate,
+            contents,
+            favoriteTracks,
+            // connect (not artistId) so this stays a relation-style create
+            artist: {
+                connect: { id: artistId },
             },
-            image: {
-                create: imgData,
-            },
-            contents: {
-                create: contents,
-            },
-            attributes: {
-                create: attributes,
+            // Album's ID comes from its MusicItem; link/image/genres belong to the MusicItem
+            musicItem: {
+                create: {
+                    link: {
+                        create: link,
+                    },
+                    image: {
+                        create: image,
+                    },
+                    genres: {
+                        // Reuse the Genre if the name already exists, otherwise create it
+                        create: genres.map(({ name }) => ({
+                            genre: {
+                                connectOrCreate: {
+                                    where: { name },
+                                    create: { name },
+                                },
+                            },
+                        })),
+                    },
+                },
             },
         },
         // Return full Album Object
-        include: {
-            link: true,
-            image: true,
-            contents: {
-                orderBy: {
-                    order: 'asc',
-                },
-            },
-            attributes: {
-                orderBy: {
-                    order: 'asc',
-                },
-            },
-        },
+        include: albumInclude,
     });
 
     return transformAlbum(album);
