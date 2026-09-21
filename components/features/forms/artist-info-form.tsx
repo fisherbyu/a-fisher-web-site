@@ -1,11 +1,13 @@
 import React from 'react';
-import { Dropdown, NumberInput, TextInput } from '@/components';
+import { TextInput } from '@/components';
 import { HandleInputChanges } from '@/lib';
 
+// Form-only Artist fields; list fields are comma-separated strings, split on submit
 export type ArtistInfoData = {
     name: string;
-    tier: number;
-    rank?: number;
+    favoriteTracks: string;
+    favoriteAlbums: string;
+    genres: string;
 };
 
 type ArtistInfoFormProps = {
@@ -14,26 +16,42 @@ type ArtistInfoFormProps = {
 };
 
 export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
-    const tierOptions = [...Array(5)].map((_, index) => ({ label: `Tier ${index + 1}`, value: index + 1 }));
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    ) => {
         HandleInputChanges(e, data, onChange);
-    };
-
-    const handleTierChange = (value: number | string) => {
-        const updatedData = {
-            ...data,
-            tier: value as number,
-        };
-        onChange(updatedData);
     };
 
     return (
         <div>
-            <TextInput name="name" title="Name" value={data.name} onChange={handleChange} required />
-            <div className="grid grid-cols-2">
-                <NumberInput name="rank" title="Rank" value={data.rank} onChange={handleChange} required min={1} max={5} />
-                <Dropdown label="Tier" value={data.tier} options={tierOptions} onSelect={handleTierChange} />
-            </div>
+            <TextInput
+                name="name"
+                title="Name"
+                value={data.name}
+                onChange={handleChange}
+                required
+            />
+            <TextInput
+                name="favoriteTracks"
+                title="Favorite Tracks"
+                value={data.favoriteTracks}
+                onChange={handleChange}
+                placeholder="Yellow, Up&Up, Coloratura"
+            />
+            <TextInput
+                name="favoriteAlbums"
+                title="Favorite Albums"
+                value={data.favoriteAlbums}
+                onChange={handleChange}
+                placeholder="Parachutes, X&Y"
+            />
+            <TextInput
+                name="genres"
+                title="Genres"
+                value={data.genres}
+                onChange={handleChange}
+                placeholder="Alternative, Rock"
+            />
         </div>
     );
 };
