@@ -1,5 +1,5 @@
 'use client';
-import { Button, Divider, FileUpload, UploadableFile } from 'thread-ui';
+import { Button, Divider, FileUpload, ImageDisplay, UploadableFile } from 'thread-ui';
 import { ArtistInfoData, ArtistInfoForm } from './artist-info-form';
 import { Artist, ArtistInput } from '@/types';
 import { useState } from 'react';
@@ -7,7 +7,6 @@ import { LinkData, LinkForm } from './link-form';
 import { ContentData, ContentsForm, fromContentData, toContentData } from './contents-form';
 import { createArtist } from '@/lib';
 import { getPublicUrl, joinList, splitList, uploadImage } from '@/lib';
-import { ImageDisplay } from '@/components/ui/form-elements/file-upload/previews';
 
 type FormProps = {
     initialData?: Artist;
