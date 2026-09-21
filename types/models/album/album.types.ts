@@ -5,7 +5,7 @@ export type Album = Prettify<
     {
         id: number;
         title: string;
-        releaseDate: Date;
+        releaseDate?: Date;
         contents: string[];
         favoriteTracks: string[];
         artistId: Artist['id'];
