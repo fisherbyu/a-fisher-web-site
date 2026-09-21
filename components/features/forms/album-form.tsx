@@ -1,12 +1,11 @@
 'use client';
-import { Button, Divider, FileUpload, UploadableFile } from 'thread-ui';
+import { Button, Divider, FileUpload, UploadableFile, ImageDisplay } from 'thread-ui';
 import { AlbumInfoData, AlbumInfoForm } from './album-info-form';
 import { Album, AlbumInput } from '@/types';
 import { useState } from 'react';
 import { LinkData, LinkForm } from './link-form';
 import { ContentData, ContentsForm, fromContentData, toContentData } from './contents-form';
 import { createAlbum, getPublicUrl, joinList, splitList, uploadImage } from '@/lib';
-import { ImageDisplay } from '@/components/ui/form-elements/file-upload/previews';
 
 type FormProps = {
     artistId: number;
