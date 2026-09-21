@@ -23,7 +23,7 @@ export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
     };
 
     return (
-        <div>
+        <div className="flex flex-col gap-2">
             <TextInput
                 name="name"
                 title="Name"
