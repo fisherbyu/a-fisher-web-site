@@ -100,6 +100,9 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
                 <div>
                     <ArtistInfoForm data={artistInfo} onChange={setArtistInfo} />
                     <LinkForm data={link} onChange={setLink} />
+                </div>
+                <div className="flex flex-col gap-3">
+                    <ContentsForm data={contents} onChange={setContents} onAdd={addContent} />
                     {existingImage && !replaceImage ? (
                         <div className="mt-3">
                             <ImageDisplay
@@ -121,9 +124,6 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
                             size="md"
                         />
                     )}
-                </div>
-                <div className="flex flex-col gap-3">
-                    <ContentsForm data={contents} onChange={setContents} onAdd={addContent} />
                 </div>
             </div>
             <div className="flex flex-row justify-end">
