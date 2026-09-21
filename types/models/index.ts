@@ -1,7 +1,5 @@
 export * from './album';
 export * from './artist';
-export * from './attribute';
-export * from './content';
 export * from './genre';
 export * from './image';
 export * from './link';
