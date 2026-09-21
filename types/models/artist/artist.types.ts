@@ -1,5 +1,5 @@
 import type { Album, MusicItem } from '@/types';
-import { Prettify } from 'thread-ui';
+import type { Prettify } from 'thread-ui';
 
 export type Artist = Prettify<
     {
