@@ -1,7 +1,15 @@
-'use server';
+import 'server-only';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
+/**
+ * Creates a request-scoped Supabase client backed by the Next.js cookie store.
+ * Server-only: use in server components, route handlers, or Server Actions.
+ *
+ * @example
+ * const supabase = await createSupabaseServerClient();
+ * const { data } = await supabase.auth.getUser();
+ */
 export const createSupabaseServerClient = async () => {
     const cookieStore = await cookies();
 
