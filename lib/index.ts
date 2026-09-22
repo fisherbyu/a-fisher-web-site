@@ -4,9 +4,6 @@ export * from './actions';
 // Hooks
 export * from './hooks';
 
-// Prisma Connection/Singleton
-export * from './prisma';
-
 // Notion
 export * from './notion';
 
