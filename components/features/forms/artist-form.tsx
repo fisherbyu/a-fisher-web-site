@@ -1,11 +1,11 @@
 'use client';
 import { Button, Divider, FileUpload, ImageDisplay, UploadableFile } from 'thread-ui';
-import { ArtistInfoData, ArtistInfoForm } from './artist-info-form';
+import { ArtistInfoForm } from './artist-info-form';
 import { Artist, Image as ImageData } from '@/types';
 import { useActionState, useState } from 'react';
-import { LinkData, LinkForm } from './link-form';
+import { LinkForm } from './link-form';
 import { ContentData, ContentsForm, fromContentData, toContentData } from './contents-form';
-import { getPublicUrl, joinList, uploadImage } from '@/lib';
+import { getPublicUrl, uploadImage } from '@/lib';
 import { createArtistAction, updateArtistAction } from '@/server/data/artist.actions';
 
 type FormProps = {
@@ -31,13 +31,6 @@ export const ArtistForm = ({ initialData }: FormProps) => {
     const [state, formAction, pending] = useActionState(action, {});
 
     // Extract or Init Data
-    // Artist Info
-    const [artistInfo, setArtistInfo] = useState<ArtistInfoData>({
-        name: initialData?.name ?? '',
-        favoriteTracks: joinList(initialData?.favoriteTracks ?? []),
-        favoriteAlbums: joinList(initialData?.favoriteAlbums ?? []),
-        genres: joinList(initialData?.genres.map(({ name }) => name) ?? []),
-    });
 
     // Contents
     const [contents, setContents] = useState<ContentData[]>(() =>
@@ -51,12 +44,6 @@ export const ArtistForm = ({ initialData }: FormProps) => {
         };
         setContents([...contents, newContent]);
     };
-
-    // Link
-    const [link, setLink] = useState<LinkData>({
-        appleURI: initialData?.link.appleURI ?? '',
-        spotifyURI: initialData?.link.spotifyURI ?? '',
-    });
 
     // Image (existing image on edit; new uploads come from files)
     const existingImage = initialData?.image;
@@ -114,8 +101,8 @@ export const ArtistForm = ({ initialData }: FormProps) => {
             {state.message && <div className="text-red-500">{state.message}</div>}
             <div className="grid gap-10 grid-cols-1 md:grid-cols-2">
                 <div>
-                    <ArtistInfoForm data={artistInfo} onChange={setArtistInfo} />
-                    <LinkForm data={link} onChange={setLink} />
+                    <ArtistInfoForm initialData={initialData} />
+                    <LinkForm initialData={initialData} />
                 </div>
                 <div className="flex flex-col gap-3">
                     <ContentsForm data={contents} onChange={setContents} onAdd={addContent} />
