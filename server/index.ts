@@ -3,3 +3,4 @@ export * from './db';
 
 // Supabase Connection
 export * from './supabase';
+export * from './supabase.middleware';
