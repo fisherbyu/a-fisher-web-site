@@ -1,3 +1,6 @@
+// Authentication
+export * from './auth.actions';
+
 // Prisma Connection/Singleton
 export * from './db';
 
