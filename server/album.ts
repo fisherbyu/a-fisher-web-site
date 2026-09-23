@@ -13,7 +13,7 @@ export const getAlbums = async (): Promise<Album[]> => {
 };
 
 /**
- * Server Action to Create Album
+ * Data Function to Create Album
  * @param {AlbumInput} data
  * @returns {Promise<Album>}
  */
