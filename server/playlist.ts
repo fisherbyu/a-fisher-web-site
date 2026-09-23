@@ -1,14 +1,12 @@
 import 'server-only';
 import type { Playlist, PlaylistInput } from '@/types';
 import { prisma } from './db';
-import { transformPlaylist } from '@/lib';
+import { transformPlaylist, playlistInclude } from '@/lib';
 
 /** Get Playlist Objects from DB */
 export const getPlaylists = async (): Promise<Playlist[]> => {
     const data = await prisma.playlist.findMany({
-        include: {
-            link: true,
-        },
+        include: playlistInclude,
     });
 
     return data.map(transformPlaylist);
@@ -30,9 +28,7 @@ export async function createPlaylist(data: PlaylistInput): Promise<Playlist> {
                 create: link,
             },
         },
-        include: {
-            link: true,
-        },
+        include: playlistInclude,
     });
 
     return transformPlaylist(playlist);
