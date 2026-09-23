@@ -1,9 +1,18 @@
-'use server';
 import { Artist, ArtistInput } from '@/types';
-import { prisma, transformArtist, artistInclude } from '@/lib';
+import { prisma } from './db';
+import { transformArtist, artistInclude } from '@/lib';
+
+/** Get Artist Objects from DB */
+export const getArtists = async (): Promise<Artist[]> => {
+    const data = await prisma.artist.findMany({
+        include: artistInclude,
+    });
+
+    return data.map(transformArtist);
+};
 
 /**
- * Server Action to Create Artist
+ * Data Function Create Artist
  * @param {ArtistInput} data
  * @returns {Promise<Artist>}
  */
