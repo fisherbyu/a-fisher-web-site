@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 /** Splits a comma-separated input into trimmed, non-empty values */
-export const list = (max: number) =>
+export const formatZodList = (max: number) =>
     z
         .string()
         .default('')
