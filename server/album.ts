@@ -1,6 +1,16 @@
-'use server';
-import { Album, AlbumInput } from '@/types';
-import { prisma, transformAlbum, albumInclude } from '@/lib';
+import 'server-only';
+import type { Album, AlbumInput } from '@/types';
+import { prisma } from './db';
+import { transformAlbum, albumInclude } from '@/lib';
+
+/** Get Album Objects from DB */
+export const getAlbums = async (): Promise<Album[]> => {
+    const data = await prisma.album.findMany({
+        include: albumInclude,
+    });
+
+    return data.map(transformAlbum);
+};
 
 /**
  * Server Action to Create Album
