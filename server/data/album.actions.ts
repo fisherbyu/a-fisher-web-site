@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { AlbumInput } from '@/types';
 import { requireAdmin } from '../auth';
 import { createAlbum, updateAlbum } from './album';
+import { formatZodList } from '@/lib';
 
 /** Shape returned to `useActionState`; `errors` is keyed by form field name */
 export type AlbumFormState = {
@@ -13,19 +14,6 @@ export type AlbumFormState = {
     /** Top-level failure message, shown above the form */
     message?: string;
 };
-
-/** Splits a comma-separated input into trimmed, non-empty values */
-const list = (max: number) =>
-    z
-        .string()
-        .default('')
-        .transform((value) =>
-            value
-                .split(',')
-                .map((item) => item.trim())
-                .filter(Boolean)
-        )
-        .pipe(z.array(z.string().max(max)));
 
 /** Field lengths mirror the `VarChar` limits in the Prisma schema */
 const albumSchema = z.object({
@@ -39,7 +27,7 @@ const albumSchema = z.object({
     contents: z
         .array(z.string())
         .transform((texts) => texts.map((text) => text.trim()).filter(Boolean)),
-    favoriteTracks: list(255),
+    favoriteTracks: formatZodList(255),
     appleURI: z.string().trim().max(255).default(''),
     spotifyURI: z.string().trim().max(255).default(''),
     imageSrc: z.string().trim().min(1, 'An image is required').max(255),
@@ -47,7 +35,7 @@ const albumSchema = z.object({
     imageWidth: z.coerce.number().int().positive(),
     imageHeight: z.coerce.number().int().positive(),
     // `Genre.name` is uniquely indexed, so dedupe before the write
-    genres: list(50).transform((names) => [...new Set(names)]),
+    genres: formatZodList(50).transform((names) => [...new Set(names)]),
 });
 
 type ParseResult =
