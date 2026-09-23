@@ -1,4 +1,4 @@
-import { Artist, ArtistInput } from '@/types';
+import type { Artist, ArtistInput } from '@/types';
 import { prisma } from './db';
 import { transformArtist, artistInclude } from '@/lib';
 
