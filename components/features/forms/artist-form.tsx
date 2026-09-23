@@ -1,19 +1,35 @@
 'use client';
 import { Button, Divider, FileUpload, ImageDisplay, UploadableFile } from 'thread-ui';
 import { ArtistInfoData, ArtistInfoForm } from './artist-info-form';
-import { Artist, ArtistInput } from '@/types';
-import { useState } from 'react';
+import { Artist, Image as ImageData } from '@/types';
+import { useActionState, useState } from 'react';
 import { LinkData, LinkForm } from './link-form';
 import { ContentData, ContentsForm, fromContentData, toContentData } from './contents-form';
-import { createArtist } from '@/lib';
-import { getPublicUrl, joinList, splitList, uploadImage } from '@/lib';
+import { getPublicUrl, joinList, uploadImage } from '@/lib';
+import { createArtistAction, updateArtistAction } from '@/server/data/artist.actions';
 
 type FormProps = {
+    /** Existing artist to edit; omit to create a new one */
     initialData?: Artist;
-    onSuccess?: (artist: Artist) => void;
 };
 
-export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
+/**
+ * Create/edit form for an Artist. Submits through a Server Action, so every
+ * field is read from the DOM as `FormData` rather than assembled by hand.
+ * The image is uploaded client-side on submit and passed along as hidden
+ * metadata fields.
+ *
+ * @example
+ * <ArtistForm />
+ *
+ * @example
+ * <ArtistForm initialData={artist} />
+ */
+export const ArtistForm = ({ initialData }: FormProps) => {
+    // Bind the id server-side on edit so it can't be swapped by the client
+    const action = initialData ? updateArtistAction.bind(null, initialData.id) : createArtistAction;
+    const [state, formAction, pending] = useActionState(action, {});
+
     // Extract or Init Data
     // Artist Info
     const [artistInfo, setArtistInfo] = useState<ArtistInfoData>({
@@ -47,52 +63,55 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
     const [files, setFiles] = useState<UploadableFile[]>([]);
     const [replaceImage, setReplaceImage] = useState(false);
 
+    // Upload runs before the action dispatches, so it needs its own pending flag
+    const [uploading, setUploading] = useState(false);
+    const [imageError, setImageError] = useState<string>();
+    const busy = uploading || pending;
+
     // Submission
-    const handleSubmit = async () => {
-        // Edit Artist
-        if (initialData) {
-            console.log(initialData);
+    const handleAction = async (formData: FormData) => {
+        setImageError(undefined);
+
+        // Upload the new file if one was picked, otherwise reuse what's stored
+        const file = files[0];
+        let image: Omit<ImageData, 'id'> | undefined = existingImage;
+
+        if (file) {
+            setUploading(true);
+            try {
+                image = await uploadImage({
+                    file: file,
+                    alt: file.alt || '',
+                    filePath: 'music/artists/',
+                });
+            } catch (error) {
+                console.error('Image upload failed:', error);
+                setImageError('Could not upload the image. Please try again.');
+                return;
+            } finally {
+                setUploading(false);
+            }
+        }
+
+        if (!image) {
+            setImageError('An image is required.');
             return;
         }
 
-        // Create Artist (image required)
-        const file = files[0];
-        if (!file) return;
+        // Pick fields explicitly so extra upload metadata never reaches Prisma
+        formData.set('imageSrc', image.src);
+        formData.set('imageAlt', image.alt);
+        formData.set('imageWidth', String(image.width));
+        formData.set('imageHeight', String(image.height));
 
-        try {
-            const uploaded = await uploadImage({
-                file: file,
-                alt: file.alt || '',
-                filePath: 'music/artists/',
-            });
-
-            const input: ArtistInput = {
-                name: artistInfo.name,
-                contents: fromContentData(contents),
-                favoriteTracks: splitList(artistInfo.favoriteTracks),
-                favoriteAlbums: splitList(artistInfo.favoriteAlbums),
-                link,
-                // Pick fields explicitly so extra upload metadata never reaches Prisma
-                image: {
-                    src: uploaded.src,
-                    alt: uploaded.alt,
-                    height: uploaded.height,
-                    width: uploaded.width,
-                },
-                genres: splitList(artistInfo.genres).map((name) => ({ name })),
-            };
-
-            const artist = await createArtist(input);
-            onSuccess?.(artist);
-        } catch (error) {
-            console.log(error);
-        }
+        formAction(formData);
     };
 
     return (
-        <form className="container">
+        <form className="container" action={handleAction}>
             <div className="text-3xl">{initialData ? 'Edit' : 'Create'} Artist</div>
             <Divider width="100%" />
+            {state.message && <div className="text-red-500">{state.message}</div>}
             <div className="grid gap-10 grid-cols-1 md:grid-cols-2">
                 <div>
                     <ArtistInfoForm data={artistInfo} onChange={setArtistInfo} />
@@ -112,7 +131,7 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
                     ) : (
                         <FileUpload
                             title="Add Image"
-                            name="image"
+                            name="imageFile"
                             allowedFileTypes={['image/*']}
                             supportedFormatsText="Supports all Image Types"
                             value={files}
@@ -121,11 +140,19 @@ export const ArtistForm = ({ initialData, onSuccess }: FormProps) => {
                             size="md"
                         />
                     )}
+                    {imageError && <div className="text-red-500">{imageError}</div>}
+                    {state.errors?.imageSrc && (
+                        <div className="text-red-500">{state.errors.imageSrc[0]}</div>
+                    )}
                 </div>
             </div>
+            {/* Paragraphs ride along as repeated fields; the action reads them in order */}
+            {fromContentData(contents).map((text, index) => (
+                <input key={index} type="hidden" name="contents" value={text} />
+            ))}
             <div className="flex flex-row justify-end">
-                <Button margin="0px" onClick={handleSubmit}>
-                    Submit
+                <Button margin="0px" type="submit" disabled={busy}>
+                    {busy ? 'Saving…' : 'Submit'}
                 </Button>
             </div>
         </form>
