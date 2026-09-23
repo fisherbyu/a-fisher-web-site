@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { Button, Card, Divider, H3, Text, TextInput } from 'thread-ui';
-import { authenticateUser } from '@/lib';
+import { Button, Card, H3, Text, TextInput } from 'thread-ui';
+import { authenticateUser } from '@/server/auth.actions';
 import { useRouter } from 'next/navigation';
 
 export const LoginForm = () => {
