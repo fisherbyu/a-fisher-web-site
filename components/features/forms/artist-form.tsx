@@ -102,7 +102,7 @@ export const ArtistForm = ({ initialData }: FormProps) => {
             <div className="grid gap-10 grid-cols-1 md:grid-cols-2">
                 <div>
                     <ArtistInfoForm initialData={initialData} />
-                    <LinkForm initialData={initialData} />
+                    <LinkForm initialData={initialData?.link} />
                 </div>
                 <div className="flex flex-col gap-3">
                     <ContentsForm data={contents} onChange={setContents} onAdd={addContent} />
