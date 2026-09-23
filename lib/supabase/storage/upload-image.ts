@@ -8,7 +8,11 @@ type UploadImageProps = {
     filePath: string;
 };
 
-export async function uploadImage({ file, alt, filePath }: UploadImageProps): Promise<Omit<Image, 'id'>> {
+export async function uploadImage({
+    file,
+    alt,
+    filePath,
+}: UploadImageProps): Promise<Omit<Image, 'id'>> {
     try {
         // Upload File
         const uploadResult = await uploadFile({ file, filePath });
