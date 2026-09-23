@@ -1,9 +1,21 @@
-'use server';
-import { Playlist, PlaylistInput } from '@/types';
-import { prisma, transformPlaylist } from '@/lib';
+import 'server-only';
+import type { Playlist, PlaylistInput } from '@/types';
+import { prisma } from './db';
+import { transformPlaylist } from '@/lib';
+
+/** Get Playlist Objects from DB */
+export const getPlaylists = async (): Promise<Playlist[]> => {
+    const data = await prisma.playlist.findMany({
+        include: {
+            link: true,
+        },
+    });
+
+    return data.map(transformPlaylist);
+};
 
 /**
- * Server Action to Create Playlist
+ * Data Function to Create Playlist
  * @param {PlaylistInput} data
  * @returns {Promise<Playlist>}
  */
