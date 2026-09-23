@@ -1,9 +1,9 @@
 import { TextInput } from 'thread-ui';
-import { Artist } from '@/types';
+import { Link } from '@/types';
 
 type LinkFormProps = {
-    /** Existing artist to prefill from; omit when creating */
-    initialData?: Artist;
+    /** Existing link to prefill from; omit when creating */
+    initialData?: Link;
 };
 
 /**
@@ -11,7 +11,7 @@ type LinkFormProps = {
  * `FormData` when the parent form submits.
  *
  * @example
- * <LinkForm initialData={artist} />
+ * <LinkForm initialData={album.link} />
  */
 export const LinkForm = ({ initialData }: LinkFormProps) => {
     return (
@@ -19,12 +19,12 @@ export const LinkForm = ({ initialData }: LinkFormProps) => {
             <TextInput
                 name="appleURI"
                 title="Apple Music"
-                defaultValue={initialData?.link.appleURI ?? ''}
+                defaultValue={initialData?.appleURI ?? ''}
             />
             <TextInput
                 name="spotifyURI"
                 title="Spotify"
-                defaultValue={initialData?.link.spotifyURI ?? ''}
+                defaultValue={initialData?.spotifyURI ?? ''}
             />
         </div>
     );
