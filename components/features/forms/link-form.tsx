@@ -1,36 +1,30 @@
 import { TextInput } from 'thread-ui';
-import { HandleInputChanges } from '@/lib';
-import { Link } from '@/types';
-
-export type LinkData = Omit<Link, 'id'>;
+import { Artist } from '@/types';
 
 type LinkFormProps = {
-    data: LinkData;
-    onChange: (data: LinkData) => void;
+    /** Existing artist to prefill from; omit when creating */
+    initialData?: Artist;
 };
 
-export const LinkForm = ({ data, onChange }: LinkFormProps) => {
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-    ) => {
-        HandleInputChanges(e, data, onChange);
-    };
-
+/**
+ * Streaming service links. Uncontrolled: values are read from the DOM as
+ * `FormData` when the parent form submits.
+ *
+ * @example
+ * <LinkForm initialData={artist} />
+ */
+export const LinkForm = ({ initialData }: LinkFormProps) => {
     return (
-        <div>
+        <div className="flex flex-col gap-2">
             <TextInput
                 name="appleURI"
-                title="Apple URI"
-                value={data.appleURI}
-                onChange={handleChange}
-                required
+                title="Apple Music"
+                defaultValue={initialData?.link.appleURI ?? ''}
             />
             <TextInput
                 name="spotifyURI"
-                title="Spotify URI"
-                value={data.spotifyURI}
-                onChange={handleChange}
-                required
+                title="Spotify"
+                defaultValue={initialData?.link.spotifyURI ?? ''}
             />
         </div>
     );
