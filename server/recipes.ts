@@ -1,4 +1,4 @@
-'use server';
+import 'server-only';
 import { notion } from '@/lib/notion';
 import { transformRecipe } from '@/lib/utils';
 import { Recipe } from '@/types';
@@ -21,8 +21,4 @@ export const getRecipes = async (): Promise<Recipe[]> => {
     });
 
     return recipeData.results.map((recipe) => transformRecipe(recipe));
-};
-
-export const fetchRecipes = async (): Promise<Recipe[]> => {
-    return await getRecipes();
 };
