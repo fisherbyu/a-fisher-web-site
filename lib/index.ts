@@ -1,11 +1,8 @@
-// Server Actions
-export * from './actions';
+// API
+export * from './api';
 
 // Hooks
 export * from './hooks';
-
-// Notion
-export * from './notion';
 
 // Supabase Connection/Actions
 export * from './supabase';
