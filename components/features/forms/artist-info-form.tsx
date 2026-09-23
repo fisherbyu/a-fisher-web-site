@@ -1,49 +1,39 @@
-import React from 'react';
 import { TextInput } from 'thread-ui';
-import { HandleInputChanges } from '@/lib';
-
-// Form-only Artist fields; list fields are comma-separated strings, split on submit
-export type ArtistInfoData = {
-    name: string;
-    favoriteTracks: string;
-    favoriteAlbums: string;
-    genres: string;
-};
+import { Artist } from '@/types';
+import { joinList } from '@/lib';
 
 type ArtistInfoFormProps = {
-    data: ArtistInfoData;
-    onChange: (data: ArtistInfoData) => void;
+    /** Existing artist to prefill from; omit when creating */
+    initialData?: Artist;
 };
 
-export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-    ) => {
-        HandleInputChanges(e, data, onChange);
-    };
-
+/**
+ * Plain text fields for an Artist. Uncontrolled: values are read from the
+ * DOM as `FormData` when the parent form submits. List fields are
+ * comma-separated here and split server-side.
+ *
+ * @example
+ * <ArtistInfoForm initialData={artist} />
+ */
+export const ArtistInfoForm = ({ initialData }: ArtistInfoFormProps) => {
     return (
         <div className="flex flex-col gap-2">
-            <TextInput
-                name="name"
-                title="Name"
-                value={data.name}
-                onChange={handleChange}
-                required
-            />
+            <TextInput name="name" title="Name" defaultValue={initialData?.name ?? ''} required />
             <TextInput
                 name="favoriteTracks"
                 title="Favorite Tracks"
-                value={data.favoriteTracks}
-                onChange={handleChange}
+                defaultValue={joinList(initialData?.favoriteTracks ?? [])}
             />
             <TextInput
                 name="favoriteAlbums"
                 title="Favorite Albums"
-                value={data.favoriteAlbums}
-                onChange={handleChange}
+                defaultValue={joinList(initialData?.favoriteAlbums ?? [])}
             />
-            <TextInput name="genres" title="Genres" value={data.genres} onChange={handleChange} />
+            <TextInput
+                name="genres"
+                title="Genres"
+                defaultValue={joinList(initialData?.genres.map(({ name }) => name) ?? [])}
+            />
         </div>
     );
 };
