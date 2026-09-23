@@ -1,7 +1,7 @@
 import 'server-only';
 import type { Album, AlbumInput } from '@/types';
 import { prisma } from './db';
-import { transformAlbum, albumInclude } from '@/lib';
+import { transformAlbum, albumInclude } from './data-transformers';
 
 /** Get Album Objects from DB */
 export const getAlbums = async (): Promise<Album[]> => {

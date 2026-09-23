@@ -1,6 +1,6 @@
 import 'server-only';
 import { notion } from './notion';
-import { transformRecipe } from '@/lib/utils';
+import { transformRecipe } from './data-transformers';
 import { Recipe } from '@/types';
 
 const RECIPE_DB_ID = '9d17ef1c79914432896a680416f9ba1b';

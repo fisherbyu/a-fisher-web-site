@@ -1,7 +1,7 @@
 import 'server-only';
 import type { Artist, ArtistInput } from '@/types';
 import { prisma } from './db';
-import { transformArtist, artistInclude } from '@/lib';
+import { transformArtist, artistInclude } from './data-transformers';
 
 /** Get Artist Objects from DB */
 export const getArtists = async (): Promise<Artist[]> => {
