@@ -1,7 +1,7 @@
 import 'server-only';
 import type { Playlist, PlaylistInput } from '@/types';
-import { prisma } from './clients';
-import { transformPlaylist, playlistInclude } from './data-transformers';
+import { prisma } from '../clients';
+import { transformPlaylist, playlistInclude } from '../data-transformers';
 
 /** Get Playlist Objects from DB */
 export const getPlaylists = async (): Promise<Playlist[]> => {
