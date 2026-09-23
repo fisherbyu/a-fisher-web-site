@@ -100,7 +100,7 @@ export const ArtistForm = ({ initialData }: FormProps) => {
             <Divider width="100%" />
             {state.message && <div className="text-red-500">{state.message}</div>}
             <div className="grid gap-10 grid-cols-1 md:grid-cols-2">
-                <div>
+                <div className="flex flex-col gap-2 ">
                     <ArtistInfoForm initialData={initialData} />
                     <LinkForm initialData={initialData?.link} />
                 </div>
