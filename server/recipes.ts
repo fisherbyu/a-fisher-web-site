@@ -1,5 +1,5 @@
 import 'server-only';
-import { notion } from './notion';
+import { notion } from './clients';
 import { transformRecipe } from './data-transformers';
 import { Recipe } from '@/types';
 

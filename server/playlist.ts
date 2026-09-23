@@ -1,6 +1,6 @@
 import 'server-only';
 import type { Playlist, PlaylistInput } from '@/types';
-import { prisma } from './db';
+import { prisma } from './clients';
 import { transformPlaylist, playlistInclude } from './data-transformers';
 
 /** Get Playlist Objects from DB */

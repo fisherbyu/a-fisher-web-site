@@ -1,6 +1,6 @@
 import 'server-only';
 import type { Artist, ArtistInput } from '@/types';
-import { prisma } from './db';
+import { prisma } from './clients';
 import { transformArtist, artistInclude } from './data-transformers';
 
 /** Get Artist Objects from DB */
