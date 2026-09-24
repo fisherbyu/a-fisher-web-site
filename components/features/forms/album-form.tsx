@@ -133,12 +133,14 @@ export const AlbumForm = ({ artistId, initialData }: FormProps) => {
                         title="Release Date"
                         defaultValue={toDateValue(initialData?.releaseDate)}
                         placeholder="YYYY-MM-DD"
+                        required
                     />
                     <TextInput
                         name="favoriteTracks"
                         title="Favorite Tracks"
                         defaultValue={joinList(initialData?.favoriteTracks ?? [])}
                         placeholder="Yellow, Spies, Trouble"
+                        required
                     />
                     <TextInput
                         name="genres"

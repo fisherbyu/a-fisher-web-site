@@ -124,11 +124,13 @@ export const ArtistForm = ({ initialData }: FormProps) => {
                         name="favoriteTracks"
                         title="Favorite Tracks"
                         defaultValue={joinList(initialData?.favoriteTracks ?? [])}
+                        required
                     />
                     <TextInput
                         name="favoriteAlbums"
                         title="Favorite Albums"
                         defaultValue={joinList(initialData?.favoriteAlbums ?? [])}
+                        required
                     />
                     <TextInput
                         name="genres"

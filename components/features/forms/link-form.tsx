@@ -20,11 +20,13 @@ export const LinkForm = ({ initialData }: LinkFormProps) => {
                 name="appleURI"
                 title="Apple Music"
                 defaultValue={initialData?.appleURI ?? ''}
+                required
             />
             <TextInput
                 name="spotifyURI"
                 title="Spotify"
                 defaultValue={initialData?.spotifyURI ?? ''}
+                required
             />
         </div>
     );
