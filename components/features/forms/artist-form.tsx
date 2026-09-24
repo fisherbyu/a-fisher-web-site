@@ -1,11 +1,11 @@
 'use client';
-import { Button, Divider, FileUpload, FileUploadItem, UploadableFile } from 'thread-ui';
+import { Button, Divider, FileUpload, FileUploadItem, TextInput, UploadableFile } from 'thread-ui';
 import { ArtistInfoForm } from './artist-info-form';
 import { Artist, Image as ImageData } from '@/types';
 import { useActionState, useState } from 'react';
 import { LinkForm } from './link-form';
 import { ContentData, ContentsForm, fromContentData, toContentData } from './contents-form';
-import { getPublicUrl, uploadImage } from '@/lib';
+import { getPublicUrl, joinList, uploadImage } from '@/lib';
 import { createArtistAction, updateArtistAction } from '@/server/data/artist.actions';
 
 type FormProps = {
@@ -114,7 +114,27 @@ export const ArtistForm = ({ initialData }: FormProps) => {
             {state.message && <div className="text-red-500">{state.message}</div>}
             <div className="grid gap-10 grid-cols-1 md:grid-cols-2">
                 <div className="flex flex-col gap-2 ">
-                    <ArtistInfoForm initialData={initialData} />
+                    <TextInput
+                        name="name"
+                        title="Name"
+                        defaultValue={initialData?.name ?? ''}
+                        required
+                    />
+                    <TextInput
+                        name="favoriteTracks"
+                        title="Favorite Tracks"
+                        defaultValue={joinList(initialData?.favoriteTracks ?? [])}
+                    />
+                    <TextInput
+                        name="favoriteAlbums"
+                        title="Favorite Albums"
+                        defaultValue={joinList(initialData?.favoriteAlbums ?? [])}
+                    />
+                    <TextInput
+                        name="genres"
+                        title="Genres"
+                        defaultValue={joinList(initialData?.genres.map(({ name }) => name) ?? [])}
+                    />
                     <LinkForm initialData={initialData?.link} />
                 </div>
                 <div className="flex flex-col gap-3">

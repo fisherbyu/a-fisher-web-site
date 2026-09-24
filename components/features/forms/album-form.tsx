@@ -1,12 +1,18 @@
 'use client';
-import { Button, Divider, FileUpload, FileUploadItem, UploadableFile } from 'thread-ui';
+import { Button, Divider, FileUpload, FileUploadItem, TextInput, UploadableFile } from 'thread-ui';
 import { AlbumInfoForm } from './album-info-form';
 import { Album, Image as ImageData } from '@/types';
 import { useActionState, useState } from 'react';
 import { LinkForm } from './link-form';
 import { ContentData, ContentsForm, fromContentData, toContentData } from './contents-form';
-import { getPublicUrl, uploadImage } from '@/lib';
+import { getPublicUrl, joinList, uploadImage } from '@/lib';
 import { createAlbumAction, updateAlbumAction } from '@/server/data/album.actions';
+
+const toDateValue = (value?: string | Date | null) => {
+    if (!value) return '';
+
+    return value instanceof Date ? value.toISOString().slice(0, 10) : value.slice(0, 10);
+};
 
 type FormProps = {
     /** Artist this album belongs to; bound server-side, never read from the DOM */
@@ -116,7 +122,30 @@ export const AlbumForm = ({ artistId, initialData }: FormProps) => {
             {state.message && <div className="text-red-500">{state.message}</div>}
             <div className="grid gap-10 grid-cols-1 md:grid-cols-2">
                 <div className="flex flex-col gap-2 ">
-                    <AlbumInfoForm initialData={initialData} />
+                    <TextInput
+                        name="title"
+                        title="Title"
+                        defaultValue={initialData?.title ?? ''}
+                        required
+                    />
+                    <TextInput
+                        name="releaseDate"
+                        title="Release Date"
+                        defaultValue={toDateValue(initialData?.releaseDate)}
+                        placeholder="YYYY-MM-DD"
+                    />
+                    <TextInput
+                        name="favoriteTracks"
+                        title="Favorite Tracks"
+                        defaultValue={joinList(initialData?.favoriteTracks ?? [])}
+                        placeholder="Yellow, Spies, Trouble"
+                    />
+                    <TextInput
+                        name="genres"
+                        title="Genres"
+                        defaultValue={joinList(initialData?.genres.map(({ name }) => name) ?? [])}
+                        placeholder="Alternative, Rock"
+                    />
                     <LinkForm initialData={initialData?.link} />
                 </div>
                 <div className="flex flex-col gap-3">
