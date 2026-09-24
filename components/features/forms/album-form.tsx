@@ -1,5 +1,5 @@
 'use client';
-import { Button, Divider, FileUpload, ImageDisplay, UploadableFile } from 'thread-ui';
+import { Button, Divider, FileUpload, FileUploadItem, UploadableFile } from 'thread-ui';
 import { AlbumInfoForm } from './album-info-form';
 import { Album, Image as ImageData } from '@/types';
 import { useActionState, useState } from 'react';
@@ -14,6 +14,8 @@ type FormProps = {
     /** Existing album to edit; omit to create a new one */
     initialData?: Album;
 };
+
+const isNewFile = (item: FileUploadItem): item is UploadableFile => item instanceof File;
 
 /**
  * Create/edit form for an Album. Submits through a Server Action, so every
@@ -47,10 +49,20 @@ export const AlbumForm = ({ artistId, initialData }: FormProps) => {
         setContents([...contents, newContent]);
     };
 
-    // Image (existing image on edit; new uploads come from files)
+    // Image (existing image on edit shows as a remote file; new uploads are `File`s)
     const existingImage = initialData?.image;
-    const [files, setFiles] = useState<UploadableFile[]>([]);
-    const [replaceImage, setReplaceImage] = useState(false);
+    const [files, setFiles] = useState<FileUploadItem[]>(() =>
+        existingImage
+            ? [
+                  {
+                      id: existingImage.src,
+                      src: getPublicUrl(existingImage.src),
+                      name: existingImage.src.split('/').pop() ?? 'Current image',
+                      alt: existingImage.alt,
+                  },
+              ]
+            : []
+    );
 
     // Upload runs before the action dispatches, so it needs its own pending flag
     const [uploading, setUploading] = useState(false);
@@ -61,9 +73,9 @@ export const AlbumForm = ({ artistId, initialData }: FormProps) => {
     const handleAction = async (formData: FormData) => {
         setImageError(undefined);
 
-        // Upload the new file if one was picked, otherwise reuse what's stored
-        const file = files[0];
-        let image: Omit<ImageData, 'id'> | undefined = existingImage;
+        // Upload the new file if one was picked, otherwise reuse what's stored if it wasn't removed
+        const file = files.find(isNewFile);
+        let image: Omit<ImageData, 'id'> | undefined = files.length > 0 ? existingImage : undefined;
 
         if (file) {
             setUploading(true);
@@ -82,6 +94,7 @@ export const AlbumForm = ({ artistId, initialData }: FormProps) => {
             }
         }
 
+        // `required` on the upload covers this natively; kept as a type guard
         if (!image) {
             setImageError('An image is required.');
             return;
@@ -108,27 +121,18 @@ export const AlbumForm = ({ artistId, initialData }: FormProps) => {
                 </div>
                 <div className="flex flex-col gap-3">
                     <ContentsForm data={contents} onChange={setContents} onAdd={addContent} />
-                    {existingImage && !replaceImage ? (
-                        <div className="mt-3">
-                            <ImageDisplay
-                                src={getPublicUrl(existingImage.src)}
-                                action={() => {
-                                    setReplaceImage(true);
-                                }}
-                            />
-                        </div>
-                    ) : (
-                        <FileUpload
-                            title="Add Image"
-                            name="imageFile"
-                            allowedFileTypes={['image/*']}
-                            supportedFormatsText="Supports all Image Types"
-                            value={files}
-                            onChange={setFiles}
-                            maxNumberFiles={1}
-                            size="md"
-                        />
-                    )}
+                    {/* No `name`: the image uploads client-side, so the file must not ride along in FormData */}
+                    <FileUpload
+                        title="Image"
+                        emptyTitle="Add Image"
+                        accept="image/*"
+                        supportedFormatsText="Supports all Image Types"
+                        value={files}
+                        onChange={setFiles}
+                        maxFiles={1}
+                        required
+                        size="md"
+                    />
                     {imageError && <div className="text-red-500">{imageError}</div>}
                     {state.errors?.imageSrc && (
                         <div className="text-red-500">{state.errors.imageSrc[0]}</div>
