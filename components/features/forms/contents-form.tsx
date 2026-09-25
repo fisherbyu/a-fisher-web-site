@@ -1,10 +1,7 @@
-import { ReorderableList } from '@/components/ui';
-import { TextInput } from 'thread-ui';
-import { EditableListItem } from '@/components/ui/form-elements/editable-list-item';
-import { ItemChangeProp } from '@/components/ui/reorderable-list/sortable-item';
 import { useDebounce } from '@/lib';
-import { ReactNode, useState } from 'react';
-import { Divider, Icon } from 'thread-ui';
+import { useState } from 'react';
+import { IconButton, ReorderableList, TextInput, type ReorderableItemProps } from 'thread-ui';
+import { EditableListItem } from '@/components/ui/form-elements/editable-list-item';
 
 // Form-only paragraph row; `id` is a local React key and never leaves the form
 export type ContentData = {
@@ -30,21 +27,16 @@ type ContentFormProps = {
     onAdd: () => void;
 };
 
-type EditContentsProps = ContentData & {
-    dragHandle: ReactNode;
-    onItemChange: ItemChangeProp<ContentData>;
-};
+// Screen reader label for each paragraph row
+const getContentLabel = (item: ContentData, index: number) =>
+    item.text.trim().slice(0, 40) || `Empty paragraph ${index + 1}`;
 
-const EditContents = (props: EditContentsProps) => {
+const EditContents = (props: ReorderableItemProps<ContentData>) => {
     // Extract Props
-    const { id, order, text, dragHandle, onItemChange } = props;
+    const { item, dragHandle, onItemChange } = props;
 
     // Init Local Data Handling
-    const [contentData, setCotentData] = useState<ContentData>({
-        id: id,
-        text: text,
-        order: order,
-    });
+    const [contentData, setCotentData] = useState<ContentData>(item);
 
     // Update parent component with debounced changes
     const debouncedUpdate = useDebounce((newData) => {
@@ -72,30 +64,35 @@ const EditContents = (props: EditContentsProps) => {
     );
 
     return (
-        <EditableListItem
-            dragHandle={dragHandle}
-            display={displayContents}
-            edit={editContentData}
-        />
+        <div className="py-0.5">
+            <EditableListItem
+                dragHandle={dragHandle}
+                display={displayContents}
+                edit={editContentData}
+            />
+        </div>
     );
 };
 
 export const ContentsForm = ({ data, onChange, onAdd }: ContentFormProps) => {
     return (
         <div className="h-64 overflow-scroll">
-            <div className="flex flex-row items-center justify-between">
-                <h1>Contents</h1>
-                <button type="button" onClick={onAdd}>
-                    <Icon name="Plus" color="info" size={24} />
-                </button>
-            </div>
-            <Divider width="100%" marginY="4px" />
             <ReorderableList
-                className="flex flex-col gap-1"
-                data={data}
+                title="Contents"
+                divider
+                secondaryContent={
+                    <IconButton
+                        name="Plus"
+                        type="button"
+                        onClick={onAdd}
+                        aria-label="Add paragraph"
+                    />
+                }
+                value={data}
                 orderProperty="order"
                 ItemComponent={EditContents}
                 onChange={onChange}
+                getItemLabel={getContentLabel}
             />
         </div>
     );
