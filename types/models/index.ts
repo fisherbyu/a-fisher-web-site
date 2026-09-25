@@ -5,4 +5,5 @@ export * from './image.types';
 export * from './link.types';
 export * from './music-item.types';
 export * from './playlist.types';
+export * from './ranking.types';
 export * from './recipe.types';
