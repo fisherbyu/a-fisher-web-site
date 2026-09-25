@@ -4,4 +4,5 @@ export type EditableListItemProps = {
     display: ReactNode;
     edit: ReactNode;
     dragHandle: ReactNode;
+    deleteButton?: ReactNode;
 };
