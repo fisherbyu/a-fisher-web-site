@@ -86,7 +86,12 @@ export const ContentsForm = ({ data, onChange, onAdd }: ContentFormProps) => {
                         type="button"
                         onClick={onAdd}
                         aria-label="Add paragraph"
-                    />
+                        color="info"
+                        text
+                        size="md"
+                    >
+                        Add new Item
+                    </IconButton>
                 }
                 value={data}
                 orderProperty="order"
