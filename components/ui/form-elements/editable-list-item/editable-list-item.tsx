@@ -10,7 +10,7 @@ export const EditableListItem = ({ display, edit, dragHandle }: EditableListItem
 
     return (
         <div
-            className={`w-full flex flex-row gap-3 justify-between py-2 px-3 border rounded-md items-start ${open ? 'items-start' : 'items-center'}`}
+            className={`w-full flex flex-row gap-3 justify-between py-2 px-3  rounded-md items-start ${open ? 'items-start' : 'items-center'}`}
         >
             {dragHandle}
             <div className="flex-grow w-full overflow-hidden">{open ? edit : display}</div>
