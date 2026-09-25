@@ -33,7 +33,7 @@ const getContentLabel = (item: ContentData, index: number) =>
 
 const EditContents = (props: ReorderableItemProps<ContentData>) => {
     // Extract Props
-    const { item, dragHandle, onItemChange } = props;
+    const { item, dragHandle, onItemChange, onItemRemove } = props;
 
     // Init Local Data Handling
     const [contentData, setCotentData] = useState<ContentData>(item);
@@ -63,12 +63,25 @@ const EditContents = (props: ReorderableItemProps<ContentData>) => {
         <TextInput name="text" value={contentData.text} onChange={handleLocalUpdate} multiline />
     );
 
+    const deleteContentItem = (
+        <IconButton
+            name="Trash"
+            type="button"
+            size="md"
+            color="error"
+            onClick={onItemRemove}
+            aria-label="Delete paragraph"
+            text
+        />
+    );
+
     return (
         <div className="py-0.5">
             <EditableListItem
                 dragHandle={dragHandle}
                 display={displayContents}
                 edit={editContentData}
+                deleteButton={deleteContentItem}
             />
         </div>
     );
@@ -85,7 +98,6 @@ export const ContentsForm = ({ data, onChange, onAdd }: ContentFormProps) => {
                         name="Plus"
                         type="button"
                         onClick={onAdd}
-                        aria-label="Add paragraph"
                         color="info"
                         text
                         size="md"
