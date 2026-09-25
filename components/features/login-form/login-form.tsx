@@ -46,7 +46,7 @@ export const LoginForm = () => {
         <div className="max-w-96 mx-auto">
             <Card size="md">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                    <H3 inline>Admin Login</H3>
+                    <H3 marginBottom={false}>Admin Login</H3>
                     {errorMessage && <Text color="error">{errorMessage}</Text>}
                     <TextInput name="email" title="Email" type="email" required />
                     <TextInput name="password" title="Password" type="password" required />
