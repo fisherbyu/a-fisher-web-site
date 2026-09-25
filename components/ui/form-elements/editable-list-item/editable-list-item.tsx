@@ -4,8 +4,8 @@ import { EditableListItemProps } from './editable-list-item.types';
 import { Icon, IconButton } from 'thread-ui';
 
 export const EditableListItem = ({
-    display,
-    edit,
+    displayView: display,
+    editView: edit,
     dragHandle,
     deleteButton,
 }: EditableListItemProps) => {

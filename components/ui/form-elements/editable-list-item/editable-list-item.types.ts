@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 
 export type EditableListItemProps = {
-    display: ReactNode;
-    edit: ReactNode;
+    displayView: ReactNode;
+    editView: ReactNode;
     dragHandle: ReactNode;
     deleteButton?: ReactNode;
 };

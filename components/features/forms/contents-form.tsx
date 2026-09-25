@@ -79,8 +79,8 @@ const EditContents = (props: ReorderableItemProps<ContentData>) => {
         <div className="py-0.5">
             <EditableListItem
                 dragHandle={dragHandle}
-                display={displayContents}
-                edit={editContentData}
+                displayView={displayContents}
+                editView={editContentData}
                 deleteButton={deleteContentItem}
             />
         </div>
