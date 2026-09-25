@@ -1,9 +1,14 @@
 'use client';
 import { useState } from 'react';
 import { EditableListItemProps } from './editable-list-item.types';
-import { Icon } from 'thread-ui';
+import { Icon, IconButton } from 'thread-ui';
 
-export const EditableListItem = ({ display, edit, dragHandle }: EditableListItemProps) => {
+export const EditableListItem = ({
+    display,
+    edit,
+    dragHandle,
+    deleteButton,
+}: EditableListItemProps) => {
     // Handle Opening Edit
     const [open, setOpen] = useState(false);
     const toggleContents = () => setOpen(!open);
@@ -14,9 +19,15 @@ export const EditableListItem = ({ display, edit, dragHandle }: EditableListItem
         >
             {dragHandle}
             <div className="flex-grow w-full overflow-hidden">{open ? edit : display}</div>
-            <button type="button" className="self-start" onClick={toggleContents}>
-                <Icon name={open ? 'XSquare' : 'NotePencil'} color="info" size={24} />
-            </button>
+            <IconButton
+                name={open ? 'XSquare' : 'NotePencil'}
+                type="button"
+                onClick={toggleContents}
+                color="info"
+                size="md"
+                text
+            />
+            {deleteButton}
         </div>
     );
 };
