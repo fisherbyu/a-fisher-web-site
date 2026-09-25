@@ -8,14 +8,15 @@ PRETTIER := $(NPX) prettier
 PLOP := $(NPX) plop
 NEXT := $(NPX) next
 YALC := $(NPX) yalc
+PRISMA := $(NPX) prisma
 
 # Default target
 .DEFAULT_GOAL := help
 
 # Download ENV
 ifneq (,$(wildcard .env))
-	include .env
-	export
+    include .env
+    export
 endif
 
 # Internal Helpers
@@ -92,3 +93,16 @@ down: docker-stop ## Stop Docker container
 
 .PHONY: push
 push: docker-push ## Build Docker Image and Push to Registry
+
+# Database Targets
+.PHONY: migrations
+migrations: ## Generate migration files without applying
+	$(PRISMA) migrate dev --create-only
+
+.PHONY: apply-migrations
+apply-migrations: ## Apply pending migrations
+	$(PRISMA) migrate deploy
+
+.PHONY: prisma-client
+prisma-client: ## Generate Prisma client
+	$(PRISMA) generate
