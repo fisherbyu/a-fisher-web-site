@@ -14,7 +14,7 @@ export const EditableListItem = ({ display, edit, dragHandle }: EditableListItem
         >
             {dragHandle}
             <div className="flex-grow w-full overflow-hidden">{open ? edit : display}</div>
-            <button className="self-start" onClick={toggleContents}>
+            <button type="button" className="self-start" onClick={toggleContents}>
                 <Icon name={open ? 'XSquare' : 'NotePencil'} color="info" size={24} />
             </button>
         </div>
