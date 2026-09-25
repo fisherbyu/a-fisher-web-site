@@ -12,8 +12,6 @@ export type PrismaPlaylist = Prisma.PlaylistGetPayload<{ include: typeof playlis
 export const transformPlaylist = (data: PrismaPlaylist): Playlist => {
     const { link } = data;
 
-    if (!link) throw new Error(`Playlist ${data.id} is missing a link`);
-
     return {
         id: data.id,
         title: data.title,

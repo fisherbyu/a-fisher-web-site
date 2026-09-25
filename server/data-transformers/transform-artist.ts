@@ -14,7 +14,6 @@ export type PrismaArtist = Prisma.ArtistGetPayload<{ include: typeof artistInclu
 export const transformArtist = (data: PrismaArtist): Artist => {
     const { link, image, genres } = data.musicItem;
 
-    if (!link) throw new Error(`Artist ${data.id} is missing a link`);
     if (!image) throw new Error(`Artist ${data.id} is missing an image`);
 
     return {

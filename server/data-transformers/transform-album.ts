@@ -14,7 +14,6 @@ export type PrismaAlbum = Prisma.AlbumGetPayload<{ include: typeof albumInclude 
 export const transformAlbum = (data: PrismaAlbum): Album => {
     const { link, image, genres } = data.musicItem;
 
-    if (!link) throw new Error(`Album ${data.id} is missing a link`);
     if (!image) throw new Error(`Album ${data.id} is missing an image`);
 
     return {
