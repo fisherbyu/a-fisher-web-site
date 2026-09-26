@@ -1,1 +1,1 @@
-export * from './editable-list-item';
+export * from '../editable-list-item';

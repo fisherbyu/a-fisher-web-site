@@ -1,7 +1,7 @@
 import { useDebounce } from '@/lib';
 import { useState } from 'react';
 import { IconButton, ReorderableList, TextInput, type ReorderableItemProps } from 'thread-ui';
-import { EditableListItem } from '@/components/ui/form-elements/editable-list-item';
+import { EditableListItem } from '@/components/ui/editable-list-item';
 
 // Form-only paragraph row; `id` is a local React key and never leaves the form
 export type ContentData = {
