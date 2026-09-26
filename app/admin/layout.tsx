@@ -1,32 +1,10 @@
-import { NavMenu, SideNav, SideNavItemProps } from 'thread-ui';
+import { NavMenu } from 'thread-ui';
 import Logo from '@/public/core/andrew-fisher-logo.svg';
 import Image from 'next/image';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-    const adminLinks: SideNavItemProps[] = [
-        {
-            title: 'Home',
-            path: '/',
-            icon: 'House',
-        },
-        {
-            title: 'Artists',
-            path: '/artist',
-            icon: 'MusicNotes',
-        },
-        {
-            title: 'Albums',
-            path: '/album',
-            icon: 'VinylRecord',
-        },
-        {
-            title: 'Playlists',
-            path: '/playlist',
-            icon: 'Playlist',
-        },
-    ];
     return (
-        <div className="h-screen overflow-hidden">
+        <div className="h-screen flex flex-col overflow-hidden">
             <NavMenu
                 logo={{ href: '/', logo: <Image src={Logo} alt="Andrew Fisher" className="cursor-pointer" /> }}
                 items={[
@@ -45,10 +23,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     },
                 ]}
             />
-            <div className="h-full flex flex-row">
-                <SideNav links={adminLinks} basePath="/admin" />
-                {children}
-            </div>
+            <div className="flex-1 min-h-0">{children}</div>
         </div>
     );
 }
