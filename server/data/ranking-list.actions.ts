@@ -3,9 +3,9 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { Tier } from '@prisma/client';
-import { RankingEntryInput } from '@/types';
+import { RankingListInput } from '@/types';
 import { requireAdmin } from '../auth';
-import { updateRankingList } from './ranking-list';
+import { createRankingList, updateRankingList } from './ranking-list';
 
 /** Shape returned to `useActionState`; `errors` is keyed by form field name */
 export type RankingListFormState = {
@@ -22,10 +22,19 @@ const rankingEntrySchema = z.object({
     position: z.coerce.number().int().positive().optional(),
 });
 
-/** Entries arrive as JSON in a single `entries` field; checks mirror the Prisma unique constraints */
+/** Field lengths mirror the `VarChar` limits in the Prisma schema; entry checks mirror its unique constraints */
 const rankingListSchema = z.object({
+    name: z.string().trim().min(1, 'Name is required').max(100),
+    slug: z
+        .string()
+        .trim()
+        .min(1, 'Slug is required')
+        .max(100)
+        .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, 'Use lowercase letters, numbers, and dashes'),
+    // Entries arrive as JSON in a single `entries` field
     entries: z
         .string()
+        .default('[]')
         .transform((value, ctx) => {
             try {
                 return JSON.parse(value);
@@ -50,25 +59,59 @@ const rankingListSchema = z.object({
 });
 
 type ParseResult =
-    | { success: true; data: RankingEntryInput[] }
+    | { success: true; data: Omit<RankingListInput, 'artistId'> }
     | { success: false; state: RankingListFormState };
 
-/** Reads the ranking form fields and reshapes them into `RankingEntryInput`s */
+/** Reads the ranking list form fields and reshapes them into a `RankingListInput` */
 const parseRankingListForm = (formData: FormData): ParseResult => {
     const parsed = rankingListSchema.safeParse({
-        entries: formData.get('entries'),
+        name: formData.get('name'),
+        slug: formData.get('slug'),
+        // `get` returns null for a missing field; undefined lets `.default` apply
+        entries: formData.get('entries') ?? undefined,
     });
 
     if (!parsed.success) {
         return { success: false, state: { errors: z.flattenError(parsed.error).fieldErrors } };
     }
 
-    return { success: true, data: parsed.data.entries };
+    return { success: true, data: parsed.data };
 };
 
 /**
- * Updates an existing RankingList's entries. `id` is bound server-side rather
- * than read from the form, so it can't be swapped by the client.
+ * Creates a RankingList. Pass an `artistId` to scope the list to that
+ * artist's albums, or `undefined` for a general list.
+ *
+ * @example
+ * const action = createRankingListAction.bind(null, artistId);
+ * const [state, formAction, pending] = useActionState(action, {});
+ */
+export const createRankingListAction = async (
+    artistId: number | undefined,
+    prevState: RankingListFormState,
+    formData: FormData
+): Promise<RankingListFormState> => {
+    await requireAdmin();
+
+    const parsed = parseRankingListForm(formData);
+    if (!parsed.success) return parsed.state;
+
+    try {
+        await createRankingList({ ...parsed.data, artistId });
+    } catch (error) {
+        // Prisma messages can leak schema details, so log and return generic copy
+        console.error('Failed to create ranking list:', error);
+        return { message: 'Could not save this ranking list. Please try again.' };
+    }
+
+    revalidatePath('/admin/rankings');
+    redirect('/admin/rankings');
+};
+
+/**
+ * Updates an existing RankingList. `id` is bound server-side rather than read
+ * from the form, so it can't be swapped by the client. The artist scope is
+ * fixed at creation and never changes here.
  *
  * @example
  * const action = updateRankingListAction.bind(null, list.id);
@@ -87,7 +130,6 @@ export const updateRankingListAction = async (
     try {
         await updateRankingList(id, parsed.data);
     } catch (error) {
-        // Prisma messages can leak schema details, so log and return generic copy
         console.error('Failed to update ranking list:', error);
         return { message: 'Could not save this ranking list. Please try again.' };
     }

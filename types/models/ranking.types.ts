@@ -1,4 +1,4 @@
-import type { Album, Artist } from '@/types';
+import type { Album, Artist, Input } from '@/types';
 import type { Prettify } from 'thread-ui';
 
 /** Tier labels, ordered best-first. Mirrors the Prisma `Tier` enum. */
@@ -36,3 +36,10 @@ export type RankingEntryInput = {
     tier?: Tier;
     position?: number;
 };
+
+/** A RankingList as submitted by the ranking form. `artistId` is fixed once created. */
+export type RankingListInput = Prettify<
+    Omit<Input<RankingList>, 'entries'> & {
+        entries: RankingEntryInput[];
+    }
+>;
