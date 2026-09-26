@@ -49,6 +49,7 @@ export const AdminNavigator = ({ sections }: { sections: AdminSection[] }) => {
             items={rows}
             item={item}
             onItemChange={select}
+            detailTitle={(row) => row.title}
             renderItem={(row) => <span className="font-medium">{row.title}</span>}
             renderDetail={(row) => (
                 <div className="px-4 pb-4">

@@ -1,5 +1,5 @@
 'use client';
-import { Button, Divider, FileUpload, FileUploadItem, TextInput, UploadableFile } from 'thread-ui';
+import { Button, FileUpload, FileUploadItem, TextInput, UploadableFile } from 'thread-ui';
 import { AlbumInfoForm } from './album-info-form';
 import { Album, Image as ImageData } from '@/types';
 import { useActionState, useState } from 'react';
@@ -116,12 +116,10 @@ export const AlbumForm = ({ artistId, initialData }: FormProps) => {
     };
 
     return (
-        <form className="container" action={handleAction}>
-            <div className="text-3xl">{initialData ? 'Edit' : 'Create'} Album</div>
-            <Divider width="100%" />
+        <form className="flex flex-col gap-4 w-full" action={handleAction}>
             {state.message && <div className="text-red-500">{state.message}</div>}
-            <div className="grid gap-10 grid-cols-1 md:grid-cols-2">
-                <div className="flex flex-col gap-2 ">
+            <div className="grid gap-x-10 gap-y-4 grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
+                <div className="flex flex-col gap-2">
                     <TextInput
                         name="title"
                         title="Title"

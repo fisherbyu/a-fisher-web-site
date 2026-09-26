@@ -1,5 +1,5 @@
 'use client';
-import { Button, Divider, TextInput } from 'thread-ui';
+import { Button, TextInput } from 'thread-ui';
 import { Playlist } from '@/types';
 import { useActionState } from 'react';
 import { LinkForm } from './link-form';
@@ -28,11 +28,9 @@ export const PlaylistForm = ({ initialData }: PlaylistFormProps) => {
     const [state, formAction, pending] = useActionState(action, {});
 
     return (
-        <form className="container" action={formAction}>
-            <div className="text-3xl">{initialData ? 'Edit' : 'Create'} Playlist</div>
-            <Divider width="100%" />
+        <form className="flex flex-col gap-4 w-full" action={formAction}>
             {state.message && <div className="text-red-500">{state.message}</div>}
-            <div className="w-56">
+            <div className="w-full max-w-md">
                 <TextInput
                     name="title"
                     title="Title"

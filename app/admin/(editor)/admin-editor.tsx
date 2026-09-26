@@ -19,13 +19,15 @@ const CreateAlbumForm = () => {
     const artistOptions = (artists ?? []).map(({ id, name }) => ({ label: name, value: id }));
 
     return (
-        <div>
-            <Dropdown
-                title="Artist"
-                value={artistId}
-                options={artistOptions}
-                onChange={setArtistId}
-            />
+        <div className="flex flex-col gap-4">
+            <div className="w-full max-w-md">
+                <Dropdown
+                    title="Artist"
+                    value={artistId}
+                    options={artistOptions}
+                    onChange={setArtistId}
+                />
+            </div>
             {artistId !== null && <AlbumForm key={artistId} artistId={artistId} />}
         </div>
     );
