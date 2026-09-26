@@ -53,7 +53,7 @@ export const AdminNavigator = ({ sections }: { sections: AdminSection[] }) => {
             renderItem={(row) => <span className="font-medium">{row.title}</span>}
             renderDetail={(row) => (
                 <div className="px-4 pb-4">
-                    {row.data ? section.renderDetail(row.data) : section.renderCreate()}
+                    {row.data ? section.renderDetail(row.data) : section.renderCreate(select)}
                 </div>
             )}
             sidebarTitle="Admin"

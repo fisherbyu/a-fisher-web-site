@@ -13,8 +13,8 @@ export type AdminSection<T extends AdminRecord = AdminRecord> = SplitNavigatorSe
     getTitle: (item: T) => string;
     /** Edit view for the selected record */
     renderDetail: (item: T) => ReactNode;
-    /** Create view, shown for the new row */
-    renderCreate: () => ReactNode;
+    /** Create view, shown for the new row. Call `onCreated` with the new record's id to select it */
+    renderCreate: (onCreated: (id: number) => void) => ReactNode;
 };
 
 /** Types a section against its record while letting mixed sections share one list */
