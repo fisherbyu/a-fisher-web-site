@@ -6,10 +6,11 @@ import {
     AlbumForm,
     ArtistForm,
     PlaylistForm,
+    RankingForm,
     defineAdminSection,
 } from '@/components';
 import { useArtists } from '@/lib';
-import { Album, Artist, Playlist } from '@/types';
+import { Album, Artist, Playlist, RankingListSummary } from '@/types';
 
 // Create flow: pick the Artist first, since every Album belongs to one
 const CreateAlbumForm = () => {
@@ -29,6 +30,29 @@ const CreateAlbumForm = () => {
                 />
             </div>
             {artistId !== null && <AlbumForm key={artistId} artistId={artistId} />}
+        </div>
+    );
+};
+
+// Create flow: an artist scopes the list to their albums; none makes a general list
+const CreateRankingForm = () => {
+    const { artists } = useArtists();
+    const [artistId, setArtistId] = useState<number | null>(null);
+
+    const artistOptions = (artists ?? []).map(({ id, name }) => ({ label: name, value: id }));
+
+    return (
+        <div className="flex flex-col gap-4">
+            <div className="w-full max-w-md">
+                <Dropdown
+                    title="Artist"
+                    placeholder="None (general list)"
+                    value={artistId}
+                    options={artistOptions}
+                    onChange={setArtistId}
+                />
+            </div>
+            <RankingForm key={artistId ?? 'general'} artistId={artistId ?? undefined} />
         </div>
     );
 };
@@ -66,6 +90,16 @@ const sections = [
         getTitle: (playlist) => playlist.title,
         renderDetail: (playlist) => <PlaylistForm key={playlist.id} initialData={playlist} />,
         renderCreate: () => <PlaylistForm />,
+    }),
+    defineAdminSection<RankingListSummary>({
+        id: 'ranking',
+        title: 'Rankings',
+        icon: 'Ranking',
+        endpoint: '/api/ranking',
+        noun: 'ranking',
+        getTitle: (list) => list.name,
+        renderDetail: (list) => <RankingForm key={list.id} slug={list.slug} />,
+        renderCreate: () => <CreateRankingForm />,
     }),
 ];
 
