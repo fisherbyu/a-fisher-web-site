@@ -6,10 +6,11 @@ export const SignOutButton = () => {
     return (
         <Button
             margin="0px"
-            color="gray"
+            color="secondary"
             onClick={async () => {
                 await signOut();
             }}
+            text
         >
             Sign Out
         </Button>
