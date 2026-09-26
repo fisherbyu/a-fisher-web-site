@@ -107,8 +107,8 @@ export const createAlbumAction = async (
         return { message: 'Could not save this album. Please try again.' };
     }
 
-    revalidatePath('/admin/albums');
-    redirect('/admin/albums');
+    revalidatePath('/admin/album');
+    redirect('/admin/album');
 };
 
 /**
@@ -137,6 +137,6 @@ export const updateAlbumAction = async (
         return { message: 'Could not save this album. Please try again.' };
     }
 
-    revalidatePath('/admin/albums');
-    redirect('/admin/albums');
+    revalidatePath('/admin/album');
+    redirect('/admin/album');
 };

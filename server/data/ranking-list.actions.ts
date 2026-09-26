@@ -104,8 +104,8 @@ export const createRankingListAction = async (
         return { message: 'Could not save this ranking list. Please try again.' };
     }
 
-    revalidatePath('/admin/rankings');
-    redirect('/admin/rankings');
+    revalidatePath('/admin/ranking');
+    redirect('/admin/ranking');
 };
 
 /**
@@ -134,6 +134,6 @@ export const updateRankingListAction = async (
         return { message: 'Could not save this ranking list. Please try again.' };
     }
 
-    revalidatePath('/admin/rankings');
-    redirect('/admin/rankings');
+    revalidatePath('/admin/ranking');
+    redirect('/admin/ranking');
 };

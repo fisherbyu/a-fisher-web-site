@@ -71,8 +71,8 @@ export const createPlaylistAction = async (
         return { message: 'Could not save this playlist. Please try again.' };
     }
 
-    revalidatePath('/admin/playlists');
-    redirect('/admin/playlists');
+    revalidatePath('/admin/playlist');
+    redirect('/admin/playlist');
 };
 
 /**
@@ -100,6 +100,6 @@ export const updatePlaylistAction = async (
         return { message: 'Could not save this playlist. Please try again.' };
     }
 
-    revalidatePath('/admin/playlists');
-    redirect('/admin/playlists');
+    revalidatePath('/admin/playlist');
+    redirect('/admin/playlist');
 };

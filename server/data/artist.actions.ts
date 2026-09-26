@@ -100,8 +100,8 @@ export const createArtistAction = async (
         return { message: 'Could not save this artist. Please try again.' };
     }
 
-    revalidatePath('/admin/artists');
-    redirect('/admin/artists');
+    revalidatePath('/admin/artist');
+    redirect('/admin/artist');
 };
 
 /**
@@ -129,6 +129,6 @@ export const updateArtistAction = async (
         return { message: 'Could not save this artist. Please try again.' };
     }
 
-    revalidatePath('/admin/artists');
-    redirect('/admin/artists');
+    revalidatePath('/admin/artist');
+    redirect('/admin/artist');
 };
