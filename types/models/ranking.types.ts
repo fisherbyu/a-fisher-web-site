@@ -30,6 +30,9 @@ export type RankingList = Prettify<{
     entries: RankingEntry[];
 }>;
 
+/** A RankingList without its entries, as listed by the index route. */
+export type RankingListSummary = Omit<RankingList, 'entries'>;
+
 /** One entry as submitted by the ranking form. */
 export type RankingEntryInput = {
     musicItemId: number;

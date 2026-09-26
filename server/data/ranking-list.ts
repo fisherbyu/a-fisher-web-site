@@ -1,6 +1,6 @@
 import 'server-only';
 import { Prisma } from '@prisma/client';
-import type { RankingList, RankingListInput } from '@/types';
+import type { RankingList, RankingListInput, RankingListSummary } from '@/types';
 import { prisma } from '../clients';
 import { transformRankingList, rankingListInclude } from '../data-transformers';
 
@@ -14,6 +14,16 @@ export const getRankingLists = async (): Promise<RankingList[]> => {
     });
 
     return data.map(transformRankingList);
+};
+
+/** Every RankingList's identity without its entries, for choosing which list to load */
+export const getRankingListSummaries = async (): Promise<RankingListSummary[]> => {
+    const data = await prisma.rankingList.findMany({
+        select: { id: true, name: true, slug: true, artistId: true },
+        orderBy: { name: 'asc' },
+    });
+
+    return data.map(({ artistId, ...list }) => ({ ...list, artistId: artistId ?? undefined }));
 };
 
 export const getRankingList = async (id: number): Promise<RankingList | null> => {
