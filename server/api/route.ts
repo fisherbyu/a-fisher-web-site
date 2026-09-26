@@ -22,7 +22,7 @@ const toResponse = (body: unknown, status: number, options: RouteOptions) => {
  * returned as a generic 500 so internals never reach the client.
  *
  * @example
- * export const GET = createRoute(getArtists);
+ * export const GET = createRoute(getPlaylists);
  *
  * @example
  * export const GET = createRoute<Artist, { id: string }>(async (_request, { params }) => {

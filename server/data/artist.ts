@@ -1,16 +1,45 @@
 import 'server-only';
-import type { Artist, ArtistInput } from '@/types';
+import type { Artist, ArtistInput, ArtistSort } from '@/types';
 import { prisma } from '../clients';
 import { transformArtist, artistInclude } from '../data-transformers';
 import { toGenreCreate, replaceGenres } from './genre';
+import { FAVORITE_ARTISTS_SLUG } from './ranking-list';
 
-/** Get Artist Objects from DB */
-export const getArtists = async (): Promise<Artist[]> => {
-    const data = await prisma.artist.findMany({
-        include: artistInclude,
+/** MusicItem ids in the favorite-artists list, best first */
+const getFavoriteArtistOrder = async (): Promise<number[]> => {
+    const entries = await prisma.rankingEntry.findMany({
+        where: { list: { slug: FAVORITE_ARTISTS_SLUG } },
+        // Same ordering as `rankingListInclude`: tier, then position
+        orderBy: [
+            { tier: { sort: 'asc', nulls: 'last' } },
+            { position: { sort: 'asc', nulls: 'last' } },
+        ],
+        select: { musicItemId: true },
     });
 
-    return data.map(transformArtist);
+    return entries.map(({ musicItemId }) => musicItemId);
+};
+
+/**
+ * Get Artist Objects from DB
+ * @param sort `rank` (default): favorite-artists order, then unranked artists by name. `name`: alphabetical
+ */
+export const getArtists = async (sort: ArtistSort = 'rank'): Promise<Artist[]> => {
+    const [data, order] = await Promise.all([
+        prisma.artist.findMany({
+            include: artistInclude,
+            orderBy: { name: 'asc' },
+        }),
+        sort === 'rank' ? getFavoriteArtistOrder() : [],
+    ]);
+
+    const artists = data.map(transformArtist);
+    if (order.length === 0) return artists;
+
+    // Artist ids are their MusicItem ids; unranked artists sort after, keeping name order
+    const rank = new Map(order.map((id, index) => [id, index]));
+    const rankOf = ({ id }: Artist) => rank.get(id) ?? Infinity;
+    return artists.sort((a, b) => rankOf(a) - rankOf(b));
 };
 
 export const getArtist = async (id: number): Promise<Artist | null> => {

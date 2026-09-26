@@ -1,9 +1,18 @@
 'use client';
-import { Artist } from '@/types';
+import { Artist, ArtistSort } from '@/types';
 import useSWR from 'swr';
 
-export const useArtists = () => {
-    const { data, error, isLoading } = useSWR<Artist[]>('/api/artist');
+/**
+ * All artists, ranked by the favorite-artists list unless another sort is asked for.
+ *
+ * @example
+ * const { artists } = useArtists();
+ *
+ * @example
+ * const { artists } = useArtists({ sort: 'name' });
+ */
+export const useArtists = ({ sort = 'rank' }: { sort?: ArtistSort } = {}) => {
+    const { data, error, isLoading } = useSWR<Artist[]>(`/api/artist?sort=${sort}`);
     return {
         artists: data,
         isLoading,
