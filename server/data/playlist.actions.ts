@@ -1,7 +1,5 @@
 'use server';
 import { z } from 'zod';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { PlaylistInput } from '@/types';
 import { requireAdmin } from '../auth';
 import { createPlaylist, updatePlaylist } from './playlist';
@@ -12,6 +10,8 @@ export type PlaylistFormState = {
     errors?: Record<string, string[]>;
     /** Top-level failure message, shown above the form */
     message?: string;
+    /** Id of the record just saved; set only on success */
+    savedId?: number;
 };
 
 /** Field lengths mirror the `VarChar` limits in the Prisma schema */
@@ -63,16 +63,16 @@ export const createPlaylistAction = async (
     const parsed = parsePlaylistForm(formData);
     if (!parsed.success) return parsed.state;
 
+    let saved;
     try {
-        await createPlaylist(parsed.data);
+        saved = await createPlaylist(parsed.data);
     } catch (error) {
         // Prisma messages can leak schema details, so log and return generic copy
         console.error('Failed to create playlist:', error);
         return { message: 'Could not save this playlist. Please try again.' };
     }
 
-    revalidatePath('/admin/playlist');
-    redirect('/admin/playlist');
+    return { savedId: saved.id };
 };
 
 /**
@@ -100,6 +100,5 @@ export const updatePlaylistAction = async (
         return { message: 'Could not save this playlist. Please try again.' };
     }
 
-    revalidatePath('/admin/playlist');
-    redirect('/admin/playlist');
+    return { savedId: id };
 };

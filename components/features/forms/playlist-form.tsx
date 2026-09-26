@@ -1,13 +1,15 @@
 'use client';
 import { Button, TextInput } from 'thread-ui';
 import { Playlist } from '@/types';
-import { useActionState } from 'react';
+import { useSaveAction } from '@/lib';
 import { LinkForm } from './link-form';
 import { createPlaylistAction, updatePlaylistAction } from '@/server/data/playlist.actions';
 
 type PlaylistFormProps = {
     /** Existing playlist to edit; omit to create a new one */
     initialData?: Playlist;
+    /** Called with the record's id after a successful save */
+    onSaved?: (id: number) => void;
 };
 
 /**
@@ -20,12 +22,15 @@ type PlaylistFormProps = {
  * @example
  * <PlaylistForm initialData={playlist} />
  */
-export const PlaylistForm = ({ initialData }: PlaylistFormProps) => {
+export const PlaylistForm = ({ initialData, onSaved }: PlaylistFormProps) => {
     // Bind the id server-side on edit so it can't be swapped by the client
     const action = initialData
         ? updatePlaylistAction.bind(null, initialData.id)
         : createPlaylistAction;
-    const [state, formAction, pending] = useActionState(action, {});
+    const [state, formAction, pending] = useSaveAction(action, {
+        refresh: ['/api/playlist'],
+        onSaved,
+    });
 
     return (
         <form className="flex flex-col gap-4 w-full" action={formAction}>

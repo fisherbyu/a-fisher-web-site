@@ -1,7 +1,5 @@
 'use server';
 import { z } from 'zod';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { ArtistInput } from '@/types';
 import { requireAdmin } from '../auth';
 import { createArtist, updateArtist } from './artist';
@@ -13,6 +11,8 @@ export type ArtistFormState = {
     errors?: Record<string, string[]>;
     /** Top-level failure message, shown above the form */
     message?: string;
+    /** Id of the record just saved; set only on success */
+    savedId?: number;
 };
 
 /** Field lengths mirror the `VarChar` limits in the Prisma schema */
@@ -92,16 +92,16 @@ export const createArtistAction = async (
     const parsed = parseArtistForm(formData);
     if (!parsed.success) return parsed.state;
 
+    let saved;
     try {
-        await createArtist(parsed.data);
+        saved = await createArtist(parsed.data);
     } catch (error) {
         // Prisma messages can leak schema details, so log and return generic copy
         console.error('Failed to create artist:', error);
         return { message: 'Could not save this artist. Please try again.' };
     }
 
-    revalidatePath('/admin/artist');
-    redirect('/admin/artist');
+    return { savedId: saved.id };
 };
 
 /**
@@ -129,6 +129,5 @@ export const updateArtistAction = async (
         return { message: 'Could not save this artist. Please try again.' };
     }
 
-    revalidatePath('/admin/artist');
-    redirect('/admin/artist');
+    return { savedId: id };
 };

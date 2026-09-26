@@ -1,7 +1,5 @@
 'use server';
 import { z } from 'zod';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { AlbumInput } from '@/types';
 import { requireAdmin } from '../auth';
 import { createAlbum, updateAlbum } from './album';
@@ -13,6 +11,8 @@ export type AlbumFormState = {
     errors?: Record<string, string[]>;
     /** Top-level failure message, shown above the form */
     message?: string;
+    /** Id of the record just saved; set only on success */
+    savedId?: number;
 };
 
 /** Field lengths mirror the `VarChar` limits in the Prisma schema */
@@ -99,16 +99,16 @@ export const createAlbumAction = async (
     const parsed = parseAlbumForm(formData);
     if (!parsed.success) return parsed.state;
 
+    let saved;
     try {
-        await createAlbum({ ...parsed.data, artistId });
+        saved = await createAlbum({ ...parsed.data, artistId });
     } catch (error) {
         // Prisma messages can leak schema details, so log and return generic copy
         console.error('Failed to create album:', error);
         return { message: 'Could not save this album. Please try again.' };
     }
 
-    revalidatePath('/admin/album');
-    redirect('/admin/album');
+    return { savedId: saved.id };
 };
 
 /**
@@ -137,6 +137,5 @@ export const updateAlbumAction = async (
         return { message: 'Could not save this album. Please try again.' };
     }
 
-    revalidatePath('/admin/album');
-    redirect('/admin/album');
+    return { savedId: id };
 };

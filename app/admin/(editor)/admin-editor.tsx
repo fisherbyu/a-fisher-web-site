@@ -13,8 +13,8 @@ import { useArtists } from '@/lib';
 import { Album, Artist, Playlist, RankingListSummary } from '@/types';
 
 // Create flow: pick the Artist first, since every Album belongs to one
-const CreateAlbumForm = () => {
-    const { artists } = useArtists();
+const CreateAlbumForm = ({ onCreated }: { onCreated: (id: number) => void }) => {
+    const { artists } = useArtists({ sort: 'name' });
     const [artistId, setArtistId] = useState<number | null>(null);
 
     const artistOptions = (artists ?? []).map(({ id, name }) => ({ label: name, value: id }));
@@ -29,14 +29,16 @@ const CreateAlbumForm = () => {
                     onChange={setArtistId}
                 />
             </div>
-            {artistId !== null && <AlbumForm key={artistId} artistId={artistId} />}
+            {artistId !== null && (
+                <AlbumForm key={artistId} artistId={artistId} onSaved={onCreated} />
+            )}
         </div>
     );
 };
 
 // Create flow: an artist scopes the list to their albums; none makes a general list
-const CreateRankingForm = () => {
-    const { artists } = useArtists();
+const CreateRankingForm = ({ onCreated }: { onCreated: (id: number) => void }) => {
+    const { artists } = useArtists({ sort: 'name' });
     const [artistId, setArtistId] = useState<number | null>(null);
 
     const artistOptions = (artists ?? []).map(({ id, name }) => ({ label: name, value: id }));
@@ -52,7 +54,11 @@ const CreateRankingForm = () => {
                     onChange={setArtistId}
                 />
             </div>
-            <RankingForm key={artistId ?? 'general'} artistId={artistId ?? undefined} />
+            <RankingForm
+                key={artistId ?? 'general'}
+                artistId={artistId ?? undefined}
+                onSaved={onCreated}
+            />
         </div>
     );
 };
@@ -63,11 +69,12 @@ const sections = [
         id: 'artist',
         title: 'Artists',
         icon: 'MusicNotes',
-        endpoint: '/api/artist',
+        // Same key as `useArtists()`, so the two share one cache entry
+        endpoint: '/api/artist?sort=rank',
         noun: 'artist',
         getTitle: (artist) => artist.name,
         renderDetail: (artist) => <ArtistForm key={artist.id} initialData={artist} />,
-        renderCreate: () => <ArtistForm />,
+        renderCreate: (onCreated) => <ArtistForm onSaved={onCreated} />,
     }),
     defineAdminSection<Album>({
         id: 'album',
@@ -79,7 +86,7 @@ const sections = [
         renderDetail: (album) => (
             <AlbumForm key={album.id} artistId={album.artistId} initialData={album} />
         ),
-        renderCreate: () => <CreateAlbumForm />,
+        renderCreate: (onCreated) => <CreateAlbumForm onCreated={onCreated} />,
     }),
     defineAdminSection<Playlist>({
         id: 'playlist',
@@ -89,7 +96,7 @@ const sections = [
         noun: 'playlist',
         getTitle: (playlist) => playlist.title,
         renderDetail: (playlist) => <PlaylistForm key={playlist.id} initialData={playlist} />,
-        renderCreate: () => <PlaylistForm />,
+        renderCreate: (onCreated) => <PlaylistForm onSaved={onCreated} />,
     }),
     defineAdminSection<RankingListSummary>({
         id: 'ranking',
@@ -99,7 +106,7 @@ const sections = [
         noun: 'ranking',
         getTitle: (list) => list.name,
         renderDetail: (list) => <RankingForm key={list.id} slug={list.slug} />,
-        renderCreate: () => <CreateRankingForm />,
+        renderCreate: (onCreated) => <CreateRankingForm onCreated={onCreated} />,
     }),
 ];
 

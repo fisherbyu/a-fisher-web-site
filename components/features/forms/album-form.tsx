@@ -2,10 +2,10 @@
 import { Button, FileUpload, FileUploadItem, TextInput, UploadableFile } from 'thread-ui';
 import { AlbumInfoForm } from './album-info-form';
 import { Album, Image as ImageData } from '@/types';
-import { useActionState, useState } from 'react';
+import { useState } from 'react';
 import { LinkForm } from './link-form';
 import { ContentData, ContentsForm, fromContentData, toContentData } from './contents-form';
-import { getPublicUrl, joinList, uploadImage } from '@/lib';
+import { getPublicUrl, joinList, uploadImage, useSaveAction } from '@/lib';
 import { createAlbumAction, updateAlbumAction } from '@/server/data/album.actions';
 
 const toDateValue = (value?: string | Date | null) => {
@@ -19,6 +19,8 @@ type FormProps = {
     artistId: number;
     /** Existing album to edit; omit to create a new one */
     initialData?: Album;
+    /** Called with the record's id after a successful save */
+    onSaved?: (id: number) => void;
 };
 
 const isNewFile = (item: FileUploadItem): item is UploadableFile => item instanceof File;
@@ -35,12 +37,15 @@ const isNewFile = (item: FileUploadItem): item is UploadableFile => item instanc
  * @example
  * <AlbumForm artistId={artist.id} initialData={album} />
  */
-export const AlbumForm = ({ artistId, initialData }: FormProps) => {
+export const AlbumForm = ({ artistId, initialData, onSaved }: FormProps) => {
     // Bind ids server-side so they can't be swapped by the client
     const action = initialData
         ? updateAlbumAction.bind(null, initialData.id)
         : createAlbumAction.bind(null, artistId);
-    const [state, formAction, pending] = useActionState(action, {});
+    const [state, formAction, pending] = useSaveAction(action, {
+        refresh: ['/api/album', '/api/artist'],
+        onSaved,
+    });
 
     // Contents
     const [contents, setContents] = useState<ContentData[]>(() =>

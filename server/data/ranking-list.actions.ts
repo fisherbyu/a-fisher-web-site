@@ -1,7 +1,5 @@
 'use server';
 import { z } from 'zod';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { Tier } from '@prisma/client';
 import { RankingListInput } from '@/types';
 import { requireAdmin } from '../auth';
@@ -13,6 +11,8 @@ export type RankingListFormState = {
     errors?: Record<string, string[]>;
     /** Top-level failure message, shown above the form */
     message?: string;
+    /** Id of the record just saved; set only on success */
+    savedId?: number;
 };
 
 /** One row of the ranking form */
@@ -96,16 +96,16 @@ export const createRankingListAction = async (
     const parsed = parseRankingListForm(formData);
     if (!parsed.success) return parsed.state;
 
+    let saved;
     try {
-        await createRankingList({ ...parsed.data, artistId });
+        saved = await createRankingList({ ...parsed.data, artistId });
     } catch (error) {
         // Prisma messages can leak schema details, so log and return generic copy
         console.error('Failed to create ranking list:', error);
         return { message: 'Could not save this ranking list. Please try again.' };
     }
 
-    revalidatePath('/admin/ranking');
-    redirect('/admin/ranking');
+    return { savedId: saved.id };
 };
 
 /**
@@ -134,6 +134,5 @@ export const updateRankingListAction = async (
         return { message: 'Could not save this ranking list. Please try again.' };
     }
 
-    revalidatePath('/admin/ranking');
-    redirect('/admin/ranking');
+    return { savedId: id };
 };

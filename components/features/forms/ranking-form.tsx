@@ -1,5 +1,5 @@
 'use client';
-import { useActionState, useState } from 'react';
+import { useState } from 'react';
 import {
     Button,
     Dropdown,
@@ -9,7 +9,7 @@ import {
     ReorderableList,
     TextInput,
 } from 'thread-ui';
-import { getPublicUrl, useAlbums, useArtists, useRankingList } from '@/lib';
+import { getPublicUrl, useAlbums, useArtists, useRankingList, useSaveAction } from '@/lib';
 import { RankingEntryInput, RankingList, TIER_ORDER, Tier } from '@/types';
 import {
     createRankingListAction,
@@ -115,14 +115,19 @@ type RankingFormFieldsProps = {
     list?: RankingList;
     artistId?: number;
     candidates: Tile[];
+    onSaved?: (id: number) => void;
 };
 
-const RankingFormFields = ({ list, artistId, candidates }: RankingFormFieldsProps) => {
+const RankingFormFields = ({ list, artistId, candidates, onSaved }: RankingFormFieldsProps) => {
     // Bind server-side so neither the id nor the artist scope can be swapped by the client
     const action = list
         ? updateRankingListAction.bind(null, list.id)
         : createRankingListAction.bind(null, artistId);
-    const [state, formAction, pending] = useActionState(action, {});
+    const [state, formAction, pending] = useSaveAction(action, {
+        // Artist order follows the favorite-artists ranking
+        refresh: ['/api/ranking', '/api/artist'],
+        onSaved,
+    });
 
     const [style, setStyle] = useState<Style>(() =>
         list?.entries.length && list.entries.every(({ tier }) => !tier) ? 'ordered' : 'tiered'
@@ -202,6 +207,8 @@ type RankingFormProps = {
     slug?: string;
     /** Scopes a new list to this artist's albums; omit for a general list */
     artistId?: number;
+    /** Called with the list's id after a successful save */
+    onSaved?: (id: number) => void;
 };
 
 /**
@@ -215,7 +222,7 @@ type RankingFormProps = {
  * @example
  * <RankingForm artistId={coldplay.id} />
  */
-export const RankingForm = ({ slug, artistId: newArtistId }: RankingFormProps) => {
+export const RankingForm = ({ slug, artistId: newArtistId, onSaved }: RankingFormProps) => {
     const { rankingList, isLoading: listLoading } = useRankingList(slug ?? null);
     const { albums, isLoading: albumsLoading } = useAlbums();
     const { artists, isLoading: artistsLoading } = useArtists();
@@ -233,5 +240,12 @@ export const RankingForm = ({ slug, artistId: newArtistId }: RankingFormProps) =
                   .filter((album) => album.artistId === artistId)
                   .map(({ id, title, image }) => ({ id, title, image, order: 0 }));
 
-    return <RankingFormFields list={rankingList} artistId={artistId} candidates={candidates} />;
+    return (
+        <RankingFormFields
+            list={rankingList}
+            artistId={artistId}
+            candidates={candidates}
+            onSaved={onSaved}
+        />
+    );
 };
