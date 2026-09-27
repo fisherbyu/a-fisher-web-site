@@ -7,8 +7,8 @@ import AppleMusicLogo from '@/public/music/apple-music.svg';
 import SpotifyLogo from '@/public/music/spotify.svg';
 import { LoadingError } from '@/components';
 
-export default function AlbumContents() {
-    const { albums, isLoading, error } = useAlbums();
+export default function AlbumContents({ artistId }: { artistId: number }) {
+    const { albums, isLoading, error } = useAlbums({ artistId });
 
     if (error) {
         return <LoadingError />;
