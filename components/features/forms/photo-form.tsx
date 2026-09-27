@@ -9,6 +9,8 @@ type PhotoFormProps = {
     initialData: Photo;
     /** Called after a successful save, e.g. to close a modal */
     onSaved?: () => void;
+    /** Shows a Cancel button that calls this, e.g. to close a modal without saving */
+    onCancel?: () => void;
     /** Called after the photo is deleted, e.g. to close a modal */
     onDeleted?: () => void;
 };
@@ -36,9 +38,9 @@ const toDateValue = (value?: string | Date | null) => {
  * New photos are created by `PhotoUploadForm`, so this form always edits.
  *
  * @example
- * <PhotoForm initialData={photo} onSaved={close} onDeleted={close} />
+ * <PhotoForm initialData={photo} onSaved={close} onCancel={close} onDeleted={close} />
  */
-export const PhotoForm = ({ initialData, onSaved, onDeleted }: PhotoFormProps) => {
+export const PhotoForm = ({ initialData, onSaved, onCancel, onDeleted }: PhotoFormProps) => {
     const { id, asset } = initialData;
     const [state, formAction, pending] = useSaveAction(updatePhotoAction.bind(null, id), {
         refresh: ['/api/photo'],
@@ -95,83 +97,94 @@ export const PhotoForm = ({ initialData, onSaved, onDeleted }: PhotoFormProps) =
     const busy = pending || deleting;
 
     return (
-        <form className="flex flex-col gap-4 w-full" action={handleAction}>
+        <form className="flex flex-col gap-2 w-full" action={handleAction}>
             {state.message && <div className="text-red-500">{state.message}</div>}
             {deleteError && <div className="text-red-500">{deleteError}</div>}
-            <div className="grid gap-x-10 gap-y-4 grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
-                <div className="flex flex-col gap-2">
-                    <TextInput
-                        name="title"
-                        title="Title"
-                        defaultValue={initialData.title}
-                        error={errors?.title?.[0]}
-                        required
-                    />
-                    <TextInput
-                        name="caption"
-                        title="Caption"
-                        defaultValue={initialData.caption ?? ''}
-                        error={errors?.caption?.[0]}
-                        multiline
-                    />
-                    <TextInput
-                        name="location"
-                        title="Location"
-                        defaultValue={initialData.location ?? ''}
-                        error={errors?.location?.[0]}
-                        placeholder="Arches National Park, Utah"
-                    />
-                    <TextInput
-                        name="camera"
-                        title="Camera"
-                        defaultValue={initialData.camera ?? ''}
-                        error={errors?.camera?.[0]}
-                    />
-                    <TextInput
-                        name="takenAt"
-                        title="Date Taken"
-                        defaultValue={toDateValue(initialData.takenAt)}
-                        error={errors?.takenAt?.[0]}
-                        placeholder="YYYY-MM-DD"
-                    />
-                    <TextInput
-                        name="tags"
-                        title="Tags"
-                        defaultValue={joinList(initialData.tags.map(({ name }) => name))}
-                        error={errors?.tags?.[0]}
-                        placeholder="Landscape, Utah"
-                    />
-                    <Dropdown
-                        name="published"
-                        title="Status"
-                        defaultValue={String(initialData.published)}
-                        options={STATUS_OPTIONS}
-                    />
-                </div>
-                <div className="flex flex-col gap-3">
-                    {/* No `name`: the action reads the file set in `handleAction`, not the input's own value */}
-                    <FileUpload
-                        title="Image"
-                        emptyTitle="Replace Image"
-                        accept="image/*"
-                        supportedFormatsText="Supports all Image Types"
-                        value={files}
-                        onChange={setFiles}
-                        maxFiles={1}
-                        required
-                        size="md"
-                    />
-                    {imageError && <div className="text-red-500">{imageError}</div>}
-                    {errors?.image && <div className="text-red-500">{errors.image[0]}</div>}
-                </div>
+            <TextInput
+                name="title"
+                title="Title"
+                size="sm"
+                defaultValue={initialData.title}
+                error={errors?.title?.[0]}
+                required
+            />
+            <TextInput
+                name="caption"
+                title="Caption"
+                size="sm"
+                defaultValue={initialData.caption ?? ''}
+                error={errors?.caption?.[0]}
+                multiline
+            />
+            {/* Short fields pair up to keep the form within the viewport */}
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                <TextInput
+                    name="location"
+                    title="Location"
+                    size="sm"
+                    defaultValue={initialData.location ?? ''}
+                    error={errors?.location?.[0]}
+                    placeholder="Arches National Park, Utah"
+                />
+                <TextInput
+                    name="camera"
+                    title="Camera"
+                    size="sm"
+                    defaultValue={initialData.camera ?? ''}
+                    error={errors?.camera?.[0]}
+                />
+                <TextInput
+                    name="takenAt"
+                    title="Date Taken"
+                    size="sm"
+                    defaultValue={toDateValue(initialData.takenAt)}
+                    error={errors?.takenAt?.[0]}
+                    placeholder="YYYY-MM-DD"
+                />
+                <Dropdown
+                    name="published"
+                    title="Status"
+                    size="sm"
+                    defaultValue={String(initialData.published)}
+                    options={STATUS_OPTIONS}
+                />
             </div>
-            <div className="flex flex-row gap-3">
-                <Button margin="0px" type="submit" disabled={busy}>
-                    {pending ? 'Saving…' : 'Save'}
-                </Button>
-                <Button margin="0px" color="error" text disabled={busy} onClick={handleDelete}>
+            <TextInput
+                name="tags"
+                title="Tags"
+                size="sm"
+                defaultValue={joinList(initialData.tags.map(({ name }) => name))}
+                error={errors?.tags?.[0]}
+                placeholder="Landscape, Utah"
+            />
+            {/* No `name`: the action reads the file set in `handleAction`, not the input's own value */}
+            <FileUpload
+                title="Image"
+                emptyTitle="Replace Image"
+                accept="image/*"
+                supportedFormatsText="Supports all Image Types"
+                value={files}
+                onChange={setFiles}
+                maxFiles={1}
+                required
+                size="sm"
+            />
+            {imageError && <div className="text-red-500">{imageError}</div>}
+            {errors?.image && <div className="text-red-500">{errors.image[0]}</div>}
+            <div className="flex flex-row items-center justify-between gap-3 pt-2">
+                <Button margin="0px" color="error" disabled={busy} onClick={handleDelete}>
                     {deleting ? 'Deleting…' : 'Delete'}
                 </Button>
+                <div className="flex flex-row items-center gap-3">
+                    {onCancel && (
+                        <Button margin="0px" color="info" text disabled={busy} onClick={onCancel}>
+                            Cancel
+                        </Button>
+                    )}
+                    <Button margin="0px" type="submit" disabled={busy}>
+                        {pending ? 'Saving…' : 'Save'}
+                    </Button>
+                </div>
             </div>
         </form>
     );

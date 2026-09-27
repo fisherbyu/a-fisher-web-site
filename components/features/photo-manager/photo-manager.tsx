@@ -99,6 +99,7 @@ export const PhotoManager = () => {
                         key={editing.id}
                         initialData={editing}
                         onSaved={() => edit(null)}
+                        onCancel={() => edit(null)}
                         onDeleted={() => edit(null)}
                     />
                 )}
