@@ -13,7 +13,3 @@ export type Artist = Prettify<
 >;
 
 export type ArtistInput = Omit<Input<Artist>, 'albums'>;
-
-/** Artist orderings for `/api/artist?sort=`: `rank` follows the favorite-artists ranking, `name` is alphabetical */
-export const ARTIST_SORTS = ['rank', 'name'] as const;
-export type ArtistSort = (typeof ARTIST_SORTS)[number];
