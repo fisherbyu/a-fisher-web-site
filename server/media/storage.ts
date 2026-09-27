@@ -21,7 +21,8 @@ const getMediaRoot = () => {
 export const resolveMediaPath = (relativePath: string) => {
     const root = getMediaRoot();
     const resolved = path.resolve(root, relativePath);
-    if (!resolved.startsWith(root + path.sep)) throw new Error(`Path escapes MEDIA_ROOT: ${relativePath}`);
+    if (!resolved.startsWith(root + path.sep))
+        throw new Error(`Path escapes MEDIA_ROOT: ${relativePath}`);
     return resolved;
 };
 
@@ -62,3 +63,17 @@ export const deleteAssetFiles = async ({ folder, key }: Pick<AssetLocation, 'fol
 
 /** Reads one file for the `/media` route */
 export const readMediaFile = (relativePath: string) => readFile(resolveMediaPath(relativePath));
+
+/**
+ * Display title from an uploaded file's name.
+ *
+ * @example
+ * titleFromFileName('provo-canyon-4.jpg'); // 'Provo Canyon 4'
+ */
+export const titleFromFileName = (fileName: string) =>
+    path
+        .parse(fileName)
+        .name.split(/[-_\s]+/)
+        .filter(Boolean)
+        .map((word) => word[0].toUpperCase() + word.slice(1))
+        .join(' ') || 'Untitled';
