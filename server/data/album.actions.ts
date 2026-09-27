@@ -4,6 +4,7 @@ import { AlbumInput } from '@/types';
 import { requireAdmin } from '../auth';
 import { createAlbum, updateAlbum } from './album';
 import { formatZodList } from '@/lib';
+import { storeFormImage } from '@/server/media';
 
 /** Shape returned to `useActionState`; `errors` is keyed by form field name */
 export type AlbumFormState = {
@@ -30,10 +31,7 @@ const albumSchema = z.object({
     favoriteTracks: formatZodList(255),
     appleURI: z.string().trim().max(255).default(''),
     spotifyURI: z.string().trim().max(255).default(''),
-    imageSrc: z.string().trim().min(1, 'An image is required').max(255),
     imageAlt: z.string().trim().max(255).default(''),
-    imageWidth: z.coerce.number().int().positive(),
-    imageHeight: z.coerce.number().int().positive(),
     // `Genre.name` is uniquely indexed, so dedupe before the write
     genres: formatZodList(50).transform((names) => [...new Set(names)]),
 });
@@ -51,10 +49,7 @@ const parseAlbumForm = (formData: FormData): ParseResult => {
         favoriteTracks: formData.get('favoriteTracks'),
         appleURI: formData.get('appleURI'),
         spotifyURI: formData.get('spotifyURI'),
-        imageSrc: formData.get('imageSrc'),
         imageAlt: formData.get('imageAlt'),
-        imageWidth: formData.get('imageWidth'),
-        imageHeight: formData.get('imageHeight'),
         genres: formData.get('genres'),
     });
 
@@ -62,28 +57,23 @@ const parseAlbumForm = (formData: FormData): ParseResult => {
         return { success: false, state: { errors: z.flattenError(parsed.error).fieldErrors } };
     }
 
-    const { appleURI, spotifyURI, imageSrc, imageAlt, imageWidth, imageHeight, genres, ...rest } =
-        parsed.data;
+    const { appleURI, spotifyURI, imageAlt, genres, ...rest } = parsed.data;
 
     return {
         success: true,
         data: {
             ...rest,
             link: { appleURI, spotifyURI },
-            image: {
-                src: imageSrc,
-                alt: imageAlt,
-                width: imageWidth,
-                height: imageHeight,
-            },
+            // `stored` is added by the action once the uploaded file is processed
+            image: { alt: imageAlt },
             genres: genres.map((name) => ({ name })),
         },
     };
 };
 
 /**
- * Creates an Album under the given artist. Image upload happens client-side;
- * this receives the resulting metadata as hidden fields.
+ * Creates an Album under the given artist. The image file rides along in
+ * the form data and is processed into MEDIA_ROOT before the row is saved.
  *
  * @example
  * const action = createAlbumAction.bind(null, artistId);
@@ -98,6 +88,14 @@ export const createAlbumAction = async (
 
     const parsed = parseAlbumForm(formData);
     if (!parsed.success) return parsed.state;
+
+    const { stored, error: imageError } = await storeFormImage(formData, {
+        folder: 'music/album',
+        name: parsed.data.title,
+        required: true,
+    });
+    if (imageError) return { errors: { image: [imageError] } };
+    parsed.data.image.stored = stored;
 
     let saved;
     try {
@@ -129,6 +127,15 @@ export const updateAlbumAction = async (
 
     const parsed = parseAlbumForm(formData);
     if (!parsed.success) return parsed.state;
+
+    // Optional on update: without a new file the current image is kept
+    const { stored, error: imageError } = await storeFormImage(formData, {
+        folder: 'music/album',
+        name: parsed.data.title,
+        required: false,
+    });
+    if (imageError) return { errors: { image: [imageError] } };
+    parsed.data.image.stored = stored;
 
     try {
         await updateAlbum(id, parsed.data);

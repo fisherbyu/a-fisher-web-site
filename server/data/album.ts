@@ -2,6 +2,7 @@ import 'server-only';
 import type { Album, AlbumInput, MusicSort } from '@/types';
 import { prisma } from '../clients';
 import { transformAlbum, albumInclude } from '../data-transformers';
+import { toAssetCreate, toAssetUpdate, getImageLocation, deleteReplacedFiles } from './asset';
 import { toGenreCreate, replaceGenres } from './genre';
 import { getRankingOrder, sortByRanking } from './ranking-list';
 
@@ -61,7 +62,7 @@ export async function createAlbum(data: AlbumInput): Promise<Album> {
                         create: link,
                     },
                     image: {
-                        create: image,
+                        create: toAssetCreate(image),
                     },
                     genres: {
                         create: toGenreCreate(genres),
@@ -79,8 +80,8 @@ export async function createAlbum(data: AlbumInput): Promise<Album> {
 /**
  * Updates an Album and its MusicItem relations.
  *
- * Image rows can be shared across MusicItems, so a changed image connects a
- * new row instead of mutating the existing one. The artist relation is fixed
+ * A new image file replaces the stored columns on the existing Asset row,
+ * and the old files are deleted once the save commits. The artist relation is fixed
  * at creation and not updatable here.
  *
  * @param {number} id
@@ -91,12 +92,8 @@ export async function updateAlbum(id: number, data: Omit<AlbumInput, 'artistId'>
     // Extract Data
     const { title, releaseDate, contents, favoriteTracks, link, image, genres } = data;
 
-    // Only touch the image relation when the file actually changed
-    const current = await prisma.musicItem.findUnique({
-        where: { id },
-        select: { image: { select: { src: true } } },
-    });
-    const imageChanged = current?.image?.src !== image.src;
+    // Only needed when the file is being replaced
+    const replaced = image.stored ? await getImageLocation(id) : undefined;
 
     const album = await prisma.$transaction(async (tx) => {
         await replaceGenres(tx, id, genres);
@@ -117,17 +114,15 @@ export async function updateAlbum(id: number, data: Omit<AlbumInput, 'artistId'>
                                 update: link,
                             },
                         },
-                        ...(imageChanged && {
-                            image: {
-                                create: image,
-                            },
-                        }),
+                        image: toAssetUpdate(image),
                     },
                 },
             },
             include: albumInclude,
         });
     });
+
+    await deleteReplacedFiles(replaced);
 
     return transformAlbum(album);
 }

@@ -2,6 +2,7 @@ import 'server-only';
 import type { Artist, ArtistInput, MusicSort } from '@/types';
 import { prisma } from '../clients';
 import { transformArtist, artistInclude } from '../data-transformers';
+import { toAssetCreate, toAssetUpdate, getImageLocation, deleteReplacedFiles } from './asset';
 import { toGenreCreate, replaceGenres } from './genre';
 import { FAVORITE_ARTISTS_SLUG, getRankingOrder, sortByRanking } from './ranking-list';
 
@@ -79,7 +80,7 @@ export async function createArtist(data: ArtistInput): Promise<Artist> {
                         create: link,
                     },
                     image: {
-                        create: image,
+                        create: toAssetCreate(image),
                     },
                     genres: {
                         create: toGenreCreate(genres),
@@ -97,8 +98,8 @@ export async function createArtist(data: ArtistInput): Promise<Artist> {
 /**
  * Updates an Artist and its MusicItem relations.
  *
- * Image rows can be shared across MusicItems, so a changed image connects a
- * new row instead of mutating the existing one.
+ * A new image file replaces the stored columns on the existing Asset row,
+ * and the old files are deleted once the save commits.
  *
  * @param {number} id
  * @param {ArtistInput} data
@@ -108,12 +109,8 @@ export async function updateArtist(id: number, data: ArtistInput): Promise<Artis
     // Extract Data
     const { name, contents, favoriteTracks, favoriteAlbums, link, image, genres } = data;
 
-    // Only touch the image relation when the file actually changed
-    const current = await prisma.musicItem.findUnique({
-        where: { id },
-        select: { image: { select: { src: true } } },
-    });
-    const imageChanged = current?.image?.src !== image.src;
+    // Only needed when the file is being replaced
+    const replaced = image.stored ? await getImageLocation(id) : undefined;
 
     const artist = await prisma.$transaction(async (tx) => {
         await replaceGenres(tx, id, genres);
@@ -134,17 +131,15 @@ export async function updateArtist(id: number, data: ArtistInput): Promise<Artis
                                 update: link,
                             },
                         },
-                        ...(imageChanged && {
-                            image: {
-                                create: image,
-                            },
-                        }),
+                        image: toAssetUpdate(image),
                     },
                 },
             },
             include: artistInclude,
         });
     });
+
+    await deleteReplacedFiles(replaced);
 
     return transformArtist(artist);
 }

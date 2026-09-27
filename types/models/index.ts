@@ -2,7 +2,6 @@ export * from './album.types';
 export * from './artist.types';
 export * from './asset.types';
 export * from './genre.types';
-export * from './image.types';
 export * from './link.types';
 export * from './music-item.types';
 export * from './photo.types';

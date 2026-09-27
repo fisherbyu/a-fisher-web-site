@@ -1,11 +1,11 @@
 'use client';
 import { Button, FileUpload, FileUploadItem, TextInput, UploadableFile } from 'thread-ui';
 import { AlbumInfoForm } from './album-info-form';
-import { Album, ImageUpload } from '@/types';
+import { Album } from '@/types';
 import { useState } from 'react';
 import { LinkForm } from './link-form';
 import { ContentData, ContentsForm, fromContentData, toContentData } from './contents-form';
-import { getAssetSrc, joinList, uploadImage, useSaveAction } from '@/lib';
+import { getAssetSrc, joinList, useSaveAction } from '@/lib';
 import { createAlbumAction, updateAlbumAction } from '@/server/data/album.actions';
 
 const toDateValue = (value?: string | Date | null) => {
@@ -31,8 +31,8 @@ const isNewFile = (item: FileUploadItem): item is UploadableFile => item instanc
 /**
  * Create/edit form for an Album. Submits through a Server Action, so every
  * field is read from the DOM as `FormData` rather than assembled by hand.
- * The image is uploaded client-side on submit and passed along as hidden
- * metadata fields.
+ * A newly picked image file is added to the form data and processed
+ * server-side by the action.
  *
  * @example
  * <AlbumForm artistId={artist.id} />
@@ -78,51 +78,23 @@ export const AlbumForm = ({ artistId, initialData, onSaved }: FormProps) => {
             : []
     );
 
-    // Upload runs before the action dispatches, so it needs its own pending flag
-    const [uploading, setUploading] = useState(false);
     const [imageError, setImageError] = useState<string>();
-    const busy = uploading || pending;
 
     // Submission
-    const handleAction = async (formData: FormData) => {
+    const handleAction = (formData: FormData) => {
         setImageError(undefined);
 
-        // Upload the new file if one was picked, otherwise reuse what's stored if it wasn't removed
-        const file = files.find(isNewFile);
-        // TODO(writes): `src` is the legacy path; the server upload action replaces this
-        let image: ImageUpload | undefined =
-            files.length > 0 && existingImage?.src
-                ? { ...existingImage, src: existingImage.src }
-                : undefined;
-
-        if (file) {
-            setUploading(true);
-            try {
-                image = await uploadImage({
-                    file: file,
-                    alt: file.alt || '',
-                    filePath: 'music/album/',
-                });
-            } catch (error) {
-                console.error('Image upload failed:', error);
-                setImageError('Could not upload the image. Please try again.');
-                return;
-            } finally {
-                setUploading(false);
-            }
-        }
-
-        // `required` on the upload covers this natively; kept as a type guard
-        if (!image) {
+        // `required` on the upload covers this natively; kept as a guard
+        const current = files[0];
+        if (!current) {
             setImageError('An image is required.');
             return;
         }
 
-        // Pick fields explicitly so extra upload metadata never reaches Prisma
-        formData.set('imageSrc', image.src);
-        formData.set('imageAlt', image.alt);
-        formData.set('imageWidth', String(image.width));
-        formData.set('imageHeight', String(image.height));
+        // A new file rides along to be processed server-side; without one the stored image is kept
+        const file = files.find(isNewFile);
+        if (file) formData.set('image', file);
+        formData.set('imageAlt', current.alt ?? '');
 
         formAction(formData);
     };
@@ -162,7 +134,7 @@ export const AlbumForm = ({ artistId, initialData, onSaved }: FormProps) => {
                 </div>
                 <div className="flex flex-col gap-3">
                     <ContentsForm data={contents} onChange={setContents} onAdd={addContent} />
-                    {/* No `name`: the image uploads client-side, so the file must not ride along in FormData */}
+                    {/* No `name`: the action reads the file set in `handleAction`, not the input's own value */}
                     <FileUpload
                         title="Image"
                         emptyTitle="Add Image"
@@ -175,8 +147,8 @@ export const AlbumForm = ({ artistId, initialData, onSaved }: FormProps) => {
                         size="md"
                     />
                     {imageError && <div className="text-red-500">{imageError}</div>}
-                    {state.errors?.imageSrc && (
-                        <div className="text-red-500">{state.errors.imageSrc[0]}</div>
+                    {state.errors?.image && (
+                        <div className="text-red-500">{state.errors.image[0]}</div>
                     )}
                 </div>
             </div>
@@ -185,8 +157,8 @@ export const AlbumForm = ({ artistId, initialData, onSaved }: FormProps) => {
                 <input key={index} type="hidden" name="contents" value={text} />
             ))}
             <div className="flex flex-row justify-end">
-                <Button margin="0px" type="submit" disabled={busy}>
-                    {busy ? 'Saving…' : 'Submit'}
+                <Button margin="0px" type="submit" disabled={pending}>
+                    {pending ? 'Saving…' : 'Submit'}
                 </Button>
             </div>
         </form>

@@ -28,8 +28,7 @@ export const transformArtist = (data: PrismaArtist): Artist => {
             appleURI: link.appleURI,
             spotifyURI: link.spotifyURI,
         },
-        // TODO(contract): drop `src` once the admin forms upload to MEDIA_ROOT
-        image: { ...transformAsset(image), src: image.src ?? undefined },
+        image: transformAsset(image),
         genres: genres.map(({ genre }) => ({
             id: genre.id,
             name: genre.name,
