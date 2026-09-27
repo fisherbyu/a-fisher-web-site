@@ -3,3 +3,4 @@
 export * from './process-image';
 export * from './storage';
 export * from './serve-media';
+export * from './upload';
