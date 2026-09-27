@@ -51,12 +51,12 @@ export const getImageLocation = async (musicItemId: number) => {
 };
 
 /**
- * Removes a replaced image's files. Runs after the save commits, and never fails the save:
+ * Removes a replaced or deleted image's files. Runs after the save commits, and never fails the save:
  * leftovers are orphans that `media-prune` cleans up.
  */
-export const deleteReplacedFiles = async (location?: { folder: string; key: string }) => {
+export const deleteOldFiles = async (location?: { folder: string; key: string }) => {
     if (!location) return;
     await deleteAssetFiles(location).catch((error) =>
-        console.error(`Failed to delete replaced files ${location.folder}/${location.key}:`, error)
+        console.error(`Failed to delete old files ${location.folder}/${location.key}:`, error)
     );
 };

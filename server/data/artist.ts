@@ -2,7 +2,7 @@ import 'server-only';
 import type { Artist, ArtistInput, MusicSort } from '@/types';
 import { prisma } from '../clients';
 import { transformArtist, artistInclude } from '../data-transformers';
-import { toAssetCreate, toAssetUpdate, getImageLocation, deleteReplacedFiles } from './asset';
+import { toAssetCreate, toAssetUpdate, getImageLocation, deleteOldFiles } from './asset';
 import { toGenreCreate, replaceGenres } from './genre';
 import { FAVORITE_ARTISTS_SLUG, getRankingOrder, sortByRanking } from './ranking-list';
 
@@ -139,7 +139,7 @@ export async function updateArtist(id: number, data: ArtistInput): Promise<Artis
         });
     });
 
-    await deleteReplacedFiles(replaced);
+    await deleteOldFiles(replaced);
 
     return transformArtist(artist);
 }

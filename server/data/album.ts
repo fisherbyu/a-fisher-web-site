@@ -2,7 +2,7 @@ import 'server-only';
 import type { Album, AlbumInput, MusicSort } from '@/types';
 import { prisma } from '../clients';
 import { transformAlbum, albumInclude } from '../data-transformers';
-import { toAssetCreate, toAssetUpdate, getImageLocation, deleteReplacedFiles } from './asset';
+import { toAssetCreate, toAssetUpdate, getImageLocation, deleteOldFiles } from './asset';
 import { toGenreCreate, replaceGenres } from './genre';
 import { getRankingOrder, sortByRanking } from './ranking-list';
 
@@ -122,7 +122,7 @@ export async function updateAlbum(id: number, data: Omit<AlbumInput, 'artistId'>
         });
     });
 
-    await deleteReplacedFiles(replaced);
+    await deleteOldFiles(replaced);
 
     return transformAlbum(album);
 }
