@@ -41,3 +41,4 @@ next-env.d.ts
 # Deployment
 .key
 .media/
+.media-prod/
