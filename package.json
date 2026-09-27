@@ -23,11 +23,12 @@
         "next": "^16.2.6",
         "react": "^19.1.0",
         "react-dom": "^19.1.0",
+        "server-only": "^0.0.1",
         "sharp": "^0.35.4",
         "swr": "^2.3.3",
         "tailwind-merge": "^2.2.1",
         "tailwindcss-animate": "^1.0.7",
-        "thread-ui": "^0.16.5",
+        "thread-ui": "^0.17.0",
         "zod": "^4.6.5"
     },
     "devDependencies": {
