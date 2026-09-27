@@ -26,10 +26,16 @@ export type AdminSection<
     noun: string;
     /** List row text for a record */
     getTitle: (item: T) => string;
-    /** Edit view for the selected record */
-    renderDetail: (item: T) => ReactNode;
+    /** Edit view for the selected record. Call `onDeleted` after removing it to clear the selection */
+    renderDetail: (item: T, onDeleted: () => void) => ReactNode;
     /** Create view, shown for the new row. Call `onCreated` with the new record's id to select it */
     renderCreate: (onCreated: (id: number) => void, scopeId?: number) => ReactNode;
+    /** Adds a list action that opens a view over the whole section, e.g. setting display order */
+    arrange?: {
+        /** Detail title and the action's accessible label, e.g. `'Arrange photos'` */
+        title: string;
+        render: () => ReactNode;
+    };
 };
 
 /** Types a section against its records while letting mixed sections share one list */

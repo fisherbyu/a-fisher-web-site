@@ -8,6 +8,8 @@ import { AdminRecord, AdminSection } from './admin-navigator.types';
 
 /** Sentinel id for the unsaved row shown while creating */
 const NEW = 'new';
+/** Sentinel id for the section-wide arrange view */
+const ARRANGE = 'arrange';
 
 type Row = { id: number | string; title: string; data?: AdminRecord };
 
@@ -54,8 +56,14 @@ export const AdminNavigator = ({ sections }: { sections: AdminSection[] }) => {
         title: section.getTitle(record),
         data: record,
     }));
-    // The draft row only exists while creating, so it can be selected like any other item
-    const rows = item === NEW ? [{ id: NEW, title: `New ${noun}` }, ...saved] : saved;
+    // Pseudo rows only exist while open, so they can be selected like any other item
+    const pseudo: Row[] =
+        item === NEW
+            ? [{ id: NEW, title: `New ${noun}` }]
+            : item === ARRANGE && section.arrange
+              ? [{ id: ARRANGE, title: section.arrange.title }]
+              : [];
+    const rows = [...pseudo, ...saved];
 
     return (
         <SplitNavigator<Row>
@@ -70,8 +78,10 @@ export const AdminNavigator = ({ sections }: { sections: AdminSection[] }) => {
             renderDetail={(row) => (
                 <div className="px-4 pb-4">
                     {row.data
-                        ? section.renderDetail(row.data)
-                        : section.renderCreate(select, scopeId)}
+                        ? section.renderDetail(row.data, () => select(null))
+                        : row.id === ARRANGE
+                          ? section.arrange?.render()
+                          : section.renderCreate(select, scopeId)}
                 </div>
             )}
             sidebarTitle="Admin"
@@ -88,6 +98,15 @@ export const AdminNavigator = ({ sections }: { sections: AdminSection[] }) => {
                             onChange={(id) => {
                                 if (id !== null) setScopeIds({ ...scopeIds, [section.id]: id });
                             }}
+                        />
+                    )}
+                    {section.arrange && (
+                        <IconButton
+                            name="ArrowsDownUp"
+                            color="neutral"
+                            text
+                            ariaLabel={section.arrange.title}
+                            onClick={() => select(ARRANGE)}
                         />
                     )}
                     <IconButton
