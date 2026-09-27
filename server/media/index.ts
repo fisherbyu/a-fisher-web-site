@@ -2,3 +2,4 @@
 // Import from '@/server/media' directly.
 export * from './process-image';
 export * from './storage';
+export * from './serve-media';
