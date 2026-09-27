@@ -1,3 +1,9 @@
 export { AdminNavigator } from './admin-navigator';
-export { defineAdminSection } from './admin-navigator.types';
-export type { AdminSection, AdminScope, AdminRecord } from './admin-navigator.types';
+export { defineAdminSection, defineStandaloneSection } from './admin-navigator.types';
+export type {
+    AdminSection,
+    AdminListSection,
+    AdminStandaloneSection,
+    AdminScope,
+    AdminRecord,
+} from './admin-navigator.types';

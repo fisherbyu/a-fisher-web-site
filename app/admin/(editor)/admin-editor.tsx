@@ -5,15 +5,17 @@ import {
     AdminNavigator,
     AlbumForm,
     ArtistForm,
-    PhotoForm,
-    PhotoOrderForm,
-    PhotoUploadForm,
+    PhotoManager,
+    PhotoManagerProvider,
+    PhotoOrderFooter,
+    PhotoUploadButton,
     PlaylistForm,
     RankingForm,
     defineAdminSection,
+    defineStandaloneSection,
 } from '@/components';
 import { useArtists } from '@/lib';
-import { Album, Artist, Photo, Playlist, RankingListSummary } from '@/types';
+import { Album, Artist, Playlist, RankingListSummary } from '@/types';
 
 // Create flow: an artist scopes the list to their albums; none makes a general list
 const CreateRankingForm = ({ onCreated }: { onCreated: (id: number) => void }) => {
@@ -85,19 +87,14 @@ const sections = [
         renderDetail: (playlist) => <PlaylistForm key={playlist.id} initialData={playlist} />,
         renderCreate: (onCreated) => <PlaylistForm onSaved={onCreated} />,
     }),
-    defineAdminSection<Photo>({
+    // No list: every photo is managed from one reorderable grid
+    defineStandaloneSection({
         id: 'photo',
         title: 'Photos',
         icon: 'Images',
-        // Drafts included; the route requires admin for them
-        endpoint: '/api/photo?drafts=true',
-        noun: 'photo',
-        getTitle: (photo) => (photo.published ? photo.title : `${photo.title} (draft)`),
-        renderDetail: (photo, onDeleted) => (
-            <PhotoForm key={photo.id} initialData={photo} onDeleted={onDeleted} />
-        ),
-        renderCreate: (onCreated) => <PhotoUploadForm onCreated={onCreated} />,
-        arrange: { title: 'Arrange photos', render: () => <PhotoOrderForm /> },
+        render: () => <PhotoManager />,
+        actions: () => <PhotoUploadButton />,
+        footer: () => <PhotoOrderFooter />,
     }),
     defineAdminSection<RankingListSummary>({
         id: 'ranking',
@@ -111,4 +108,9 @@ const sections = [
     }),
 ];
 
-export const AdminEditor = () => <AdminNavigator sections={sections} />;
+export const AdminEditor = () => (
+    // The Photos view's grid, header action, and footer share state across navigator slots
+    <PhotoManagerProvider>
+        <AdminNavigator sections={sections} />
+    </PhotoManagerProvider>
+);

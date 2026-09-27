@@ -7,7 +7,9 @@ import { deletePhotoAction, updatePhotoAction } from '@/server/data/photo.action
 
 type PhotoFormProps = {
     initialData: Photo;
-    /** Called after the photo is deleted, e.g. to clear the selection */
+    /** Called after a successful save, e.g. to close a modal */
+    onSaved?: () => void;
+    /** Called after the photo is deleted, e.g. to close a modal */
     onDeleted?: () => void;
 };
 
@@ -34,12 +36,13 @@ const toDateValue = (value?: string | Date | null) => {
  * New photos are created by `PhotoUploadForm`, so this form always edits.
  *
  * @example
- * <PhotoForm initialData={photo} onDeleted={() => select(null)} />
+ * <PhotoForm initialData={photo} onSaved={close} onDeleted={close} />
  */
-export const PhotoForm = ({ initialData, onDeleted }: PhotoFormProps) => {
+export const PhotoForm = ({ initialData, onSaved, onDeleted }: PhotoFormProps) => {
     const { id, asset } = initialData;
     const [state, formAction, pending] = useSaveAction(updatePhotoAction.bind(null, id), {
         refresh: ['/api/photo'],
+        onSaved: () => onSaved?.(),
     });
     const refresh = useRefresh(['/api/photo']);
 

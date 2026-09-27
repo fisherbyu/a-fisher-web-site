@@ -8,14 +8,16 @@ import { AdminRecord, AdminSection } from './admin-navigator.types';
 
 /** Sentinel id for the unsaved row shown while creating */
 const NEW = 'new';
-/** Sentinel id for the section-wide arrange view */
-const ARRANGE = 'arrange';
 
 type Row = { id: number | string; title: string; data?: AdminRecord };
+
+/** Standalone sections pass one row, which the navigator shows in place of a list */
+const VIEW = 'view';
 
 /**
  * Admin editor shell built on `SplitNavigator`: admin sections in the sidebar, the
  * active section's records in the list, and an edit or create form in the detail.
+ * Standalone sections hide the list and fill the detail with their own view.
  * Rendered once from a layout so it stays mounted while sections change; the route
  * decides the section and the selected record is local.
  *
@@ -25,9 +27,10 @@ type Row = { id: number | string; title: string; data?: AdminRecord };
 export const AdminNavigator = ({ sections }: { sections: AdminSection[] }) => {
     const pathname = usePathname();
     const section = sections.find(({ id }) => pathname.startsWith(`/admin/${id}`)) ?? sections[0];
-    const { noun } = section;
-
-    const { scope } = section;
+    // Standalone sections have no records; hooks still run with nothing to fetch
+    const listSection = section.hideList ? undefined : section;
+    const standalone = section.hideList ? section : undefined;
+    const scope = listSection?.scope;
 
     // Scoped sections wait for a pick, defaulting to the first option; each remembers its own
     const { data: scopeRecords, isLoading: scopeLoading } = useSWR<AdminRecord[]>(
@@ -37,12 +40,13 @@ export const AdminNavigator = ({ sections }: { sections: AdminSection[] }) => {
     const [scopeIds, setScopeIds] = useState<Record<string, number>>({});
     const scopeId = scope ? (scopeIds[section.id] ?? scopeOptions[0]?.value) : undefined;
 
-    const endpoint =
-        typeof section.endpoint === 'string'
-            ? section.endpoint
-            : scopeId === undefined
-              ? null
-              : section.endpoint(scopeId);
+    const endpoint = !listSection
+        ? null
+        : typeof listSection.endpoint === 'string'
+          ? listSection.endpoint
+          : scopeId === undefined
+            ? null
+            : listSection.endpoint(scopeId);
     const { data, isLoading } = useSWR<AdminRecord[]>(endpoint);
 
     // Ids repeat across sections, so a selection only counts where it was made
@@ -51,19 +55,20 @@ export const AdminNavigator = ({ sections }: { sections: AdminSection[] }) => {
     const item = selection?.view === view ? selection.id : null;
     const select = (id: Row['id'] | null) => setSelection(id === null ? null : { view, id });
 
-    const saved: Row[] = (data ?? []).map((record) => ({
-        id: record.id,
-        title: section.getTitle(record),
-        data: record,
-    }));
-    // Pseudo rows only exist while open, so they can be selected like any other item
-    const pseudo: Row[] =
-        item === NEW
-            ? [{ id: NEW, title: `New ${noun}` }]
-            : item === ARRANGE && section.arrange
-              ? [{ id: ARRANGE, title: section.arrange.title }]
-              : [];
-    const rows = [...pseudo, ...saved];
+    const noun = listSection?.noun ?? '';
+    const saved: Row[] = listSection
+        ? (data ?? []).map((record) => ({
+              id: record.id,
+              title: listSection.getTitle(record),
+              data: record,
+          }))
+        : [];
+    // The draft row only exists while creating, so it can be selected like any other item
+    const rows: Row[] = standalone
+        ? [{ id: VIEW, title: standalone.title }]
+        : item === NEW
+          ? [{ id: NEW, title: `New ${noun}` }, ...saved]
+          : saved;
 
     return (
         <SplitNavigator<Row>
@@ -77,13 +82,15 @@ export const AdminNavigator = ({ sections }: { sections: AdminSection[] }) => {
             renderItem={(row) => <span className="font-medium">{row.title}</span>}
             renderDetail={(row) => (
                 <div className="px-4 pb-4">
-                    {row.data
-                        ? section.renderDetail(row.data, () => select(null))
-                        : row.id === ARRANGE
-                          ? section.arrange?.render()
-                          : section.renderCreate(select, scopeId)}
+                    {standalone
+                        ? standalone.render()
+                        : row.data
+                          ? listSection?.renderDetail(row.data)
+                          : listSection?.renderCreate(select, scopeId)}
                 </div>
             )}
+            detailActions={() => standalone?.actions?.()}
+            detailFooter={() => standalone?.footer?.()}
             sidebarTitle="Admin"
             sidebarFooter={<SignOutButton />}
             listActions={() => (
@@ -98,15 +105,6 @@ export const AdminNavigator = ({ sections }: { sections: AdminSection[] }) => {
                             onChange={(id) => {
                                 if (id !== null) setScopeIds({ ...scopeIds, [section.id]: id });
                             }}
-                        />
-                    )}
-                    {section.arrange && (
-                        <IconButton
-                            name="ArrowsDownUp"
-                            color="neutral"
-                            text
-                            ariaLabel={section.arrange.title}
-                            onClick={() => select(ARRANGE)}
                         />
                     )}
                     <IconButton

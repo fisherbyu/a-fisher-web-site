@@ -13,11 +13,12 @@ export type AdminScope<S extends AdminRecord = AdminRecord> = {
     getOption: (record: S) => { label: string; value: number };
 };
 
-/** An editable admin area. `id` is its route under `/admin` */
-export type AdminSection<
+/** An admin area with a list of records and an edit or create form. `id` is its route under `/admin` */
+export type AdminListSection<
     T extends AdminRecord = AdminRecord,
     S extends AdminRecord = AdminRecord,
 > = SplitNavigatorSection & {
+    hideList?: false;
     /** Narrows the section by a picked record; the pick is passed to `endpoint` and `renderCreate` */
     scope?: AdminScope<S>;
     /** API route the section's records are fetched from; a function receives the scope's pick */
@@ -26,19 +27,31 @@ export type AdminSection<
     noun: string;
     /** List row text for a record */
     getTitle: (item: T) => string;
-    /** Edit view for the selected record. Call `onDeleted` after removing it to clear the selection */
-    renderDetail: (item: T, onDeleted: () => void) => ReactNode;
+    /** Edit view for the selected record */
+    renderDetail: (item: T) => ReactNode;
     /** Create view, shown for the new row. Call `onCreated` with the new record's id to select it */
     renderCreate: (onCreated: (id: number) => void, scopeId?: number) => ReactNode;
-    /** Adds a list action that opens a view over the whole section, e.g. setting display order */
-    arrange?: {
-        /** Detail title and the action's accessible label, e.g. `'Arrange photos'` */
-        title: string;
-        render: () => ReactNode;
-    };
 };
 
-/** Types a section against its records while letting mixed sections share one list */
+/** An admin area with no list: one view fills the detail column. `id` is its route under `/admin` */
+export type AdminStandaloneSection = SplitNavigatorSection & {
+    hideList: true;
+    /** The section's view */
+    render: () => ReactNode;
+    /** Trailing header content, e.g. an upload button */
+    actions?: () => ReactNode;
+    /** Content pinned to the bottom of the view, e.g. a save button */
+    footer?: () => ReactNode;
+};
+
+export type AdminSection = AdminListSection | AdminStandaloneSection;
+
+/** Types a list section against its records while letting mixed sections share one list */
 export const defineAdminSection = <T extends AdminRecord, S extends AdminRecord = AdminRecord>(
-    section: AdminSection<T, S>
+    section: Omit<AdminListSection<T, S>, 'hideList'>
 ) => section as unknown as AdminSection;
+
+/** Declares a section without a list, e.g. one that manages all its records in a single view */
+export const defineStandaloneSection = (
+    section: Omit<AdminStandaloneSection, 'hideList'>
+): AdminSection => ({ ...section, hideList: true });
