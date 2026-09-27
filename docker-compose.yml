@@ -6,6 +6,11 @@ services:
       - '3000:3000'
     env_file:
       - /srv/a-fisher-web-site/.env
+    environment:
+      # Uploaded and backfilled images; the host folder survives rebuilds and redeploys
+      MEDIA_ROOT: /data/media
+    volumes:
+      - /srv/site-media:/data/media
     restart: unless-stopped
   app-green:
     image: ghcr.io/fisherbyu/a-fisher-web-site:latest
@@ -14,4 +19,9 @@ services:
       - '3001:3000'
     env_file:
       - /srv/a-fisher-web-site/.env
+    environment:
+      # Uploaded and backfilled images; the host folder survives rebuilds and redeploys
+      MEDIA_ROOT: /data/media
+    volumes:
+      - /srv/site-media:/data/media
     restart: unless-stopped
