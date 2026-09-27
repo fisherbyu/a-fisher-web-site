@@ -14,7 +14,8 @@ export type PrismaAlbum = Prisma.AlbumGetPayload<{ include: typeof albumInclude 
 export const transformAlbum = (data: PrismaAlbum): Album => {
     const { link, image, genres } = data.musicItem;
 
-    if (!image) throw new Error(`Album ${data.id} is missing an image`);
+    // TODO(contract): read folder/key/name once src is dropped
+    if (!image?.src) throw new Error(`Album ${data.id} is missing an image`);
 
     return {
         id: data.id,
