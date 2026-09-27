@@ -106,3 +106,10 @@ apply-migrations: ## Apply pending migrations
 .PHONY: prisma-client
 prisma-client: ## Generate Prisma client
 	$(PRISMA) generate
+
+# Media Targets
+MEDIA_ROOT ?= ./.media
+
+.PHONY: backfill-assets
+backfill-assets: ## Process legacy music images and repo photos into MEDIA_ROOT (local DB only)
+	MEDIA_ROOT=$(MEDIA_ROOT) $(TSX) --conditions=react-server scripts/backfill-assets.ts
