@@ -3,10 +3,11 @@
  *
  * 1. Music images: downloads each legacy `Asset.src` from the Supabase bucket, processes it,
  *    and fills in folder/key/name/blurDataUrl (and real width/height) on the same row.
- * 2. Photos: creates an Asset + published Photo for every image the photo page imports,
- *    with the title derived from the file name and camera/date from EXIF.
+ * 2. Photos: creates an Asset + published Photo for every repo photo the page showed, in its
+ *    hand-picked order, with the title derived from the file name and camera/date from EXIF.
  *
- * Safe to re-run: assets that already have a key, and photos whose file was already imported, are skipped.
+ * Safe to re-run: assets that already have a key, and photos whose file was already imported, are skipped
+ * (existing photos only get their `sortOrder` reset to the list below).
  * Refuses to touch a non-local database unless `--prod` is passed.
  *
  * Run: make backfill-assets
@@ -17,8 +18,39 @@ import { PrismaClient } from '@prisma/client';
 import type { Folder } from '@/lib/media';
 import { generateKey, processImage, slugify, writeAssetFiles } from '@/server/media';
 
-const PHOTO_PAGE = 'app/(main)/photo/page.tsx';
-const PHOTO_IMPORT = /from '@\/public\/photography\/([^']+)'/g;
+// The photo page's static imports, in its display order, from before it moved to the database
+const PHOTO_FILES = [
+    'andrew-fisher-point.jpg',
+    'hope-3.jpg',
+    'hope-1.jpg',
+    'rexburg.jpg',
+    'virgin-river.jpg',
+    'ocean-boat.jpg',
+    'provo-canyon-4.jpg',
+    'sacramento-street.jpg',
+    'zion-2.jpg',
+    'alpine-loop-1.jpg',
+    'beach-waves.jpg',
+    'blake.jpg',
+    'alpine-loop-2.jpg',
+    'snow-canyon.jpg',
+    'zion-1.jpg',
+    'alaska-river.jpg',
+    'byu-autumn.jpg',
+    'provo-canyon-2.jpg',
+    'milky-way.jpg',
+    'ptarmigan-lake.jpg',
+    'arches-np.jpg',
+    'provo-canyon-3.jpg',
+    'wrights-lake.jpg',
+    'sydney.jpg',
+    'hope-2.jpg',
+    'alaska-trail.jpg',
+    'emily.jpg',
+    'provo-canyon-1.jpg',
+    'wrights-lake-2.jpg',
+    'alaska-river-2.jpg',
+];
 
 const prisma = new PrismaClient();
 
@@ -89,17 +121,16 @@ const backfillMusicAssets = async () => {
 };
 
 const backfillPhotos = async () => {
-    const page = await readFile(PHOTO_PAGE, 'utf8');
-    const fileNames = [...page.matchAll(PHOTO_IMPORT)].map(([, fileName]) => fileName);
-    console.log(`\nPhotos on the photo page: ${fileNames.length}`);
+    console.log(`\nRepo photos: ${PHOTO_FILES.length}`);
 
-    for (const fileName of fileNames) {
+    for (const [sortOrder, fileName] of PHOTO_FILES.entries()) {
         const title = titleFromFileName(fileName);
         const name = slugify(title);
 
         const existing = await prisma.asset.findFirst({ where: { folder: 'photo', name } });
         if (existing) {
-            console.log(`  skip ${fileName} (asset #${existing.id})`);
+            await prisma.photo.updateMany({ where: { assetId: existing.id }, data: { sortOrder } });
+            console.log(`  skip ${fileName} (asset #${existing.id}), sortOrder ${sortOrder}`);
             continue;
         }
 
@@ -113,6 +144,7 @@ const backfillPhotos = async () => {
                 takenAt: exif.takenAt,
                 // Already live on the site
                 published: true,
+                sortOrder,
                 asset: { create: { ...columns, alt: title } },
             },
         });
