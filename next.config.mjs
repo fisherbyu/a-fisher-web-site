@@ -3,6 +3,8 @@ const nextConfig = {
     output: 'standalone',
     // Don't generate AGENTS.md / CLAUDE.md on next dev
     agentRules: false,
+    // Loaded by Node instead of bundled, so exifr can reach fs/zlib
+    serverExternalPackages: ['exifr'],
     // Image uploads ride in Server Action bodies; keep in sync with MAX_IMAGE_BYTES in server/media/upload.ts
     experimental: {
         serverActions: { bodySizeLimit: '30mb' },
