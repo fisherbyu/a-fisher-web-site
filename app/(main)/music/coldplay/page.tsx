@@ -5,6 +5,8 @@ import { PageHeader } from 'thread-ui';
 import { getArtistByName } from '@/server';
 import AlbumContents from './contents';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ArtistPage() {
     // Albums are fetched per artist, so resolve Coldplay's id up front
     const coldplay = await getArtistByName('Coldplay');
