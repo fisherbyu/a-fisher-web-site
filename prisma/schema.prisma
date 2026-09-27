@@ -29,7 +29,7 @@ model MusicItem {
     updatedAt DateTime @updatedAt
 
     // Relations
-    image          Image?           @relation(fields: [imageId], references: [id], onDelete: SetNull)
+    image          Asset?           @relation(fields: [imageId], references: [id], onDelete: SetNull)
     // Restrict: a Link can't be deleted while a MusicItem references it
     link           Link             @relation(fields: [linkId], references: [id], onDelete: Restrict)
     artist         Artist?
@@ -166,15 +166,71 @@ model RankingEntry {
     @@index([musicItemId])
 }
 
-model Image {
+// Assets
+// Files live at {folder}/{key}/{name}-{width}.webp under MEDIA_ROOT
+// TODO(contract): folder, key, name, blurDataUrl become required and src is dropped after the backfill
+model Asset {
+    id          Int      @id @default(autoincrement())
+    // Legacy Supabase bucket path, read by the backfill
+    src         String?  @db.VarChar(255)
+    // Validated against a code constant: "photo", "music/artist", "music/album"
+    folder      String?  @db.VarChar(50)
+    // Random and immutable; replacing the file generates a new key on the same row
+    key         String?  @unique @db.VarChar(20)
+    // Slug, e.g. "delicate-arch"
+    name        String?  @db.VarChar(100)
+    width       Int      @db.Integer
+    height      Int      @db.Integer
+    blurDataUrl String?  @db.Text
+    alt         String   @db.VarChar(255)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    // Relations (Owners Reference Asset)
+    musicItems MusicItem[]
+    photo      Photo?
+}
+
+model Photo {
+    id        Int       @id @default(autoincrement())
+    assetId   Int       @unique
+    title     String    @db.VarChar(100)
+    caption   String?   @db.Text
+    camera    String?   @db.VarChar(100)
+    takenAt   DateTime? @db.Date
+    location  String?   @db.VarChar(100)
+    published Boolean   @default(false)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+
+    // Relations (Cascade: a Photo can't exist without its file)
+    asset Asset      @relation(fields: [assetId], references: [id], onDelete: Cascade)
+    tags  PhotoTag[]
+
+    // Indexes
+    @@index([published, takenAt])
+}
+
+model Tag {
     id        Int      @id @default(autoincrement())
-    src       String   @db.VarChar(255)
-    alt       String   @db.VarChar(255)
-    height    Int      @db.Integer
-    width     Int      @db.Integer
+    name      String   @unique @db.VarChar(50)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    // Relations (Owners Reference Image)
-    musicItems MusicItem[]
+    // Relations
+    photos PhotoTag[]
+}
+
+model PhotoTag {
+    photoId Int
+    tagId   Int
+
+    // Relations (Join Table, Cascade Deletions)
+    photo Photo @relation(fields: [photoId], references: [id], onDelete: Cascade)
+    tag   Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+    // Constraints
+    @@id([photoId, tagId])
+    // Indexes
+    @@index([tagId])
 }
