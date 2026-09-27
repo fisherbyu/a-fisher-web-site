@@ -5,8 +5,8 @@ import { useRefresh } from '@/lib';
 import { uploadPhotoAction } from '@/server/data/photo.actions';
 
 type PhotoUploadFormProps = {
-    /** Called with the first new photo's id once uploads finish */
-    onCreated?: (id: number) => void;
+    /** Called once uploads finish, with the new photos' ids and how many files failed */
+    onUploaded?: (ids: number[], failed: number) => void;
 };
 
 // Enough for a shoot's worth of picks; each file is still its own request
@@ -21,9 +21,9 @@ const isNewFile = (item: FileUploadItem): item is UploadableFile => item instanc
  * Files that fail stay in the list with their error so they can be retried.
  *
  * @example
- * <PhotoUploadForm onCreated={select} />
+ * <PhotoUploadForm onUploaded={(ids, failed) => failed === 0 && close()} />
  */
-export const PhotoUploadForm = ({ onCreated }: PhotoUploadFormProps) => {
+export const PhotoUploadForm = ({ onUploaded }: PhotoUploadFormProps) => {
     const refresh = useRefresh(['/api/photo']);
     const [files, setFiles] = useState<FileUploadItem[]>([]);
     const [progress, setProgress] = useState<{ done: number; total: number }>();
@@ -33,7 +33,7 @@ export const PhotoUploadForm = ({ onCreated }: PhotoUploadFormProps) => {
         const queue = files.filter(isNewFile);
         const failed: typeof failures = [];
         const failedFiles: FileUploadItem[] = [];
-        let firstId: number | undefined;
+        const created: number[] = [];
 
         setFailures([]);
         for (const [index, file] of queue.entries()) {
@@ -44,7 +44,7 @@ export const PhotoUploadForm = ({ onCreated }: PhotoUploadFormProps) => {
             const result = await uploadPhotoAction(formData);
 
             if (result.ok) {
-                firstId ??= result.id;
+                created.push(result.id);
             } else {
                 failed.push({ name: file.name, message: result.message });
                 failedFiles.push(file);
@@ -55,10 +55,8 @@ export const PhotoUploadForm = ({ onCreated }: PhotoUploadFormProps) => {
         // Keep only the failures, so a retry doesn't re-upload what already went through
         setFiles(failedFiles);
         setFailures(failed);
-        if (firstId !== undefined) {
-            refresh();
-            onCreated?.(firstId);
-        }
+        if (created.length) refresh();
+        onUploaded?.(created, failed.length);
     };
 
     const uploading = progress !== undefined;
@@ -94,8 +92,8 @@ export const PhotoUploadForm = ({ onCreated }: PhotoUploadFormProps) => {
                 </Button>
             </div>
             <p className="text-sm text-gray-500">
-                Uploads are saved as drafts, titled from their file names. Open each one to add
-                details and publish it.
+                Uploads are saved as drafts at the end of the order, titled from their file names.
+                Edit each one to add details and publish it.
             </p>
         </div>
     );
