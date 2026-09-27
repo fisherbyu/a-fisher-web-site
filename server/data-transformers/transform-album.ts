@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { Album } from '@/types';
+import { transformAsset } from './transform-asset';
 
 /** Query shape `transformAlbum` expects. Use this as the `include` in every Album query. */
 export const albumInclude = {
@@ -14,8 +15,7 @@ export type PrismaAlbum = Prisma.AlbumGetPayload<{ include: typeof albumInclude 
 export const transformAlbum = (data: PrismaAlbum): Album => {
     const { link, image, genres } = data.musicItem;
 
-    // TODO(contract): read folder/key/name once src is dropped
-    if (!image?.src) throw new Error(`Album ${data.id} is missing an image`);
+    if (!image) throw new Error(`Album ${data.id} is missing an image`);
 
     return {
         id: data.id,
@@ -29,13 +29,8 @@ export const transformAlbum = (data: PrismaAlbum): Album => {
             appleURI: link.appleURI,
             spotifyURI: link.spotifyURI,
         },
-        image: {
-            id: image.id,
-            src: image.src,
-            alt: image.alt,
-            height: image.height,
-            width: image.width,
-        },
+        // TODO(contract): drop `src` once the admin forms upload to MEDIA_ROOT
+        image: { ...transformAsset(image), src: image.src ?? undefined },
         genres: genres.map(({ genre }) => ({
             id: genre.id,
             name: genre.name,

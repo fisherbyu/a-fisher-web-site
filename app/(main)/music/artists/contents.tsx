@@ -1,11 +1,11 @@
 'use client';
 import { Container, MediaCard, SkeletonLayoutLoader } from 'thread-ui';
-import { getMusicLink, getPublicUrl, useArtists } from '@/lib';
+import { getMusicLink, useArtists } from '@/lib';
 import Image from 'next/image';
 import Link from 'next/link';
 import AppleMusicLogo from '@/public/music/apple-music.svg';
 import SpotifyLogo from '@/public/music/spotify.svg';
-import { LoadingError } from '@/components';
+import { AssetImage, LoadingError } from '@/components';
 
 export default function ArtistContents() {
     const { artists, isLoading, error } = useArtists();
@@ -43,14 +43,7 @@ export default function ArtistContents() {
                             description={artist.contents.map((content) => content)}
                             details={[favoriteAlbums, favoriteTracks]}
                             detailsPosition="text"
-                            image={
-                                <Image
-                                    src={getPublicUrl(artist.image.src)}
-                                    alt={artist.image.alt}
-                                    height={artist.image.height}
-                                    width={artist.image.width}
-                                />
-                            }
+                            image={<AssetImage asset={artist.image} sizes="320px" />}
                             imagePosition={_ % 2 === 0 ? 'right' : 'left'}
                             size="md"
                             links={[

@@ -1,5 +1,5 @@
 import { createClient, getImageDimensions } from '@/lib';
-import { Image } from '@/types';
+import { ImageUpload } from '@/types';
 import { uploadFile } from '@/lib';
 
 type UploadImageProps = {
@@ -12,7 +12,7 @@ export async function uploadImage({
     file,
     alt,
     filePath,
-}: UploadImageProps): Promise<Omit<Image, 'id'>> {
+}: UploadImageProps): Promise<ImageUpload> {
     try {
         // Upload File
         const uploadResult = await uploadFile({ file, filePath });

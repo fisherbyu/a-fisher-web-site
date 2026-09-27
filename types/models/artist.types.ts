@@ -1,4 +1,4 @@
-import type { Album, Input, MusicItem } from '@/types';
+import type { Album, ImageUpload, Input, MusicItem } from '@/types';
 import type { Prettify } from 'thread-ui';
 
 export type Artist = Prettify<
@@ -12,4 +12,4 @@ export type Artist = Prettify<
     } & MusicItem
 >;
 
-export type ArtistInput = Omit<Input<Artist>, 'albums'>;
+export type ArtistInput = Prettify<Omit<Input<Artist>, 'albums' | 'image'> & { image: ImageUpload }>;

@@ -1,11 +1,11 @@
 'use client';
 import { Button, FileUpload, FileUploadItem, TextInput, UploadableFile } from 'thread-ui';
 import { ArtistInfoForm } from './artist-info-form';
-import { Artist, Image as ImageData } from '@/types';
+import { Artist, ImageUpload } from '@/types';
 import { useState } from 'react';
 import { LinkForm } from './link-form';
 import { ContentData, ContentsForm, fromContentData, toContentData } from './contents-form';
-import { getPublicUrl, joinList, uploadImage, useSaveAction } from '@/lib';
+import { getAssetSrc, joinList, uploadImage, useSaveAction } from '@/lib';
 import { createArtistAction, updateArtistAction } from '@/server/data/artist.actions';
 
 type FormProps = {
@@ -14,6 +14,9 @@ type FormProps = {
     /** Called with the record's id after a successful save */
     onSaved?: (id: number) => void;
 };
+
+// Upload preview is a small thumbnail
+const PREVIEW_WIDTH = 320;
 
 const isNewFile = (item: FileUploadItem): item is UploadableFile => item instanceof File;
 
@@ -58,9 +61,9 @@ export const ArtistForm = ({ initialData, onSaved }: FormProps) => {
         existingImage
             ? [
                   {
-                      id: existingImage.src,
-                      src: getPublicUrl(existingImage.src),
-                      name: existingImage.src.split('/').pop() ?? 'Current image',
+                      id: existingImage.key,
+                      src: getAssetSrc(existingImage, PREVIEW_WIDTH),
+                      name: existingImage.name,
                       alt: existingImage.alt,
                   },
               ]
@@ -78,7 +81,11 @@ export const ArtistForm = ({ initialData, onSaved }: FormProps) => {
 
         // Upload the new file if one was picked, otherwise reuse what's stored if it wasn't removed
         const file = files.find(isNewFile);
-        let image: Omit<ImageData, 'id'> | undefined = files.length > 0 ? existingImage : undefined;
+        // TODO(writes): `src` is the legacy path; the server upload action replaces this
+        let image: ImageUpload | undefined =
+            files.length > 0 && existingImage?.src
+                ? { ...existingImage, src: existingImage.src }
+                : undefined;
 
         if (file) {
             setUploading(true);

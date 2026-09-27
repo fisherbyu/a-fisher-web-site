@@ -9,15 +9,15 @@ import {
     ReorderableList,
     TextInput,
 } from 'thread-ui';
-import { getPublicUrl, useAlbums, useArtists, useRankingList, useSaveAction } from '@/lib';
-import { RankingEntryInput, RankingList, TIER_ORDER, Tier } from '@/types';
+import { getAssetSrc, useAlbums, useArtists, useRankingList, useSaveAction } from '@/lib';
+import { Asset, RankingEntryInput, RankingList, TIER_ORDER, Tier } from '@/types';
 import {
     createRankingListAction,
     updateRankingListAction,
 } from '@/server/data/ranking-list.actions';
 
 /** A rankable MusicItem. `id` is the MusicItem id; `order` is rewritten by the list on reorder */
-type Tile = { id: number; title: string; image?: { src: string; alt: string }; order: number };
+type Tile = { id: number; title: string; image?: Asset; order: number };
 
 /** Tier groups use the tier as their id; `POOL` holds what's left unranked */
 type TileGroup = ReorderableGroup<Tile> & { id: Tier | typeof POOL };
@@ -75,11 +75,14 @@ const groupsToEntries = (groups: TileGroup[]): RankingEntryInput[] =>
 const orderToEntries = (order: Tile[]): RankingEntryInput[] =>
     order.map((tile, index) => ({ musicItemId: tile.id, position: index + 1 }));
 
+// Largest tile is 64px; 2x for retina
+const ARTWORK_WIDTH = 128;
+
 const Artwork = ({ image, className }: Pick<Tile, 'image'> & { className: string }) =>
     image ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-            src={getPublicUrl(image.src)}
+            src={getAssetSrc(image, ARTWORK_WIDTH)}
             alt={image.alt}
             className={`${className} rounded-md object-cover pointer-events-none`}
         />
