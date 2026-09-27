@@ -200,6 +200,7 @@ model Photo {
     takenAt   DateTime? @db.Date
     location  String?   @db.VarChar(100)
     published Boolean   @default(false)
+    sortOrder Int       @default(0)
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
 
@@ -208,7 +209,7 @@ model Photo {
     tags  PhotoTag[]
 
     // Indexes
-    @@index([published, takenAt])
+    @@index([published, sortOrder])
 }
 
 model Tag {
