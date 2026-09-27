@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     output: 'standalone',
+    // Don't generate AGENTS.md / CLAUDE.md on next dev
+    agentRules: false,
     images: {
         remotePatterns: [{
             protocol: 'https',
