@@ -1,28 +1,54 @@
-import React from 'react';
-import { Dropdown, NumberInput, TextInput } from '@/components';
-import { HandleInputChanges } from '@/lib';
-
-export type AlbumInfoData = {
-    name: string;
-    rank?: number;
-};
+import { TextInput } from 'thread-ui';
+import { Album } from '@/types';
+import { joinList } from '@/lib';
 
 type AlbumInfoFormProps = {
-    data: AlbumInfoData;
-    onChange: (data: AlbumInfoData) => void;
+    /** Existing album to prefill from; omit when creating */
+    initialData?: Album;
 };
 
-export const AlbumInfoForm = ({ data, onChange }: AlbumInfoFormProps) => {
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        HandleInputChanges(e, data, onChange);
-    };
+/** Normalizes a stored date to the `YYYY-MM-DD` shape the input expects */
+const toDateValue = (value?: string | Date | null) => {
+    if (!value) return '';
 
+    return value instanceof Date ? value.toISOString().slice(0, 10) : value.slice(0, 10);
+};
+
+/**
+ * Plain text fields for an Album. Uncontrolled: values are read from the
+ * DOM as `FormData` when the parent form submits. List fields are
+ * comma-separated here and split server-side.
+ *
+ * @example
+ * <AlbumInfoForm initialData={album} />
+ */
+export const AlbumInfoForm = ({ initialData }: AlbumInfoFormProps) => {
     return (
         <div>
-            <TextInput name="name" title="Name" value={data.name} onChange={handleChange} required />
-            <div className="grid grid-cols-2">
-                <NumberInput name="rank" title="Rank" value={data.rank} onChange={handleChange} required min={1} />
-            </div>
+            <TextInput
+                name="title"
+                title="Title"
+                defaultValue={initialData?.title ?? ''}
+                required
+            />
+            <TextInput
+                name="releaseDate"
+                title="Release Date"
+                defaultValue={toDateValue(initialData?.releaseDate)}
+                placeholder="YYYY-MM-DD"
+            />
+            <TextInput
+                name="favoriteTracks"
+                title="Favorite Tracks"
+                defaultValue={joinList(initialData?.favoriteTracks ?? [])}
+                placeholder="Yellow, Spies, Trouble"
+            />
+            <TextInput
+                name="genres"
+                title="Genres"
+                defaultValue={joinList(initialData?.genres.map(({ name }) => name) ?? [])}
+                placeholder="Alternative, Rock"
+            />
         </div>
     );
 };

@@ -1,52 +1,51 @@
 'use client';
-import { Button, Divider } from 'thread-ui';
-import { Link, LinkDto, Playlist, PlaylistDto } from '@/types';
-import { useId, useState } from 'react';
+import { Button, TextInput } from 'thread-ui';
+import { Playlist } from '@/types';
+import { useSaveAction } from '@/lib';
 import { LinkForm } from './link-form';
-import { TextInput } from '@/components/ui';
-import { createPlaylist, HandleInputChanges } from '@/lib';
+import { createPlaylistAction, updatePlaylistAction } from '@/server/data/playlist.actions';
 
 type PlaylistFormProps = {
+    /** Existing playlist to edit; omit to create a new one */
     initialData?: Playlist;
-    onSuccess?: (playlist: Playlist) => void;
+    /** Called with the record's id after a successful save */
+    onSaved?: (id: number) => void;
 };
 
-export const PlaylistForm = ({ initialData, onSuccess }: PlaylistFormProps) => {
-    // Extract or Init Data
-    const [title, setTitle] = useState(initialData?.title || '');
-
-    const [link, setLink] = useState<Link | LinkDto>(initialData?.link || { id: useId(), appleURI: '', spotifyURI: '' });
-
-    // Handle Submission
-    const handleSubmit = async () => {
-        // Edit Playlist
-        if (initialData) {
-            console.log(initialData);
-        } else {
-            const dto: PlaylistDto = {
-                id: crypto.randomUUID(),
-                title,
-                link,
-            };
-
-            try {
-                console.log(createPlaylist(dto));
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    };
+/**
+ * Create/edit form for a Playlist. Submits through a Server Action, so every
+ * field is read from the DOM as `FormData` rather than assembled by hand.
+ *
+ * @example
+ * <PlaylistForm />
+ *
+ * @example
+ * <PlaylistForm initialData={playlist} />
+ */
+export const PlaylistForm = ({ initialData, onSaved }: PlaylistFormProps) => {
+    // Bind the id server-side on edit so it can't be swapped by the client
+    const action = initialData
+        ? updatePlaylistAction.bind(null, initialData.id)
+        : createPlaylistAction;
+    const [state, formAction, pending] = useSaveAction(action, {
+        refresh: ['/api/playlist'],
+        onSaved,
+    });
 
     return (
-        <form className="container">
-            <div className="text-3xl">{initialData ? 'Edit' : 'Create'} Playlist</div>
-            <Divider width="100%" />
-            <div className="w-56">
-                <TextInput name="title" title="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-                <LinkForm data={link} onChange={setLink} />
+        <form className="flex flex-col gap-4 w-full" action={formAction}>
+            {state.message && <div className="text-red-500">{state.message}</div>}
+            <div className="w-full max-w-md">
+                <TextInput
+                    name="title"
+                    title="Title"
+                    defaultValue={initialData?.title ?? ''}
+                    required
+                />
+                <LinkForm initialData={initialData?.link} />
                 <div className="flex w-full justify-end pt-4">
-                    <Button margin="0 0 0 0" onClick={handleSubmit}>
-                        Submit
+                    <Button margin="0 0 0 0" type="submit" disabled={pending}>
+                        {pending ? 'Saving…' : 'Submit'}
                     </Button>
                 </div>
             </div>

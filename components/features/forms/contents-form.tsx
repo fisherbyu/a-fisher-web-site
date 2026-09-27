@@ -1,14 +1,25 @@
-import { ReorderableList, TextInput } from '@/components/ui';
-import { EditableListItem } from '@/components/ui/form-elements/editable-list-item';
-import { ItemChangeProp } from '@/components/ui/reorderable-list/sortable-item';
 import { useDebounce } from '@/lib';
-import { Content } from '@/types';
-import { ReactNode, useState } from 'react';
-import { Divider, Icon } from 'thread-ui';
+import { useState } from 'react';
+import { IconButton, ReorderableList, TextInput, type ReorderableItemProps } from 'thread-ui';
+import { EditableListItem } from '@/components/ui/editable-list-item';
 
-export type ContentData = Omit<Content, 'id'> & {
-    id: string | number;
+// Form-only paragraph row; `id` is a local React key and never leaves the form
+export type ContentData = {
+    id: string;
+    order: number;
+    text: string;
 };
+
+// Stored paragraphs -> keyed form rows
+export const toContentData = (contents: string[]): ContentData[] =>
+    contents.map((text, order) => ({ id: crypto.randomUUID(), order, text }));
+
+// Keyed form rows -> ordered paragraphs, dropping blanks
+export const fromContentData = (data: ContentData[]): string[] =>
+    [...data]
+        .sort((a, b) => a.order - b.order)
+        .map(({ text }) => text.trim())
+        .filter(Boolean);
 
 type ContentFormProps = {
     data: ContentData[];
@@ -16,21 +27,16 @@ type ContentFormProps = {
     onAdd: () => void;
 };
 
-type EditContentsProps = ContentData & {
-    dragHandle: ReactNode;
-    onItemChange: ItemChangeProp<ContentData>;
-};
+// Screen reader label for each paragraph row
+const getContentLabel = (item: ContentData, index: number) =>
+    item.text.trim().slice(0, 40) || `Empty paragraph ${index + 1}`;
 
-const EditContents = (props: EditContentsProps) => {
+const EditContents = (props: ReorderableItemProps<ContentData>) => {
     // Extract Props
-    const { id, order, text, dragHandle, onItemChange } = props;
+    const { item, dragHandle, onItemChange, onItemRemove } = props;
 
     // Init Local Data Handling
-    const [contentData, setCotentData] = useState<ContentData>({
-        id: id,
-        text: text,
-        order: order,
-    });
+    const [contentData, setCotentData] = useState<ContentData>(item);
 
     // Update parent component with debounced changes
     const debouncedUpdate = useDebounce((newData) => {
@@ -38,7 +44,9 @@ const EditContents = (props: EditContentsProps) => {
     }, 500); // 500ms delay
 
     // Handle Local Updates
-    const handleLocalUpdate = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const handleLocalUpdate = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    ) => {
         const { name, value } = e.target;
         const newData = { ...contentData, [name]: value };
 
@@ -51,27 +59,57 @@ const EditContents = (props: EditContentsProps) => {
 
     const displayContents = <div className="w-full truncate">{contentData.text}</div>;
 
-    const editContentData = <TextInput name="text" value={contentData.text} onChange={handleLocalUpdate} multiline />;
+    const editContentData = (
+        <TextInput name="text" value={contentData.text} onChange={handleLocalUpdate} multiline />
+    );
 
-    return <EditableListItem dragHandle={dragHandle} display={displayContents} edit={editContentData} />;
+    const deleteContentItem = (
+        <IconButton
+            name="Trash"
+            type="button"
+            size="md"
+            color="error"
+            onClick={onItemRemove}
+            aria-label="Delete paragraph"
+            text
+        />
+    );
+
+    return (
+        <div className="py-0.5">
+            <EditableListItem
+                dragHandle={dragHandle}
+                displayView={displayContents}
+                editView={editContentData}
+                deleteButton={deleteContentItem}
+            />
+        </div>
+    );
 };
 
 export const ContentsForm = ({ data, onChange, onAdd }: ContentFormProps) => {
     return (
         <div className="h-64 overflow-scroll">
-            <div className="flex flex-row items-center justify-between">
-                <h1>Contents</h1>
-                <button type="button" onClick={onAdd}>
-                    <Icon name="Plus" color="info" size={24} />
-                </button>
-            </div>
-            <Divider width="100%" marginY="4px" />
             <ReorderableList
-                className="flex flex-col gap-1"
-                data={data}
+                title="Contents"
+                divider
+                secondaryContent={
+                    <IconButton
+                        name="Plus"
+                        type="button"
+                        onClick={onAdd}
+                        color="info"
+                        text
+                        size="md"
+                    >
+                        Add new Item
+                    </IconButton>
+                }
+                value={data}
                 orderProperty="order"
                 ItemComponent={EditContents}
                 onChange={onChange}
+                getItemLabel={getContentLabel}
             />
         </div>
     );

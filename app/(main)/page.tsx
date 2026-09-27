@@ -45,7 +45,7 @@ export default function Home() {
             />
             <Divider width="75%" marginY="36px" />
             {/* About Me Section */}
-            <Title align="center" inline>
+            <Title align="center" marginBottom={false}>
                 About Me
             </Title>
             {/* Places I grew Up */}

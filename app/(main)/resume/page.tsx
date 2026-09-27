@@ -16,7 +16,7 @@ export default function ResumePage() {
                         <div className="flex justify-start items-center space-x-2 pb-4">
                             <Image src={BYULogo} alt="BYU Logo" className=" w-10" />
                             <div>
-                                <H2 inline>{resume.education[0].institution}</H2>
+                                <H2 marginBottom={false}>{resume.education[0].institution}</H2>
                                 <Text size="xs">
                                     {resume.education[0].graduation_month}
                                     {resume.education[0].graduation_year} -
@@ -24,7 +24,7 @@ export default function ResumePage() {
                                 </Text>
                             </div>
                         </div>
-                        <H3 inline>{resume.education[0].degree}</H3>
+                        <H3 marginBottom={false}>{resume.education[0].degree}</H3>
                         <Text color="text-secondary" weight="semibold" size="md">
                             {resume.education[0].college}
                         </Text>

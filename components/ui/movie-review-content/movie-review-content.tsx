@@ -18,7 +18,7 @@ export const MovieReviewContent = ({ title, stars, review }: MovieReviewContentP
 
     const review_ =
         typeof review === 'string' ? (
-            <Text color="white" inline>
+            <Text color="white" marginBottom={false}>
                 {review}
             </Text>
         ) : (
@@ -27,7 +27,7 @@ export const MovieReviewContent = ({ title, stars, review }: MovieReviewContentP
 
     return (
         <div className="py-4">
-            <H3 color="white" inline>
+            <H3 color="white" marginBottom={false}>
                 {title}
             </H3>
             <div style={{ color: ThreadTheme.white }} className="flex flex-row">

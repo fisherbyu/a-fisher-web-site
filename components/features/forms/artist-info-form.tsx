@@ -1,39 +1,39 @@
-import React from 'react';
-import { Dropdown, NumberInput, TextInput } from '@/components';
-import { HandleInputChanges } from '@/lib';
-
-export type ArtistInfoData = {
-    name: string;
-    tier: number;
-    rank?: number;
-};
+import { TextInput } from 'thread-ui';
+import { Artist } from '@/types';
+import { joinList } from '@/lib';
 
 type ArtistInfoFormProps = {
-    data: ArtistInfoData;
-    onChange: (data: ArtistInfoData) => void;
+    /** Existing artist to prefill from; omit when creating */
+    initialData?: Artist;
 };
 
-export const ArtistInfoForm = ({ data, onChange }: ArtistInfoFormProps) => {
-    const tierOptions = [...Array(5)].map((_, index) => ({ label: `Tier ${index + 1}`, value: index + 1 }));
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        HandleInputChanges(e, data, onChange);
-    };
-
-    const handleTierChange = (value: number | string) => {
-        const updatedData = {
-            ...data,
-            tier: value as number,
-        };
-        onChange(updatedData);
-    };
-
+/**
+ * Plain text fields for an Artist. Uncontrolled: values are read from the
+ * DOM as `FormData` when the parent form submits. List fields are
+ * comma-separated here and split server-side.
+ *
+ * @example
+ * <ArtistInfoForm initialData={artist} />
+ */
+export const ArtistInfoForm = ({ initialData }: ArtistInfoFormProps) => {
     return (
-        <div>
-            <TextInput name="name" title="Name" value={data.name} onChange={handleChange} required />
-            <div className="grid grid-cols-2">
-                <NumberInput name="rank" title="Rank" value={data.rank} onChange={handleChange} required min={1} max={5} />
-                <Dropdown label="Tier" value={data.tier} options={tierOptions} onSelect={handleTierChange} />
-            </div>
+        <div className="flex flex-col gap-2">
+            <TextInput name="name" title="Name" defaultValue={initialData?.name ?? ''} required />
+            <TextInput
+                name="favoriteTracks"
+                title="Favorite Tracks"
+                defaultValue={joinList(initialData?.favoriteTracks ?? [])}
+            />
+            <TextInput
+                name="favoriteAlbums"
+                title="Favorite Albums"
+                defaultValue={joinList(initialData?.favoriteAlbums ?? [])}
+            />
+            <TextInput
+                name="genres"
+                title="Genres"
+                defaultValue={joinList(initialData?.genres.map(({ name }) => name) ?? [])}
+            />
         </div>
     );
 };
