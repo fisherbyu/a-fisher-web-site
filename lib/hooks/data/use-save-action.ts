@@ -1,6 +1,6 @@
 'use client';
 import { useActionState } from 'react';
-import { useSWRConfig } from 'swr';
+import { useRefresh } from './use-refresh';
 
 type SaveState = { savedId?: number };
 
@@ -23,7 +23,7 @@ export const useSaveAction = <S extends SaveState>(
     action: (state: S, formData: FormData) => Promise<S>,
     { refresh, onSaved }: SaveActionOptions
 ) => {
-    const { mutate } = useSWRConfig();
+    const refreshPaths = useRefresh(refresh);
 
     return useActionState<S, FormData>(async (state, formData) => {
         // useActionState types state as Awaited<S>, which is S for these plain objects
@@ -31,9 +31,7 @@ export const useSaveAction = <S extends SaveState>(
 
         if (next.savedId !== undefined) {
             // Not awaited: the form can settle while the lists refetch
-            mutate(
-                (key) => typeof key === 'string' && refresh.some((path) => key.startsWith(path))
-            );
+            refreshPaths();
             onSaved?.(next.savedId);
         }
 
