@@ -5,12 +5,15 @@ import {
     AdminNavigator,
     AlbumForm,
     ArtistForm,
+    PhotoForm,
+    PhotoOrderForm,
+    PhotoUploadForm,
     PlaylistForm,
     RankingForm,
     defineAdminSection,
 } from '@/components';
 import { useArtists } from '@/lib';
-import { Album, Artist, Playlist, RankingListSummary } from '@/types';
+import { Album, Artist, Photo, Playlist, RankingListSummary } from '@/types';
 
 // Create flow: an artist scopes the list to their albums; none makes a general list
 const CreateRankingForm = ({ onCreated }: { onCreated: (id: number) => void }) => {
@@ -81,6 +84,20 @@ const sections = [
         getTitle: (playlist) => playlist.title,
         renderDetail: (playlist) => <PlaylistForm key={playlist.id} initialData={playlist} />,
         renderCreate: (onCreated) => <PlaylistForm onSaved={onCreated} />,
+    }),
+    defineAdminSection<Photo>({
+        id: 'photo',
+        title: 'Photos',
+        icon: 'Images',
+        // Drafts included; the route requires admin for them
+        endpoint: '/api/photo?drafts=true',
+        noun: 'photo',
+        getTitle: (photo) => (photo.published ? photo.title : `${photo.title} (draft)`),
+        renderDetail: (photo, onDeleted) => (
+            <PhotoForm key={photo.id} initialData={photo} onDeleted={onDeleted} />
+        ),
+        renderCreate: (onCreated) => <PhotoUploadForm onCreated={onCreated} />,
+        arrange: { title: 'Arrange photos', render: () => <PhotoOrderForm /> },
     }),
     defineAdminSection<RankingListSummary>({
         id: 'ranking',
