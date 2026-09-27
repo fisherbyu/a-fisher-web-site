@@ -7,6 +7,13 @@ export type Tier = 'S' | 'A' | 'B' | 'C';
 /** Tier labels in sort order. Keep in sync with the Prisma `Tier` enum. */
 export const TIER_ORDER: Tier[] = ['S', 'A', 'B', 'C'];
 
+/**
+ * Orderings for music list routes (`?sort=`): `rank` follows the relevant RankingList,
+ * then unranked items by name; `name` is alphabetical.
+ */
+export const MUSIC_SORTS = ['rank', 'name'] as const;
+export type MusicSort = (typeof MUSIC_SORTS)[number];
+
 /** A ranked `MusicItem`, discriminated by which subtype it resolved to. */
 export type RankedItem = ({ kind: 'artist' } & Artist) | ({ kind: 'album' } & Album);
 

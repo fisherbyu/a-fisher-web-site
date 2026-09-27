@@ -1,15 +1,29 @@
 import 'server-only';
-import type { Album, AlbumInput } from '@/types';
+import type { Album, AlbumInput, MusicSort } from '@/types';
 import { prisma } from '../clients';
 import { transformAlbum, albumInclude } from '../data-transformers';
 import { toGenreCreate, replaceGenres } from './genre';
+import { getRankingOrder, sortByRanking } from './ranking-list';
 
-export const getAlbums = async (): Promise<Album[]> => {
-    const data = await prisma.album.findMany({
-        include: albumInclude,
-    });
+/**
+ * Get Albums from DB, all of them or one artist's
+ * @param artistId Artist whose albums to return; omit for every album
+ * @param sort `rank` (default): the artist's album ranking if one exists, then unranked albums by title. `name`: alphabetical. Without an artist there's no ranking to follow, so both are alphabetical
+ */
+export const getAlbums = async ({
+    artistId,
+    sort = 'rank',
+}: { artistId?: number; sort?: MusicSort } = {}): Promise<Album[]> => {
+    const [data, order] = await Promise.all([
+        prisma.album.findMany({
+            where: { artistId },
+            include: albumInclude,
+            orderBy: { title: 'asc' },
+        }),
+        sort === 'rank' && artistId !== undefined ? getRankingOrder({ artistId }) : [],
+    ]);
 
-    return data.map(transformAlbum);
+    return sortByRanking(data.map(transformAlbum), order);
 };
 
 export const getAlbum = async (id: number): Promise<Album | null> => {

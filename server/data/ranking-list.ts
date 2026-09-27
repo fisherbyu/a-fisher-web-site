@@ -7,6 +7,38 @@ import { transformRankingList, rankingListInclude } from '../data-transformers';
 /** Ranking list that orders the artist endpoint. */
 export const FAVORITE_ARTISTS_SLUG = 'favorite-artists';
 
+/**
+ * MusicItem ids of the first RankingList matching `where`, best first (tier, then
+ * position, like `rankingListInclude`). Empty when no list matches.
+ */
+export const getRankingOrder = async (where: Prisma.RankingListWhereInput): Promise<number[]> => {
+    const list = await prisma.rankingList.findFirst({
+        where,
+        // An artist can hold several lists; the oldest one is the canonical ranking
+        orderBy: { id: 'asc' },
+        select: {
+            entries: {
+                orderBy: rankingListInclude.entries.orderBy,
+                select: { musicItemId: true },
+            },
+        },
+    });
+
+    return list?.entries.map(({ musicItemId }) => musicItemId) ?? [];
+};
+
+/**
+ * Sorts items by their place in `order`; unranked items go last, keeping their current
+ * order. Artist and Album ids are their MusicItem ids, so they match `order` directly.
+ */
+export const sortByRanking = <T extends { id: number }>(items: T[], order: number[]): T[] => {
+    if (order.length === 0) return items;
+
+    const rank = new Map(order.map((id, index) => [id, index]));
+    const rankOf = ({ id }: T) => rank.get(id) ?? Infinity;
+    return [...items].sort((a, b) => rankOf(a) - rankOf(b));
+};
+
 /** Get RankingList Objects from DB */
 export const getRankingLists = async (): Promise<RankingList[]> => {
     const data = await prisma.rankingList.findMany({

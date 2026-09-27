@@ -1,5 +1,5 @@
 'use client';
-import { Artist, ArtistSort } from '@/types';
+import { Artist, MusicSort } from '@/types';
 import useSWR from 'swr';
 
 /**
@@ -11,7 +11,7 @@ import useSWR from 'swr';
  * @example
  * const { artists } = useArtists({ sort: 'name' });
  */
-export const useArtists = ({ sort = 'rank' }: { sort?: ArtistSort } = {}) => {
+export const useArtists = ({ sort = 'rank' }: { sort?: MusicSort } = {}) => {
     const { data, error, isLoading } = useSWR<Artist[]>(`/api/artist?sort=${sort}`);
     return {
         artists: data,

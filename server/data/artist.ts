@@ -1,45 +1,34 @@
 import 'server-only';
-import type { Artist, ArtistInput, ArtistSort } from '@/types';
+import type { Artist, ArtistInput, MusicSort } from '@/types';
 import { prisma } from '../clients';
 import { transformArtist, artistInclude } from '../data-transformers';
 import { toGenreCreate, replaceGenres } from './genre';
-import { FAVORITE_ARTISTS_SLUG } from './ranking-list';
-
-/** MusicItem ids in the favorite-artists list, best first */
-const getFavoriteArtistOrder = async (): Promise<number[]> => {
-    const entries = await prisma.rankingEntry.findMany({
-        where: { list: { slug: FAVORITE_ARTISTS_SLUG } },
-        // Same ordering as `rankingListInclude`: tier, then position
-        orderBy: [
-            { tier: { sort: 'asc', nulls: 'last' } },
-            { position: { sort: 'asc', nulls: 'last' } },
-        ],
-        select: { musicItemId: true },
-    });
-
-    return entries.map(({ musicItemId }) => musicItemId);
-};
+import { FAVORITE_ARTISTS_SLUG, getRankingOrder, sortByRanking } from './ranking-list';
 
 /**
  * Get Artist Objects from DB
  * @param sort `rank` (default): favorite-artists order, then unranked artists by name. `name`: alphabetical
  */
-export const getArtists = async (sort: ArtistSort = 'rank'): Promise<Artist[]> => {
+export const getArtists = async (sort: MusicSort = 'rank'): Promise<Artist[]> => {
     const [data, order] = await Promise.all([
         prisma.artist.findMany({
             include: artistInclude,
             orderBy: { name: 'asc' },
         }),
-        sort === 'rank' ? getFavoriteArtistOrder() : [],
+        sort === 'rank' ? getRankingOrder({ slug: FAVORITE_ARTISTS_SLUG }) : [],
     ]);
 
-    const artists = data.map(transformArtist);
-    if (order.length === 0) return artists;
+    return sortByRanking(data.map(transformArtist), order);
+};
 
-    // Artist ids are their MusicItem ids; unranked artists sort after, keeping name order
-    const rank = new Map(order.map((id, index) => [id, index]));
-    const rankOf = ({ id }: Artist) => rank.get(id) ?? Infinity;
-    return artists.sort((a, b) => rankOf(a) - rankOf(b));
+/** First artist with this exact name, ignoring case. Names aren't unique, so prefer ids */
+export const getArtistByName = async (name: string): Promise<Artist | null> => {
+    const artist = await prisma.artist.findFirst({
+        where: { name: { equals: name, mode: 'insensitive' } },
+        include: artistInclude,
+    });
+
+    return artist ? transformArtist(artist) : null;
 };
 
 export const getArtist = async (id: number): Promise<Artist | null> => {

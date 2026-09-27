@@ -224,21 +224,20 @@ type RankingFormProps = {
  */
 export const RankingForm = ({ slug, artistId: newArtistId, onSaved }: RankingFormProps) => {
     const { rankingList, isLoading: listLoading } = useRankingList(slug ?? null);
-    const { albums, isLoading: albumsLoading } = useAlbums();
+    // An existing list's scope is only known once it loads
+    const artistId = slug ? rankingList?.artistId : newArtistId;
+    const { albums, isLoading: albumsLoading } = useAlbums({ artistId: artistId ?? null });
     const { artists, isLoading: artistsLoading } = useArtists();
 
     // Wait for everything so the groups start from the full picture
     if (listLoading || albumsLoading || artistsLoading) return <div>Loading…</div>;
     if (slug && !rankingList) return <div className="text-red-500">Ranking list not found.</div>;
 
-    const artistId = rankingList?.artistId ?? newArtistId;
     // An artist-scoped list ranks that artist's albums; a general list ranks artists
     const candidates: Tile[] =
         artistId === undefined
             ? (artists ?? []).map(({ id, name, image }) => ({ id, title: name, image, order: 0 }))
-            : (albums ?? [])
-                  .filter((album) => album.artistId === artistId)
-                  .map(({ id, title, image }) => ({ id, title, image, order: 0 }));
+            : (albums ?? []).map(({ id, title, image }) => ({ id, title, image, order: 0 }));
 
     return (
         <RankingFormFields
