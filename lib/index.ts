@@ -9,3 +9,6 @@ export * from './supabase';
 
 // Utility Functions
 export * from './utils';
+
+// Media Config (client-safe)
+export * from './media';
