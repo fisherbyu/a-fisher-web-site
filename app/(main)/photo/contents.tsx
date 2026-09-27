@@ -1,15 +1,22 @@
 'use client';
-import Image, { StaticImageData } from 'next/image';
 import { ReactNode, useState } from 'react';
-import { Lightbox, MasonryLayout, MediaOverlay } from 'thread-ui';
+import { Lightbox, MasonryLayout, MediaOverlay, SkeletonLayoutLoader, Text } from 'thread-ui';
+import { usePhotos } from '@/lib';
+import type { Photo } from '@/types';
+import { AssetImage, LoadingError } from '@/components';
 
-type PhotosContentsProps = {
-    photos: { src: StaticImageData; alt: string; info?: ReactNode }[];
-};
-
-export default function PhotosContents({ photos }: PhotosContentsProps) {
+export default function PhotosContents() {
+    const { photos, isLoading, error } = usePhotos();
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
+
+    if (error) {
+        return <LoadingError />;
+    }
+
+    if (isLoading || !photos) {
+        return <SkeletonLayoutLoader mdcol={3} itemConfig={{ h: '300px', w: '100%' }} />;
+    }
 
     const masonryItems: ReactNode[] = [];
     const lightboxItems: ReactNode[] = [];
@@ -22,12 +29,11 @@ export default function PhotosContents({ photos }: PhotosContentsProps) {
         };
 
         const masonryPhoto = (
-            <Image
-                key={index}
+            <AssetImage
+                key={photo.id}
+                asset={photo.asset}
                 style={{ objectFit: 'contain', maxWidth: '100%', maxHeight: '100%' }}
-                placeholder="blur"
-                src={photo.src}
-                alt={photo.alt}
+                sizes="(max-width: 768px) 100vw, 33vw"
                 role="button"
                 tabIndex={0}
                 onClick={openLightbox}
@@ -43,25 +49,19 @@ export default function PhotosContents({ photos }: PhotosContentsProps) {
         const masonryItem = masonryPhoto;
 
         const trackItem = (
-            <Image
-                key={index}
-                placeholder="blur"
-                src={photo.src}
-                alt={photo.alt}
-                height={60}
-                width={0}
+            <AssetImage
+                key={photo.id}
+                asset={photo.asset}
                 sizes="60px"
-                style={{ width: 'auto' }}
+                style={{ height: 60, width: 'auto' }}
             />
         );
 
-        const fullPhoto = <Image key={index} placeholder="blur" src={photo.src} alt={photo.alt} />;
-        const lightboxItem = photo.info ? (
-            <MediaOverlay fit="fill" key={index} overlay={photo.info}>
+        const fullPhoto = <AssetImage key={photo.id} asset={photo.asset} sizes="100vw" />;
+        const lightboxItem = (
+            <MediaOverlay fit="fill" key={photo.id} overlay={<PhotoInfo photo={photo} />}>
                 {fullPhoto}
             </MediaOverlay>
-        ) : (
-            fullPhoto
         );
 
         masonryItems.push(masonryItem);
@@ -83,3 +83,33 @@ export default function PhotosContents({ photos }: PhotosContentsProps) {
         </>
     );
 }
+
+/** Lightbox overlay: title, optional caption, then camera · location · date */
+const PhotoInfo = ({ photo }: { photo: Photo }) => {
+    const takenAt = photo.takenAt
+        ? new Date(photo.takenAt).toLocaleDateString('en-US', {
+              month: 'long',
+              year: 'numeric',
+              timeZone: 'UTC',
+          })
+        : undefined;
+    const details = [photo.camera, photo.location, takenAt].filter(Boolean).join(' · ');
+
+    return (
+        <div className="flex flex-col gap-1">
+            <Text color="white" weight="semibold" marginBottom={false}>
+                {photo.title}
+            </Text>
+            {photo.caption && (
+                <Text color="white" marginBottom={false}>
+                    {photo.caption}
+                </Text>
+            )}
+            {details && (
+                <Text color="white" size="sm" marginBottom={false}>
+                    {details}
+                </Text>
+            )}
+        </div>
+    );
+};
