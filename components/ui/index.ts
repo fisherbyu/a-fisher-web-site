@@ -1,3 +1,4 @@
+export * from './asset-image';
 export * from './editable-list-item';
 export * from './loading-error';
 export * from './logos';
