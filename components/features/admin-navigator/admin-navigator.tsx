@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import useSWR from 'swr';
-import { IconButton, SplitNavigator } from 'thread-ui';
+import { Dropdown, IconButton, SplitNavigator } from 'thread-ui';
 import { SignOutButton } from '../sign-out-button';
 import { AdminRecord, AdminSection } from './admin-navigator.types';
 
@@ -25,13 +25,29 @@ export const AdminNavigator = ({ sections }: { sections: AdminSection[] }) => {
     const section = sections.find(({ id }) => pathname.startsWith(`/admin/${id}`)) ?? sections[0];
     const { noun } = section;
 
-    const { data, isLoading } = useSWR<AdminRecord[]>(section.endpoint);
+    const { scope } = section;
 
-    // Ids repeat across sections, so a selection only counts in the section it was made in
-    const [selection, setSelection] = useState<{ section: string; id: Row['id'] } | null>(null);
-    const item = selection?.section === section.id ? selection.id : null;
-    const select = (id: Row['id'] | null) =>
-        setSelection(id === null ? null : { section: section.id, id });
+    // Scoped sections wait for a pick, defaulting to the first option; each remembers its own
+    const { data: scopeRecords, isLoading: scopeLoading } = useSWR<AdminRecord[]>(
+        scope?.endpoint ?? null
+    );
+    const scopeOptions = scope ? (scopeRecords ?? []).map(scope.getOption) : [];
+    const [scopeIds, setScopeIds] = useState<Record<string, number>>({});
+    const scopeId = scope ? (scopeIds[section.id] ?? scopeOptions[0]?.value) : undefined;
+
+    const endpoint =
+        typeof section.endpoint === 'string'
+            ? section.endpoint
+            : scopeId === undefined
+              ? null
+              : section.endpoint(scopeId);
+    const { data, isLoading } = useSWR<AdminRecord[]>(endpoint);
+
+    // Ids repeat across sections, so a selection only counts where it was made
+    const view = `${section.id}:${scopeId ?? ''}`;
+    const [selection, setSelection] = useState<{ view: string; id: Row['id'] } | null>(null);
+    const item = selection?.view === view ? selection.id : null;
+    const select = (id: Row['id'] | null) => setSelection(id === null ? null : { view, id });
 
     const saved: Row[] = (data ?? []).map((record) => ({
         id: record.id,
@@ -53,21 +69,38 @@ export const AdminNavigator = ({ sections }: { sections: AdminSection[] }) => {
             renderItem={(row) => <span className="font-medium">{row.title}</span>}
             renderDetail={(row) => (
                 <div className="px-4 pb-4">
-                    {row.data ? section.renderDetail(row.data) : section.renderCreate(select)}
+                    {row.data
+                        ? section.renderDetail(row.data)
+                        : section.renderCreate(select, scopeId)}
                 </div>
             )}
             sidebarTitle="Admin"
             sidebarFooter={<SignOutButton />}
             listActions={() => (
-                <IconButton
-                    name="Plus"
-                    color="neutral"
-                    text
-                    ariaLabel={`New ${noun}`}
-                    onClick={() => select(NEW)}
-                />
+                <>
+                    {scope && (
+                        <Dropdown
+                            title={scope.title}
+                            showLabel={false}
+                            size="sm"
+                            value={scopeId ?? null}
+                            options={scopeOptions}
+                            onChange={(id) => {
+                                if (id !== null) setScopeIds({ ...scopeIds, [section.id]: id });
+                            }}
+                        />
+                    )}
+                    <IconButton
+                        name="Plus"
+                        color="neutral"
+                        text
+                        ariaLabel={`New ${noun}`}
+                        disabled={Boolean(scope) && scopeId === undefined}
+                        onClick={() => select(NEW)}
+                    />
+                </>
             )}
-            emptyList={isLoading ? 'Loading…' : `No ${noun}s yet`}
+            emptyList={isLoading || scopeLoading ? 'Loading…' : `No ${noun}s yet`}
             emptyDetail={`Select a ${noun}, or add a new one`}
         />
     );
