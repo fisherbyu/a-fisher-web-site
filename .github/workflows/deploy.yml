@@ -11,7 +11,7 @@ env:
     IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-    build-and-deploy:
+    build:
         runs-on: ubuntu-latest
         permissions:
             contents: read
@@ -40,11 +40,34 @@ jobs:
                       NEXT_PUBLIC_BUCKET_NAME=${{ secrets.NEXT_PUBLIC_BUCKET_NAME }}
                       NEXT_PUBLIC_BASE_SRC=${{ secrets.NEXT_PUBLIC_BASE_SRC }}
 
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Install cloudflared
+              run: |
+                  curl -fsSL -o cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+                  sudo dpkg -i cloudflared.deb
+
+            - name: Configure SSH
+              env:
+                  SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+              run: |
+                  mkdir -p ~/.ssh
+                  echo "$SSH_KEY" > ~/.ssh/id_deploy
+                  chmod 600 ~/.ssh/id_deploy
+                  cat >> ~/.ssh/config <<EOF
+                  Host deploy
+                    HostName ssh.fisherandrew.org
+                    User ${{ secrets.SERVER_USER }}
+                    IdentityFile ~/.ssh/id_deploy
+                    ProxyCommand cloudflared access ssh --hostname %h
+                    StrictHostKeyChecking accept-new
+                  EOF
+
             - name: Deploy to server
-              uses: appleboy/ssh-action@v1
-              with:
-                  host: ${{ secrets.SERVER_HOST }}
-                  username: ${{ secrets.SERVER_USER }}
-                  key: ${{ secrets.SERVER_SSH_KEY }}
-                  port: 2222
-                  script: bash /srv/a-fisher-web-site/deploy.sh
+              env:
+                  TUNNEL_SERVICE_TOKEN_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+                  TUNNEL_SERVICE_TOKEN_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+              run: ssh deploy 'bash /srv/a-fisher-web-site/deploy.sh'
