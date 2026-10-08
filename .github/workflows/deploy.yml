@@ -70,4 +70,4 @@ jobs:
               env:
                   TUNNEL_SERVICE_TOKEN_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
                   TUNNEL_SERVICE_TOKEN_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
-              run: ssh deploy 'bash /srv/a-fisher-web-site/deploy.sh'
+              run: ssh deploy 'bash /srv/a-fisher-data-center/apps/website/deploy.sh'
