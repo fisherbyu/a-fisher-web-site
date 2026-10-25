@@ -57,10 +57,13 @@ export default function PhotosContents() {
             />
         );
 
-        const fullPhoto = <AssetImage key={photo.id} asset={photo.asset} sizes="100vw" />;
         const lightboxItem = (
-            <MediaOverlay key={photo.id} overlay={<PhotoInfo photo={photo} />}>
-                {fullPhoto}
+            <MediaOverlay
+                key={photo.id}
+                aspectRatio={photo.asset.width / photo.asset.height}
+                overlay={<PhotoInfo photo={photo} />}
+            >
+                <AssetImage asset={photo.asset} sizes="100vw" />
             </MediaOverlay>
         );
 
