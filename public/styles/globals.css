@@ -1,7 +1,16 @@
 @layer thread-reset, tailwind, thread-base, thread-tokens, thread-recipes, thread-utilities, app;
 
-@layer tailwind {
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
+/* No preflight: thread-ui ships its own reset */
+@import 'tailwindcss/theme.css' layer(tailwind);
+@import 'tailwindcss/utilities.css' layer(tailwind);
+
+/* Full width until 1400px, then capped; drops the default per-breakpoint max-widths */
+@utility container {
+    margin-inline: auto;
+    padding-inline: 2rem;
+    max-width: none;
+
+    @media (width >= 1400px) {
+        max-width: 1400px;
+    }
 }
