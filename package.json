@@ -24,7 +24,7 @@
         "server-only": "^0.0.1",
         "sharp": "^0.35.4",
         "swr": "^2.3.3",
-        "thread-ui": "^0.17.2",
+        "thread-ui": "^0.18.0",
         "zod": "^4.6.5"
     },
     "devDependencies": {
